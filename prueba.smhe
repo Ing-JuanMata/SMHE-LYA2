@@ -1,0 +1,18 @@
+inicio prueba{
+comienzo(cada 5 min){
+tiempo declarar como entero;
+
+//Encender luces
+//Registrar entrada
+//Dispensar gel
+//isEmptyRoom
+//Apagar las luces
+//Abrir puertas y ventanas
+//Ventilar
+//Cerrar puertas y ventanas
+condicion(falso){}
+}
+funcion f(var declarar como entero, var2 declarar como logico){
+tiempo declarar como logico = verdadero;
+}
+}fin

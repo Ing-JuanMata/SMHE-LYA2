@@ -1,0 +1,5 @@
+start test{
+Atlas begin(){
+condition(A > B){v++; condition(C<B){v *= 2;}}else{v--;}
+}
+}End

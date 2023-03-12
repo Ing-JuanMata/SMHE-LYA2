@@ -1,0 +1,18 @@
+start programa{
+    Atlas begin(){
+Dispositivo Declare As str = "TV";
+VOL Declare As str = "Volumen";
+deviceControl(Dispositivo,true,[(VOL=20)]);
+driverLights(1000, [(2,2)]); 
+valor Declare As int;
+valor = 10;
+emptyRoom(true, 3, true,true);//Sanitizar, 3 minutos, luces apagadas para ahorrar energía, puerta cerrada
+ventilate(valor,true,true,true); //Tiempo en minutos que se ejecutará la función, eliminador de bacterias, abrir puertas,vnt
+registerA("19400584");//Borrar comillas para demostración de validación
+dispense(2); //Dispensa gel sanitizante por 2 segundos
+
+
+for(i Declare As int; i > 10; i++){valor--;} //
+
+    }
+}End;

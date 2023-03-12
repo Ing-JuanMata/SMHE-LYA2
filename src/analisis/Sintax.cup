@@ -1,0 +1,170 @@
+package analisis;
+
+import java_cup.runtime.Symbol;
+import codigo.FrmPrincipal;
+
+parser code
+{:
+    private String ambito;
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    private void reportarError(String codigo, String encontrado){
+        FrmPrincipal.errores.agregarErrorSintactico(codigo, s.left + 1, sym.terminalNames[s.sym], encontrado);
+    }
+
+    public void report_fatal_error(String message, Object info){
+        System.out.println(message + " " + sym.terminalNames[((Symbol) info).sym]);
+    }
+
+    public SintaxPrueba(Lexer lexer){
+        super(lexer);
+    }
+
+    private void ponerValor(LlaveTabla identificador, Object valor){
+        FrmPrincipal.tablaSimbolos.agregarValor(identificador, valor);
+    }
+
+    private void ponerTipoDato(LlaveTabla identificador, String tipo){
+        FrmPrincipal.tablaSimbolos.agregarTipo(identificador, tipo);
+    }
+
+    private void ponerAmbito(LlaveTabla identificador){
+        FrmPrincipal.tablaSimbolos.agregarAmbito(identificador, ambito);
+    }
+
+    private void agregarFuncion(LlaveTabla id){
+        FrmPrincipal.tablaSimbolos.quitarDeTabla(id);
+        FrmPrincipal.funciones.agregarFuncion(id.id);
+    }
+
+    private void agregarParametro(LlaveTabla parametro){
+        FrmPrincipal.funciones.agregarParametro(ambito, parametro);
+    }
+:};
+
+terminal FIN, COMIENZO, ENTERO, LOGICO, CONDICION, SINO, VENTILAR,
+        ADMITIR, AULAVACIA, DISPENSAR, SALIR, INICIO, DECLARAR, COMO, CADA, POR, SEG,
+        MIN, HR, ABRIR, CERRAR, VENTANAS, PUERTAS, MANTENER, OBTENER, TEMPERATURA,
+        PERSONAS, APAGAR, ENCENDER, SANITIZAR, LUCES, ESTADO, FUNCION;
+terminal REL_MENOR, REL_MAYOR, REL_MENOR_IGUAL, REL_MAYOR_IGUAL, REL_DIFERENTE, 
+        REL_IGUAL;
+terminal AR_SUMA, AR_RESTA, AR_MULTIPLICACION, AR_DIVISION;
+terminal NEGACION, LOGICO_AND, LOGICO_OR;
+terminal INC, DEC, ASIGNACION;
+terminal PARENTESIS_ABIERTO, PARENTESIS_CERRADO, LLAVE_ABIERTA, LLAVE_CERRADA;
+terminal PUNTO_COMA, COMA;
+terminal Integer NUMERO;
+terminal Boolean OP_BOOLEANO;
+terminal LlaveTabla IDENTIFICADOR;
+
+non terminal inicio, gramaticas, tiempo_cada, tiempo_por, unidad_tiempo, declaracion, 
+            declaracion_valor, ventilar, admitir, aula_vacia, estado, funcion,
+            inicio_fin, parametros, asignacion;
+non terminal String declaracion_tipo_dato, tipo_dato;
+non terminal LlaveTabla declaracion_inicio;
+non terminal Integer op_aritmetica, incdec;
+non terminal Boolean condicion, sentencia_booleana, negacion_identificador, 
+            negacion_booleana, relacional_booleana, sino;
+
+precedence left AR_SUMA, AR_RESTA;
+precedence left AR_MULTIPLICACION, AR_DIVISION;
+
+start with inicio;
+
+inicio ::= INICIO IDENTIFICADOR:i {:
+            agregarFuncion(i);
+            ambito = i.id;
+        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO tiempo_cada
+        PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin
+        | INICIO error {:reportarError("ES1", null);ambito="rutina_principal";:}
+        gramaticas LLAVE_CERRADA inicio_fin
+        | error {:reportarError("ES1", null); ambito = "rutina_principal";:}
+        gramaticas LLAVE_CERRADA inicio_fin;
+inicio_fin ::= LLAVE_CERRADA FIN {:System.out.println("ANALISIS TERMINADO");:}
+                | FUNCION funcion inicio_fin;
+funcion ::= IDENTIFICADOR:i {:
+                                agregarFuncion(i);
+                                ambito = i.id;
+                            :}
+            PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA
+            gramaticas LLAVE_CERRADA;
+parametros ::= declaracion_inicio:i COMA parametros {:agregarParametro(i);:} 
+                | declaracion_inicio:i {:agregarParametro(i);:};
+gramaticas ::= incdec  | declaracion gramaticas
+            | asignacion PUNTO_COMA gramaticas 
+            | CONDICION condicion gramaticas 
+            | VENTILAR ventilar gramaticas 
+            | ADMITIR admitir gramaticas 
+            | AULAVACIA aula_vacia gramaticas 
+            | SALIR PUNTO_COMA 
+            | APAGAR LUCES PUNTO_COMA gramaticas 
+            | ENCENDER LUCES PUNTO_COMA gramaticas 
+            | ABRIR PUERTAS tiempo_por PUNTO_COMA gramaticas
+            | ABRIR PUERTAS MANTENER PUNTO_COMA gramaticas 
+            | CERRAR PUERTAS tiempo_por PUNTO_COMA gramaticas 
+            | CERRAR PUERTAS MANTENER PUNTO_COMA gramaticas 
+            | ABRIR VENTANAS tiempo_por PUNTO_COMA gramaticas 
+            | ABRIR VENTANAS MANTENER PUNTO_COMA gramaticas 
+            | CERRAR VENTANAS tiempo_por PUNTO_COMA gramaticas 
+            | CERRAR VENTANAS MANTENER PUNTO_COMA gramaticas 
+            | OBTENER TEMPERATURA PUNTO_COMA gramaticas 
+            | OBTENER PERSONAS PUNTO_COMA gramaticas 
+            | SANITIZAR tiempo_por PUNTO_COMA gramaticas
+            | DISPENSAR tiempo_por PUNTO_COMA gramaticas 
+            | ESTADO estado PUNTO_COMA gramaticas
+            | error {:reportarError("ES2", null);:} PUNTO_COMA gramaticas
+            | error {:reportarError("ES1", null);:}
+            IDENTIFICADOR:i {:
+                                agregarFuncion(i);
+                                ambito = i.id;
+                            :}
+            PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas
+            | /* nada de na */;
+incdec ::= IDENTIFICADOR INC PUNTO_COMA gramaticas | IDENTIFICADOR DEC PUNTO_COMA gramaticas 
+            | INC IDENTIFICADOR PUNTO_COMA gramaticas | DEC IDENTIFICADOR PUNTO_COMA gramaticas;
+tiempo_cada ::= CADA NUMERO unidad_tiempo;
+tiempo_por ::= POR NUMERO unidad_tiempo;
+unidad_tiempo ::= SEG | MIN | HR | error {:reportarError("ES3", null);:};
+estado ::= LUCES | PUERTAS | VENTANAS;
+asignacion ::= IDENTIFICADOR ASIGNACION op_aritmetica;
+declaracion ::= declaracion_inicio PUNTO_COMA
+                | declaracion_inicio:i declaracion_valor:valor {:ponerValor(i,valor);:} PUNTO_COMA;
+declaracion_inicio ::= IDENTIFICADOR:i DECLARAR declaracion_tipo_dato:td {:ponerAmbito(i);ponerTipoDato(i,td);RESULT=i;:};
+declaracion_valor ::= ASIGNACION OP_BOOLEANO:valor {:RESULT=valor;:} | ASIGNACION op_aritmetica:valor {:RESULT=valor;:};
+declaracion_tipo_dato ::= COMO tipo_dato:td {:RESULT = td;:};
+tipo_dato ::= ENTERO {:RESULT = "entero";:} | LOGICO {:RESULT = "logico";:}
+                | error {:reportarError("ES4", null); RESULT = "error";:};
+op_aritmetica ::= PARENTESIS_ABIERTO op_aritmetica:a PARENTESIS_CERRADO 
+               | NUMERO:a AR_SUMA op_aritmetica:b 
+               | NUMERO:a AR_RESTA op_aritmetica:b 
+               | NUMERO:a AR_MULTIPLICACION op_aritmetica:b 
+               | NUMERO:a AR_DIVISION op_aritmetica:b 
+               | NUMERO:a | IDENTIFICADOR:a;
+condicion ::= PARENTESIS_ABIERTO sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA
+            | PARENTESIS_ABIERTO sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA sino;
+sentencia_booleana ::= OP_BOOLEANO | OP_BOOLEANO LOGICO_AND sentencia_booleana 
+                | OP_BOOLEANO LOGICO_OR sentencia_booleana
+                | IDENTIFICADOR 
+                | IDENTIFICADOR LOGICO_AND sentencia_booleana IDENTIFICADOR LOGICO_OR sentencia_booleana
+                | negacion_identificador 
+                | negacion_identificador LOGICO_AND sentencia_booleana
+                | negacion_identificador LOGICO_OR sentencia_booleana 
+                | negacion_booleana 
+                | negacion_booleana LOGICO_AND sentencia_booleana 
+                | negacion_booleana LOGICO_OR sentencia_booleana
+                | relacional_booleana 
+                | relacional_booleana LOGICO_AND sentencia_booleana
+                | relacional_booleana LOGICO_OR sentencia_booleana;
+negacion_identificador ::= NEGACION IDENTIFICADOR;
+negacion_booleana ::= NEGACION PARENTESIS_ABIERTO sentencia_booleana PARENTESIS_CERRADO;
+relacional_booleana ::= IDENTIFICADOR REL_MENOR op_aritmetica | IDENTIFICADOR REL_MAYOR op_aritmetica
+                | IDENTIFICADOR REL_MENOR_IGUAL op_aritmetica | IDENTIFICADOR REL_MAYOR_IGUAL op_aritmetica
+                | IDENTIFICADOR REL_DIFERENTE op_aritmetica | IDENTIFICADOR REL_IGUAL op_aritmetica;
+sino ::= SINO condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
+ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO PUNTO_COMA;
+admitir ::= ADMITIR PARENTESIS_ABIERTO sentencia_booleana COMA tiempo_por COMA sentencia_booleana PARENTESIS_CERRADO PUNTO_COMA;
+aula_vacia ::= AULAVACIA PARENTESIS_ABIERTO sentencia_booleana COMA tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO PUNTO_COMA;
