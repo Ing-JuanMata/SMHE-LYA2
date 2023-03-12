@@ -13,6 +13,7 @@ parser code
     }
 
     private void reportarError(String codigo, String encontrado){
+        if(this.s == null) this.s = cur_token;
         FrmPrincipal.errores.agregarErrorSintactico(codigo, s.left + 1, sym.terminalNames[s.sym], encontrado);
     }
 
@@ -72,6 +73,7 @@ non terminal Boolean condicion, sentencia_booleana, negacion_identificador,
 
 precedence left AR_SUMA, AR_RESTA;
 precedence left AR_MULTIPLICACION, AR_DIVISION;
+precedence left PARENTESIS_ABIERTO, PARENTESIS_CERRADO;
 
 start with inicio;
 
@@ -85,7 +87,9 @@ inicio ::= INICIO IDENTIFICADOR:i {:
         | error {:reportarError("ES1", null); ambito = "rutina_principal";:}
         gramaticas LLAVE_CERRADA inicio_fin;
 inicio_fin ::= LLAVE_CERRADA FIN {:System.out.println("ANALISIS TERMINADO");:}
-                | FUNCION funcion inicio_fin;
+                | error {:reportarError("ES1", null);:} FIN {:System.out.println("ANALISIS TERMINADO");:}
+                | FUNCION funcion inicio_fin
+                | error {:reportarError("ES1", null);:} funcion inicio_fin;
 funcion ::= IDENTIFICADOR:i {:
                                 agregarFuncion(i);
                                 ambito = i.id;
@@ -93,57 +97,80 @@ funcion ::= IDENTIFICADOR:i {:
             PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA
             gramaticas LLAVE_CERRADA;
 parametros ::= declaracion_inicio:i COMA parametros {:agregarParametro(i);:} 
-                | declaracion_inicio:i {:agregarParametro(i);:};
-gramaticas ::= incdec  | declaracion gramaticas
+                | declaracion_inicio:i {:agregarParametro(i);:} | /**/;
+gramaticas ::= incdec | declaracion PUNTO_COMA gramaticas
+            | declaracion {:reportarError("ES7", null);:} gramaticas
             | asignacion PUNTO_COMA gramaticas 
-            | CONDICION condicion gramaticas 
-            | VENTILAR ventilar gramaticas 
-            | ADMITIR admitir gramaticas 
-            | AULAVACIA aula_vacia gramaticas 
-            | SALIR PUNTO_COMA 
-            | APAGAR LUCES PUNTO_COMA gramaticas 
-            | ENCENDER LUCES PUNTO_COMA gramaticas 
+            | asignacion {:reportarError("ES7", null);:} gramaticas
+            | CONDICION condicion gramaticas
+            | VENTILAR ventilar PUNTO_COMA gramaticas
+            | VENTILAR ventilar {:reportarError("ES7", null);:} gramaticas
+            | ADMITIR admitir PUNTO_COMA gramaticas
+            | ADMITIR admitir {:reportarError("ES7", null);:} gramaticas
+            | AULAVACIA aula_vacia PUNTO_COMA gramaticas
+            | AULAVACIA aula_vacia {:reportarError("ES7", null);:} gramaticas
+            | SALIR PUNTO_COMA gramaticas
+            | SALIR {:reportarError("ES7", null);:} gramaticas
+            | APAGAR LUCES PUNTO_COMA gramaticas
+            | APAGAR LUCES {:reportarError("ES7", null);:} gramaticas
+            | ENCENDER LUCES PUNTO_COMA gramaticas
+            | ENCENDER LUCES {:reportarError("ES7", null);:} gramaticas
             | ABRIR PUERTAS tiempo_por PUNTO_COMA gramaticas
+            | ABRIR PUERTAS tiempo_por {:reportarError("ES7", null);:} gramaticas
             | ABRIR PUERTAS MANTENER PUNTO_COMA gramaticas 
-            | CERRAR PUERTAS tiempo_por PUNTO_COMA gramaticas 
-            | CERRAR PUERTAS MANTENER PUNTO_COMA gramaticas 
-            | ABRIR VENTANAS tiempo_por PUNTO_COMA gramaticas 
+            | ABRIR PUERTAS MANTENER {:reportarError("ES7", null);:} gramaticas
+            | CERRAR PUERTAS tiempo_por PUNTO_COMA gramaticas
+            | CERRAR PUERTAS tiempo_por {:reportarError("ES7", null);:} gramaticas
+            | CERRAR PUERTAS MANTENER PUNTO_COMA gramaticas
+            | CERRAR PUERTAS MANTENER {:reportarError("ES7", null);:} gramaticas
+            | ABRIR VENTANAS tiempo_por PUNTO_COMA gramaticas
+            | ABRIR VENTANAS tiempo_por {:reportarError("ES7", null);:} gramaticas
             | ABRIR VENTANAS MANTENER PUNTO_COMA gramaticas 
+            | ABRIR VENTANAS MANTENER {:reportarError("ES7", null);:} gramaticas
             | CERRAR VENTANAS tiempo_por PUNTO_COMA gramaticas 
-            | CERRAR VENTANAS MANTENER PUNTO_COMA gramaticas 
-            | OBTENER TEMPERATURA PUNTO_COMA gramaticas 
-            | OBTENER PERSONAS PUNTO_COMA gramaticas 
+            | CERRAR VENTANAS tiempo_por {:reportarError("ES7", null);:} gramaticas
+            | CERRAR VENTANAS MANTENER PUNTO_COMA gramaticas
+            | CERRAR VENTANAS MANTENER {:reportarError("ES7", null);:} gramaticas
+            | OBTENER TEMPERATURA PUNTO_COMA gramaticas
+            | OBTENER TEMPERATURA {:reportarError("ES7", null);:} gramaticas
+            | OBTENER PERSONAS PUNTO_COMA gramaticas
+            | OBTENER PERSONAS {:reportarError("ES7", null);:} gramaticas
             | SANITIZAR tiempo_por PUNTO_COMA gramaticas
-            | DISPENSAR tiempo_por PUNTO_COMA gramaticas 
+            | SANITIZAR tiempo_por {:reportarError("ES7", null);:} gramaticas
+            | DISPENSAR tiempo_por PUNTO_COMA gramaticas
+            | DISPENSAR tiempo_por {:reportarError("ES7", null);:} gramaticas
             | ESTADO estado PUNTO_COMA gramaticas
+            | ESTADO estado {:reportarError("ES7", null);:} gramaticas
             | error {:reportarError("ES2", null);:} PUNTO_COMA gramaticas
             | error {:reportarError("ES1", null);:}
             IDENTIFICADOR:i {:
                                 agregarFuncion(i);
                                 ambito = i.id;
                             :}
-            PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas
-            | /* nada de na */;
+            PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA
+            gramaticas
+            | /* Vacio */;
 incdec ::= IDENTIFICADOR INC PUNTO_COMA gramaticas | IDENTIFICADOR DEC PUNTO_COMA gramaticas 
             | INC IDENTIFICADOR PUNTO_COMA gramaticas | DEC IDENTIFICADOR PUNTO_COMA gramaticas;
 tiempo_cada ::= CADA NUMERO unidad_tiempo;
 tiempo_por ::= POR NUMERO unidad_tiempo;
 unidad_tiempo ::= SEG | MIN | HR | error {:reportarError("ES3", null);:};
 estado ::= LUCES | PUERTAS | VENTANAS;
-asignacion ::= IDENTIFICADOR ASIGNACION op_aritmetica;
-declaracion ::= declaracion_inicio PUNTO_COMA
-                | declaracion_inicio:i declaracion_valor:valor {:ponerValor(i,valor);:} PUNTO_COMA;
+asignacion ::= IDENTIFICADOR ASIGNACION op_aritmetica | error {:System.out.println("Error de asignacion");:} ASIGNACION;
+declaracion ::= declaracion_inicio
+            | declaracion_inicio:i declaracion_valor:valor {:ponerValor(i,valor);:};
 declaracion_inicio ::= IDENTIFICADOR:i DECLARAR declaracion_tipo_dato:td {:ponerAmbito(i);ponerTipoDato(i,td);RESULT=i;:};
 declaracion_valor ::= ASIGNACION OP_BOOLEANO:valor {:RESULT=valor;:} | ASIGNACION op_aritmetica:valor {:RESULT=valor;:};
 declaracion_tipo_dato ::= COMO tipo_dato:td {:RESULT = td;:};
 tipo_dato ::= ENTERO {:RESULT = "entero";:} | LOGICO {:RESULT = "logico";:}
                 | error {:reportarError("ES4", null); RESULT = "error";:};
 op_aritmetica ::= PARENTESIS_ABIERTO op_aritmetica:a PARENTESIS_CERRADO 
-               | NUMERO:a AR_SUMA op_aritmetica:b 
-               | NUMERO:a AR_RESTA op_aritmetica:b 
-               | NUMERO:a AR_MULTIPLICACION op_aritmetica:b 
-               | NUMERO:a AR_DIVISION op_aritmetica:b 
-               | NUMERO:a | IDENTIFICADOR:a;
+                | NUMERO:a AR_SUMA op_aritmetica:b 
+                | NUMERO:a AR_RESTA op_aritmetica:b 
+                | NUMERO:a AR_MULTIPLICACION op_aritmetica:b 
+                | NUMERO:a AR_DIVISION op_aritmetica:b 
+                | NUMERO:a | IDENTIFICADOR:a 
+                | error {:reportarError("ES6", null);:};
 condicion ::= PARENTESIS_ABIERTO sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA
             | PARENTESIS_ABIERTO sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA sino;
 sentencia_booleana ::= OP_BOOLEANO | OP_BOOLEANO LOGICO_AND sentencia_booleana 
@@ -158,13 +185,14 @@ sentencia_booleana ::= OP_BOOLEANO | OP_BOOLEANO LOGICO_AND sentencia_booleana
                 | negacion_booleana LOGICO_OR sentencia_booleana
                 | relacional_booleana 
                 | relacional_booleana LOGICO_AND sentencia_booleana
-                | relacional_booleana LOGICO_OR sentencia_booleana;
+                | relacional_booleana LOGICO_OR sentencia_booleana
+                | error {:reportarError("ES5", null);:};
 negacion_identificador ::= NEGACION IDENTIFICADOR;
 negacion_booleana ::= NEGACION PARENTESIS_ABIERTO sentencia_booleana PARENTESIS_CERRADO;
 relacional_booleana ::= IDENTIFICADOR REL_MENOR op_aritmetica | IDENTIFICADOR REL_MAYOR op_aritmetica
                 | IDENTIFICADOR REL_MENOR_IGUAL op_aritmetica | IDENTIFICADOR REL_MAYOR_IGUAL op_aritmetica
                 | IDENTIFICADOR REL_DIFERENTE op_aritmetica | IDENTIFICADOR REL_IGUAL op_aritmetica;
-sino ::= SINO condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
-ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO PUNTO_COMA;
-admitir ::= ADMITIR PARENTESIS_ABIERTO sentencia_booleana COMA tiempo_por COMA sentencia_booleana PARENTESIS_CERRADO PUNTO_COMA;
-aula_vacia ::= AULAVACIA PARENTESIS_ABIERTO sentencia_booleana COMA tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO PUNTO_COMA;
+sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
+ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO;
+admitir ::= ADMITIR PARENTESIS_ABIERTO sentencia_booleana COMA tiempo_por COMA sentencia_booleana PARENTESIS_CERRADO;
+aula_vacia ::= AULAVACIA PARENTESIS_ABIERTO sentencia_booleana COMA tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO;

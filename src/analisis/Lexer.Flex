@@ -163,4 +163,4 @@ espacio=[ \t\r]+
 ("(-"{D}+")")|{D}+ {return symbol(sym.NUMERO, Integer.parseInt(yytext()));}
 
 /* Error general */
- [^]        {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}
+ [^ ;,{}[]()/<>=!&\+\-\*\n\t\|]+       {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}

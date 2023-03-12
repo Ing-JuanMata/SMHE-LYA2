@@ -22,14 +22,17 @@ public class TablaErrores {
     }
 
     private void llenarTabla() {
-        tabla.put("EL1", "Error lexico: en la linea %d la cadena \"%s\" no es considerada una cadena valida");
-        tabla.put("ES1", "Error lexico: en la linea %d se ha encontrado que las cadenas "
+        tabla.put("EL1", "Error lexico 1: en la linea %d la cadena \"%s\" no es considerada una cadena valida");
+        tabla.put("ES1", "Error sintactico 1: en la linea %d se ha encontrado que las cadenas "
                 + "de la estructura principal no concuerdan con el formato solicitado,"
                 + " favor de revisar en la ayuda");
-        tabla.put("ES2", "Error lexico: en la linea %d la expresion escrita tiene un error"
+        tabla.put("ES2", "Error sintactico 2: en la linea %d la expresion escrita tiene un error"
                 + " en su estructura en la cadena %s");
-        tabla.put("ES3", "Error lexico: en la linea %d la unidad de tiempo no es la correcta, recuerda que debe ser [\"seg\", \"min\", \"hr\"]");
-        tabla.put("ES4", "Error lexico: en la linea %d no se ha seleccionado un tipo de dato valido");
+        tabla.put("ES3", "Error sintactico 3: en la linea %d la unidad de tiempo no es la correcta, recuerda que debe ser [\"seg\", \"min\", \"hr\"]");
+        tabla.put("ES4", "Error sintactico 4: en la linea %d no se ha seleccionado un tipo de dato valido");
+        tabla.put("ES5", "Error sintactico 5: en la linea %d el formato de su expresion logica no es correcto");
+        tabla.put("ES6", "Error sintactico 6: en la linea %d el formato de su expresion aritmetica no es correcto");
+        tabla.put("ES7", "Error sintactico 7: en la linea %d no se ha encontrado el punto y coma para la instruccion ingresada");
     }
 
     public ArrayList<String> getErrores() {
@@ -42,7 +45,7 @@ public class TablaErrores {
 
     public void agregarErrorSintactico(String error, int linea, String... valores) {
         switch (error) {
-            case "ES1", "ES3", "ES4" ->
+            case "ES1", "ES3", "ES4", "ES5", "ES6", "ES7" ->
                 errores.add(String.format(tabla.get(error), linea));
             case "ES2" ->
                 errores.add(String.format(tabla.get(error), linea, valores[0]));
