@@ -2,11 +2,14 @@ package analisis;
 
 import java_cup.runtime.Symbol;
 import codigo.FrmPrincipal;
+import herramientas.ArbolSintactico;
+import herramientas.NodoSintactico;
 
 parser code
 {:
     private String ambito;
     private Symbol s;
+    public ArbolSintactico arbolSintactico;
     
     public void syntax_error(Symbol s){
         this.s = s;
@@ -45,6 +48,22 @@ parser code
     private void agregarParametro(LlaveTabla parametro){
         FrmPrincipal.funciones.agregarParametro(ambito, parametro);
     }
+
+    private void agregarHijos(Object... hijos){
+        arbolSintactico.agregarHijos(hijos);
+    }
+
+    private void agregarHijo(Object hijo){
+        arbolSintactico.agregarHijo(hijo);
+    }
+
+    private void agregarHijo(Object hijo, boolean moverse){
+        arbolSintactico.agregarHijo(hijo, moverse);
+    }
+
+    private void retroceder(){
+        arbolSintactico.retroceder();
+    }
 :};
 
 terminal FIN, COMIENZO, ENTERO, LOGICO, CONDICION, SINO, VENTILAR,
@@ -77,27 +96,70 @@ precedence left PARENTESIS_ABIERTO, PARENTESIS_CERRADO;
 
 start with inicio;
 
-inicio ::= INICIO IDENTIFICADOR:i {:
-            agregarFuncion(i);
+inicio ::=
+        INICIO IDENTIFICADOR:i {:
+            arbolSintactico=new ArbolSintactico("inicio");
+            agregarHijos("INICIO", i);
             ambito = i.id;
-        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO tiempo_cada
-        PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin
-        | INICIO error {:reportarError("ES1", null);ambito="rutina_principal";:}
+            ponerAmbito(i);
+            agregarFuncion(i);
+        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO 
+        {:
+            agregarHijos("LLAVE_ABIERTA", "COMIENZO", "PARENTESIS_ABIERTO");
+            agregarHijo("tiempo_cada", true);
+        :} tiempo_cada PARENTESIS_CERRADO LLAVE_ABIERTA
+        {:
+            agregarHijos("PARENTESIS_CERRADO", "LLAVE_ABIERTA");
+            agregarHijo("gramaticas", true);
+        :}
+        gramaticas LLAVE_CERRADA 
+        {:agregarHijo("LLAVE_CERRADA"); System.out.println("Agregando llave e inicio_fin");agregarHijo("inicio_fin", true);:} inicio_fin
+        | INICIO error {:
+            arbolSintactico=new ArbolSintactico("inicio");
+            agregarHijos("INICIO", "error");
+            agregarHijo("gramaticas", true);
+            reportarError("ES1", null);
+            ambito="rutina_principal";
+            :}
         gramaticas LLAVE_CERRADA inicio_fin
-        | error {:reportarError("ES1", null); ambito = "rutina_principal";:}
+        | error {:
+            arbolSintactico=new ArbolSintactico("inicio");
+            agregarHijo("error");
+            agregarHijo("gramaticas", true);
+            reportarError("ES1", null);
+            ambito = "rutina_principal";
+            :}
         gramaticas LLAVE_CERRADA inicio_fin;
-inicio_fin ::= LLAVE_CERRADA FIN {:System.out.println("ANALISIS TERMINADO");:}
-                | error {:reportarError("ES1", null);:} FIN {:System.out.println("ANALISIS TERMINADO");:}
-                | FUNCION funcion inicio_fin
-                | error {:reportarError("ES1", null);:} funcion inicio_fin;
+inicio_fin ::= LLAVE_CERRADA FIN {:
+                    System.out.println("ANALISIS TERMINADO");
+                    agregarHijos("LLAVE_CERRADA", "FIN");
+                :}
+                | error {:reportarError("ES1", null);:} 
+                FIN {:
+                    System.out.println("ANALISIS TERMINADO");
+                    agregarHijos("error", "FIN");
+                :}
+                | FUNCION {:agregarHijo("FUNCION"); agregarHijo("funcion", true);:}
+                funcion inicio_fin
+                | error {:
+                    reportarError("ES1", null);
+                    agregarHijo("error");
+                    agregarHijo("funcion", true);
+                :} funcion inicio_fin;
 funcion ::= IDENTIFICADOR:i {:
+                                
                                 agregarFuncion(i);
                                 ambito = i.id;
                             :}
-            PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA
-            gramaticas LLAVE_CERRADA;
+            PARENTESIS_ABIERTO 
+            /*{:agregarHijo("PARENTESIS_ABIERTO"); agregarHijo("parametros", true);:}*/
+            parametros PARENTESIS_CERRADO LLAVE_ABIERTA 
+            /*{:
+                agregarHijos("PARENTESIS_CERRADO", "LLAVE_ABIERTA");
+                agregarHijo("gramaticas", true);
+            :}*/ gramaticas LLAVE_CERRADA {:agregarHijo("LLAVE_CERRADA"); /*retroceder();*/:};
 parametros ::= declaracion_inicio:i COMA parametros {:agregarParametro(i);:} 
-                | declaracion_inicio:i {:agregarParametro(i);:} | /**/;
+                | declaracion_inicio:i {:agregarParametro(i);:} | /*{:retroceder();:}*/;
 gramaticas ::= incdec | declaracion PUNTO_COMA gramaticas
             | declaracion {:reportarError("ES7", null);:} gramaticas
             | asignacion PUNTO_COMA gramaticas 
@@ -149,12 +211,25 @@ gramaticas ::= incdec | declaracion PUNTO_COMA gramaticas
                             :}
             PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA
             gramaticas
-            | /* Vacio */;
+            | {:retroceder();:};
 incdec ::= IDENTIFICADOR INC PUNTO_COMA gramaticas | IDENTIFICADOR DEC PUNTO_COMA gramaticas 
             | INC IDENTIFICADOR PUNTO_COMA gramaticas | DEC IDENTIFICADOR PUNTO_COMA gramaticas;
-tiempo_cada ::= CADA NUMERO unidad_tiempo;
-tiempo_por ::= POR NUMERO unidad_tiempo;
-unidad_tiempo ::= SEG | MIN | HR | error {:reportarError("ES3", null);:};
+tiempo_cada ::= CADA NUMERO:n {:
+                agregarHijos("CADA", n); 
+                agregarHijo("unidad_tiempo", true);
+                :} unidad_tiempo;
+tiempo_por ::= POR NUMERO:n {:
+                agregarHijos("POR", n);
+                agregarHijo("unidad_tiempo", true);
+                :} unidad_tiempo;
+unidad_tiempo ::= SEG {:agregarHijo("SEG"); retroceder();retroceder();:} 
+                | MIN {:agregarHijo("SEG"); retroceder();retroceder();:} 
+                | HR {:agregarHijo("SEG"); retroceder();retroceder();:} 
+                | error {:
+                reportarError("ES3", null); 
+                agregarHijo("error");
+                retroceder(); retroceder();
+                :};
 estado ::= LUCES | PUERTAS | VENTANAS;
 asignacion ::= IDENTIFICADOR ASIGNACION op_aritmetica | error {:System.out.println("Error de asignacion");:} ASIGNACION;
 declaracion ::= declaracion_inicio

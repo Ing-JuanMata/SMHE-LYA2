@@ -650,15 +650,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
         Lexer lex = new Lexer(new java.io.StringReader(ST));
         SintaxPrueba sintax = new SintaxPrueba(lex);
         try {
-            
+
             sintax.parse();
+            sintax.arbolSintactico.getRaiz().getHijos().forEach(hijo -> {
+                System.out.println(hijo);
+            });
             errores.getErrores().forEach(error -> System.out.println(error));
             //System.out.println(tablaSimbolos);
             modeloDinamico.setRowCount(0);
             tablaSimbolos.verTabla(modeloDinamico);
         } catch (Exception ex) {
             System.out.println("Algo salio mal: " + ex.getMessage());
-            System.out.println(ST);
+            
         }
         /*
         if (errores.isEmpty()) {

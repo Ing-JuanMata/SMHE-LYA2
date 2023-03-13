@@ -5,6 +5,8 @@
 package analisis;
 
 import codigo.FrmPrincipal;
+import herramientas.ArbolSintactico;
+import herramientas.NodoSintactico;
 import herramientas.TablaErrores;
 import java_cup.runtime.Symbol;
 
@@ -15,10 +17,10 @@ import java_cup.runtime.Symbol;
 public class PruebaAnalizadores {
 
     public static void main(String[] args) throws Exception {
-        Lexer lex = new Lexer(new java.io.StringReader("inicio prueba{"));
-        Symbol s;
-        while ((s = lex.next_token()).sym != sym.EOF) {
-            System.out.println(sym.terminalNames[s.sym]);
-        }
+        ArbolSintactico arbol = new ArbolSintactico();
+        arbol.setValorRaiz("inicio");
+        arbol.agregarHijo(new NodoSintactico("INICIO"));
+        arbol.agregarHijo(new NodoSintactico("IDENTIFICADOR"));
+        arbol.getRaiz().getHijos().forEach(hijo -> System.out.println(hijo.valor));
     }
 }

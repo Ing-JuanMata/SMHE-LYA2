@@ -13,8 +13,8 @@ tiempo declarar como entero;
 condicion(falso){}
 }
 funcion f(var declarar como entero, var2 declarar como logico){
-tiempo declarar como logico = 10a;
-tiempo2 declarar como entero = 
+tiempo declarar como logico = 10;
+tiempo2 declarar como entero;
 }
 funcion a(){}
 }fin
