@@ -88,8 +88,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnCopiar = new javax.swing.JButton();
         btnPegar = new javax.swing.JButton();
         sep2 = new javax.swing.JToolBar.Separator();
-        btnDeshacer = new javax.swing.JButton();
-        btnRehacer = new javax.swing.JButton();
         sep3 = new javax.swing.JToolBar.Separator();
         btnCorrer = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
@@ -115,7 +113,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuGuardar = new javax.swing.JMenuItem();
         mnuGuardarC = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -197,30 +194,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         barraHerramientas.add(btnPegar);
         barraHerramientas.add(sep2);
-
-        btnDeshacer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/desHacerCambio.png"))); // NOI18N
-        btnDeshacer.setToolTipText("Deshacer cambio");
-        btnDeshacer.setFocusable(false);
-        btnDeshacer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnDeshacer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnDeshacer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeshacerActionPerformed(evt);
-            }
-        });
-        barraHerramientas.add(btnDeshacer);
-
-        btnRehacer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reHacerCambio.png"))); // NOI18N
-        btnRehacer.setToolTipText("Rehacer cambio");
-        btnRehacer.setFocusable(false);
-        btnRehacer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnRehacer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnRehacer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRehacerActionPerformed(evt);
-            }
-        });
-        barraHerramientas.add(btnRehacer);
         barraHerramientas.add(sep3);
 
         btnCorrer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/correrArchivo.png"))); // NOI18N
@@ -261,7 +234,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         lblConsola.setText("Consola");
         panelConsola.add(lblConsola, java.awt.BorderLayout.NORTH);
 
-        jSplitPane1.setRightComponent(panelConsola);
+        jSplitPane1.setBottomComponent(panelConsola);
 
         splitPanelContenedor.setDividerLocation(700);
         splitPanelContenedor.setResizeWeight(1);
@@ -279,11 +252,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         splitPanelContenedor.setLeftComponent(scrollEntrada);
 
         pestañasTablas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        pestañasTablas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                pestañasTablasMousePressed(evt);
-            }
-        });
 
         pTablaDinamica.setLayout(new java.awt.BorderLayout());
 
@@ -360,6 +328,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu3.add(mnuAbrir);
         jMenu3.add(jSeparator1);
 
+        mnuCerrar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         mnuCerrar.setText("Cerrar");
         mnuCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -389,13 +358,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jMenuBar2.add(jMenu3);
 
-        jMenu4.setText("Compilar");
-        jMenu4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jMenuBar2.add(jMenu4);
-
         jMenu1.setText("Ver");
         jMenu1.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem1.setText("Analisis Léxico");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -404,6 +370,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem2.setText("Analisis Sintactico");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -412,6 +379,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
+        ckbTablas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         ckbTablas.setText("Visualizar tablas ");
         ckbTablas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -579,22 +547,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         validarTablas();
     }//GEN-LAST:event_ckbTablasActionPerformed
 
-    private void btnDeshacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeshacerActionPerformed
-        try {
-            administradorCambios.undo();
-        } catch (Exception ex) {
-            showMessageDialog(null, "No hay mas cambios que deshacer.");
-        }
-    }//GEN-LAST:event_btnDeshacerActionPerformed
-
-    private void btnRehacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRehacerActionPerformed
-        try {
-            administradorCambios.redo();
-        } catch (Exception ex) {
-            showMessageDialog(null, "No hay mas cambios que rehacer.");
-        }
-    }//GEN-LAST:event_btnRehacerActionPerformed
-
     private void btnCortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCortarActionPerformed
         txtEntrada.cut();
     }//GEN-LAST:event_btnCortarActionPerformed
@@ -652,16 +604,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         try {
 
             sintax.parse();
-            sintax.arbolSintactico.getRaiz().getHijos().forEach(hijo -> {
-                System.out.println(hijo);
-            });
+            sintax.arbolSintactico.getRaiz().getHijos().forEach(hijo -> System.out.println(hijo.valor));
             errores.getErrores().forEach(error -> System.out.println(error));
             //System.out.println(tablaSimbolos);
             modeloDinamico.setRowCount(0);
             tablaSimbolos.verTabla(modeloDinamico);
         } catch (Exception ex) {
             System.out.println("Algo salio mal: " + ex.getMessage());
-            
+
         }
         /*
         if (errores.isEmpty()) {
@@ -690,10 +640,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
             System.out.println("Error inesperado");
         }*/
     }//GEN-LAST:event_txtEntradaKeyReleased
-
-    private void pestañasTablasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pestañasTablasMousePressed
-        //llenadoTEstatico(ckbTablaEstatica.getSelectedIndex());
-    }//GEN-LAST:event_pestañasTablasMousePressed
 
     // Funciones
     //Pendiente
@@ -961,14 +907,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnCopiar;
     private javax.swing.JButton btnCorrer;
     private javax.swing.JButton btnCortar;
-    private javax.swing.JButton btnDeshacer;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnPegar;
-    private javax.swing.JButton btnRehacer;
     private javax.swing.JCheckBoxMenuItem ckbTablas;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;

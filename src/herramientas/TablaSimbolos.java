@@ -44,6 +44,10 @@ public class TablaSimbolos {
     public void quitarDeTabla(LlaveTabla id) {
         tabla.remove(id);
     }
+    
+    public Object getValor(LlaveTabla identificador){
+        return tabla.get(identificador).valor;
+    }
 
     public void verTabla(javax.swing.table.DefaultTableModel modelo) {
         modelo.setRowCount(0);

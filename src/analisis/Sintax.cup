@@ -16,7 +16,7 @@ parser code
     }
 
     private void reportarError(String codigo, String encontrado){
-        if(this.s == null) this.s = cur_token;
+        this.s = cur_token;
         FrmPrincipal.errores.agregarErrorSintactico(codigo, s.left + 1, sym.terminalNames[s.sym], encontrado);
     }
 
@@ -30,6 +30,10 @@ parser code
 
     private void ponerValor(LlaveTabla identificador, Object valor){
         FrmPrincipal.tablaSimbolos.agregarValor(identificador, valor);
+    }
+
+    private Object getValor(LlaveTabla identificador){
+        return FrmPrincipal.tablaSimbolos.getValor(identificador);
     }
 
     private void ponerTipoDato(LlaveTabla identificador, String tipo){
@@ -81,12 +85,11 @@ terminal Integer NUMERO;
 terminal Boolean OP_BOOLEANO;
 terminal LlaveTabla IDENTIFICADOR;
 
-non terminal inicio, gramaticas, tiempo_cada, tiempo_por, unidad_tiempo, declaracion, 
-            declaracion_valor, ventilar, admitir, aula_vacia, estado, funcion,
-            inicio_fin, parametros, asignacion;
+non terminal inicio, gramaticas, tiempo_cada, tiempo_por, unidad_tiempo, 
+            declaracion_valor, ventilar, admitir, estado, funcion, inicio_fin, 
+            parametros, asignacion, valores, op_aritmetica, op1, op2, op3, op4;
 non terminal String declaracion_tipo_dato, tipo_dato;
 non terminal LlaveTabla declaracion_inicio;
-non terminal Integer op_aritmetica, incdec;
 non terminal Boolean condicion, sentencia_booleana, negacion_identificador, 
             negacion_booleana, relacional_booleana, sino;
 
@@ -98,30 +101,24 @@ start with inicio;
 
 inicio ::=
         INICIO IDENTIFICADOR:i {:
-            arbolSintactico=new ArbolSintactico("inicio");
-            agregarHijos("INICIO", i);
+            arbolSintactico=new ArbolSintactico("inicio"); 
             ambito = i.id;
             ponerAmbito(i);
             agregarFuncion(i);
-        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO 
-        {:
-            agregarHijos("LLAVE_ABIERTA", "COMIENZO", "PARENTESIS_ABIERTO");
+        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO {:
             agregarHijo("tiempo_cada", true);
-        :} tiempo_cada PARENTESIS_CERRADO LLAVE_ABIERTA
-        {:
-            agregarHijos("PARENTESIS_CERRADO", "LLAVE_ABIERTA");
+        :} tiempo_cada PARENTESIS_CERRADO LLAVE_ABIERTA {:
             agregarHijo("gramaticas", true);
         :}
-        gramaticas LLAVE_CERRADA 
-        {:agregarHijo("LLAVE_CERRADA"); System.out.println("Agregando llave e inicio_fin");agregarHijo("inicio_fin", true);:} inicio_fin
+        gramaticas LLAVE_CERRADA {:agregarHijo("inicio_fin", true);:} inicio_fin
         | INICIO error {:
             arbolSintactico=new ArbolSintactico("inicio");
-            agregarHijos("INICIO", "error");
+            agregarHijo("error");
             agregarHijo("gramaticas", true);
             reportarError("ES1", null);
             ambito="rutina_principal";
             :}
-        gramaticas LLAVE_CERRADA inicio_fin
+        gramaticas LLAVE_CERRADA {:agregarHijo("inicio_fin", true);:} inicio_fin
         | error {:
             arbolSintactico=new ArbolSintactico("inicio");
             agregarHijo("error");
@@ -129,129 +126,259 @@ inicio ::=
             reportarError("ES1", null);
             ambito = "rutina_principal";
             :}
-        gramaticas LLAVE_CERRADA inicio_fin;
+        gramaticas LLAVE_CERRADA {:agregarHijo("inicio_fin", true);:} inicio_fin;
 inicio_fin ::= LLAVE_CERRADA FIN {:
                     System.out.println("ANALISIS TERMINADO");
-                    agregarHijos("LLAVE_CERRADA", "FIN");
+                    retroceder();
                 :}
                 | error {:reportarError("ES1", null);:} 
                 FIN {:
                     System.out.println("ANALISIS TERMINADO");
-                    agregarHijos("error", "FIN");
+                    retroceder();
                 :}
-                | FUNCION {:agregarHijo("FUNCION"); agregarHijo("funcion", true);:}
-                funcion inicio_fin
+                | FUNCION {:
+                    agregarHijo("funcion", true);
+                :}
+                funcion inicio_fin {:retroceder();:}
                 | error {:
                     reportarError("ES1", null);
-                    agregarHijo("error");
                     agregarHijo("funcion", true);
-                :} funcion inicio_fin;
+                :} funcion inicio_fin {:retroceder();:};
 funcion ::= IDENTIFICADOR:i {:
-                                
                                 agregarFuncion(i);
                                 ambito = i.id;
                             :}
-            PARENTESIS_ABIERTO 
-            /*{:agregarHijo("PARENTESIS_ABIERTO"); agregarHijo("parametros", true);:}*/
-            parametros PARENTESIS_CERRADO LLAVE_ABIERTA 
-            /*{:
-                agregarHijos("PARENTESIS_CERRADO", "LLAVE_ABIERTA");
+            PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA 
+            {:
                 agregarHijo("gramaticas", true);
-            :}*/ gramaticas LLAVE_CERRADA {:agregarHijo("LLAVE_CERRADA"); /*retroceder();*/:};
-parametros ::= declaracion_inicio:i COMA parametros {:agregarParametro(i);:} 
-                | declaracion_inicio:i {:agregarParametro(i);:} | /*{:retroceder();:}*/;
-gramaticas ::= incdec | declaracion PUNTO_COMA gramaticas
-            | declaracion {:reportarError("ES7", null);:} gramaticas
-            | asignacion PUNTO_COMA gramaticas 
-            | asignacion {:reportarError("ES7", null);:} gramaticas
-            | CONDICION condicion gramaticas
-            | VENTILAR ventilar PUNTO_COMA gramaticas
-            | VENTILAR ventilar {:reportarError("ES7", null);:} gramaticas
-            | ADMITIR admitir PUNTO_COMA gramaticas
-            | ADMITIR admitir {:reportarError("ES7", null);:} gramaticas
-            | AULAVACIA aula_vacia PUNTO_COMA gramaticas
-            | AULAVACIA aula_vacia {:reportarError("ES7", null);:} gramaticas
-            | SALIR PUNTO_COMA gramaticas
-            | SALIR {:reportarError("ES7", null);:} gramaticas
-            | APAGAR LUCES PUNTO_COMA gramaticas
-            | APAGAR LUCES {:reportarError("ES7", null);:} gramaticas
-            | ENCENDER LUCES PUNTO_COMA gramaticas
-            | ENCENDER LUCES {:reportarError("ES7", null);:} gramaticas
+            :} gramaticas LLAVE_CERRADA {:retroceder();:};
+parametros ::= declaracion_inicio:i {:agregarParametro(i);retroceder();:} COMA parametros 
+                | declaracion_inicio:i {:agregarParametro(i);:} | /**/;
+gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA 
+            {:
+                agregarHijo("incdec", true);
+                agregarHijos(i, "INC", "PUNTO_COMA");
+                retroceder();
+            :} gramaticas
+            | IDENTIFICADOR INC
+            {:
+                reportarError("ES7", null);
+                agregarHijo("incdec", true);
+                agregarHijos("IDENTIFICADOR", "INC", "error");
+                retroceder();
+            :} gramaticas
+            | IDENTIFICADOR:i DEC PUNTO_COMA
+            {:
+                agregarHijo("incdec", true);
+                agregarHijos(i, "DEC", "PUNTO_COMA");
+                retroceder();
+            :} gramaticas
+            | IDENTIFICADOR:i DEC
+            {:
+                agregarHijo("incdec", true);
+                reportarError("ES7", null);
+                agregarHijos(i, "DEC", "error");
+                retroceder();
+            :} gramaticas 
+            | INC IDENTIFICADOR:i PUNTO_COMA
+            {:
+                agregarHijo("incdec", true);
+                agregarHijos("INC", i, "PUNTO_COMA");
+                retroceder();
+            :} gramaticas
+            | INC IDENTIFICADOR:i
+            {:
+                reportarError("ES7", null);
+                agregarHijo("incdec", true);
+                agregarHijos("INC", i, "error");
+                retroceder();
+            :} gramaticas
+            | DEC IDENTIFICADOR:i PUNTO_COMA
+            {:
+                agregarHijo("incdec", true);
+                agregarHijos("DEC", i, "PUNTO_COMA");
+                retroceder();
+            :} gramaticas
+            | DEC IDENTIFICADOR:i
+            {:
+                agregarHijo("incdec", true);
+                reportarError("ES7", null);
+                agregarHijos("DEC", i, "error");
+                retroceder();
+            :} gramaticas
+            | declaracion_inicio {:retroceder();:} PUNTO_COMA gramaticas
+            | declaracion_inicio {:reportarError("ES7", null); retroceder();:} gramaticas
+            | declaracion_inicio declaracion_valor {:retroceder();:} PUNTO_COMA gramaticas
+            | declaracion_inicio declaracion_valor 
+            {:
+                reportarError("ES7", null);
+                retroceder();
+            :} gramaticas
+            | asignacion {:retroceder();:} PUNTO_COMA gramaticas 
+            | asignacion {:reportarError("ES7", null); retroceder();:} gramaticas
+            | CONDICION condicion {:retroceder();:} gramaticas
+            | VENTILAR ventilar {:retroceder();:} PUNTO_COMA gramaticas
+            | VENTILAR ventilar {:reportarError("ES7", null);retroceder();:} gramaticas
+            | ADMITIR admitir {:retroceder();:} PUNTO_COMA gramaticas
+            | ADMITIR admitir {:reportarError("ES7", null); retroceder();:} gramaticas
+            | SALIR {:agregarHijo("SALIR");:} PUNTO_COMA gramaticas
+            | SALIR {:reportarError("ES7", null); agregarHijo("SALIR");:} gramaticas
+            | APAGAR LUCES {:
+                agregarHijo("accion", true);
+                agregarHijos("APAGAR", "LUCES");
+                retroceder();
+            :} PUNTO_COMA gramaticas
+            | APAGAR LUCES {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("APAGAR", "LUCES");
+                retroceder();
+            :} gramaticas
+            | ENCENDER LUCES {:
+                agregarHijo("accion", true);
+                agregarHijos("ENCENDER", "LUCES");
+                retroceder();
+            :} PUNTO_COMA gramaticas
+            | ENCENDER LUCES {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("ENCENDER", "LUCES");
+                retroceder();
+            :} gramaticas
             | ABRIR PUERTAS tiempo_por PUNTO_COMA gramaticas
             | ABRIR PUERTAS tiempo_por {:reportarError("ES7", null);:} gramaticas
-            | ABRIR PUERTAS MANTENER PUNTO_COMA gramaticas 
-            | ABRIR PUERTAS MANTENER {:reportarError("ES7", null);:} gramaticas
+            | ABRIR PUERTAS MANTENER {:
+                agregarHijo("accion", true);
+                agregarHijos("ABRIR", "PUERTAS", "MANTENER");
+                retroceder();
+            :} PUNTO_COMA gramaticas 
+            | ABRIR PUERTAS MANTENER {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("ABRIR", "PUERTAS", "MANTENER");
+                retroceder();
+            :} gramaticas
             | CERRAR PUERTAS tiempo_por PUNTO_COMA gramaticas
             | CERRAR PUERTAS tiempo_por {:reportarError("ES7", null);:} gramaticas
-            | CERRAR PUERTAS MANTENER PUNTO_COMA gramaticas
-            | CERRAR PUERTAS MANTENER {:reportarError("ES7", null);:} gramaticas
+            | CERRAR PUERTAS MANTENER {:
+                agregarHijo("accion", true);
+                agregarHijos("CERRAR", "PUERTAS", "MANTENER");
+                retroceder();
+            :} PUNTO_COMA gramaticas
+            | CERRAR PUERTAS MANTENER {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("CERRAR", "PUERTAS", "MANTENER");
+                retroceder();
+            :} gramaticas
             | ABRIR VENTANAS tiempo_por PUNTO_COMA gramaticas
             | ABRIR VENTANAS tiempo_por {:reportarError("ES7", null);:} gramaticas
-            | ABRIR VENTANAS MANTENER PUNTO_COMA gramaticas 
-            | ABRIR VENTANAS MANTENER {:reportarError("ES7", null);:} gramaticas
+            | ABRIR VENTANAS MANTENER {:
+                agregarHijo("accion", true);
+                agregarHijos("ABRIR", "VENTANAS", "MANTENER");
+                retroceder();
+            :} PUNTO_COMA gramaticas 
+            | ABRIR VENTANAS MANTENER {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("ABRIR", "VENTANAS", "MANTENER");
+                retroceder();
+            :} gramaticas
             | CERRAR VENTANAS tiempo_por PUNTO_COMA gramaticas 
             | CERRAR VENTANAS tiempo_por {:reportarError("ES7", null);:} gramaticas
-            | CERRAR VENTANAS MANTENER PUNTO_COMA gramaticas
-            | CERRAR VENTANAS MANTENER {:reportarError("ES7", null);:} gramaticas
-            | OBTENER TEMPERATURA PUNTO_COMA gramaticas
-            | OBTENER TEMPERATURA {:reportarError("ES7", null);:} gramaticas
-            | OBTENER PERSONAS PUNTO_COMA gramaticas
-            | OBTENER PERSONAS {:reportarError("ES7", null);:} gramaticas
+            | CERRAR VENTANAS MANTENER {:
+                agregarHijo("accion", true);
+                agregarHijos("CERRAR", "VENTANAS", "MANTENER");
+                retroceder();
+            :} PUNTO_COMA gramaticas
+            | CERRAR VENTANAS MANTENER {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("CERRAR", "VENTANAS", "MANTENER");
+                retroceder();
+            :} gramaticas
             | SANITIZAR tiempo_por PUNTO_COMA gramaticas
             | SANITIZAR tiempo_por {:reportarError("ES7", null);:} gramaticas
             | DISPENSAR tiempo_por PUNTO_COMA gramaticas
             | DISPENSAR tiempo_por {:reportarError("ES7", null);:} gramaticas
-            | ESTADO estado PUNTO_COMA gramaticas
-            | ESTADO estado {:reportarError("ES7", null);:} gramaticas
-            | error {:reportarError("ES2", null);:} PUNTO_COMA gramaticas
-            | error {:reportarError("ES1", null);:}
-            IDENTIFICADOR:i {:
-                                agregarFuncion(i);
-                                ambito = i.id;
-                            :}
-            PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA
-            gramaticas
+            | error {:reportarError("ES2", null);:} gramaticas
             | {:retroceder();:};
-incdec ::= IDENTIFICADOR INC PUNTO_COMA gramaticas | IDENTIFICADOR DEC PUNTO_COMA gramaticas 
-            | INC IDENTIFICADOR PUNTO_COMA gramaticas | DEC IDENTIFICADOR PUNTO_COMA gramaticas;
 tiempo_cada ::= CADA NUMERO:n {:
                 agregarHijos("CADA", n); 
                 agregarHijo("unidad_tiempo", true);
-                :} unidad_tiempo;
+                :} unidad_tiempo {:retroceder();:}
+                | error {:agregarHijo("error"); retroceder();:};
 tiempo_por ::= POR NUMERO:n {:
+                agregarHijo("tiempo_por", true);
                 agregarHijos("POR", n);
-                agregarHijo("unidad_tiempo", true);
-                :} unidad_tiempo;
-unidad_tiempo ::= SEG {:agregarHijo("SEG"); retroceder();retroceder();:} 
-                | MIN {:agregarHijo("SEG"); retroceder();retroceder();:} 
-                | HR {:agregarHijo("SEG"); retroceder();retroceder();:} 
+                :} unidad_tiempo {:retroceder();:}
+                | error {:
+                    agregarHijo("tiempo_por", true);
+                    agregarHijo("error");
+                    retroceder();
+                :};
+unidad_tiempo ::= SEG {:agregarHijo("SEG");:} 
+                | MIN {:agregarHijo("MIN");:} 
+                | HR {:agregarHijo("HR");:} 
                 | error {:
                 reportarError("ES3", null); 
                 agregarHijo("error");
-                retroceder(); retroceder();
                 :};
 estado ::= LUCES | PUERTAS | VENTANAS;
-asignacion ::= IDENTIFICADOR ASIGNACION op_aritmetica | error {:System.out.println("Error de asignacion");:} ASIGNACION;
-declaracion ::= declaracion_inicio
-            | declaracion_inicio:i declaracion_valor:valor {:ponerValor(i,valor);:};
-declaracion_inicio ::= IDENTIFICADOR:i DECLARAR declaracion_tipo_dato:td {:ponerAmbito(i);ponerTipoDato(i,td);RESULT=i;:};
-declaracion_valor ::= ASIGNACION OP_BOOLEANO:valor {:RESULT=valor;:} | ASIGNACION op_aritmetica:valor {:RESULT=valor;:};
+asignacion ::= IDENTIFICADOR:i ASIGNACION {:
+                agregarHijo("asignacion", true);
+                agregarHijos(i, "ASIGNACION");
+            :} op_aritmetica
+            | error {:
+                System.out.println("Error de asignacion");
+                agregarHijo("asignacion", true);
+                agregarHijo("error");
+            :} ASIGNACION {:
+                agregarHijos(i, "ASIGNACION");
+            :} op_aritmetica;
+declaracion_inicio ::= IDENTIFICADOR:i DECLARAR declaracion_tipo_dato:td {:
+                        ponerAmbito(i);
+                        ponerTipoDato(i,td);
+                        agregarHijo("declaracion", true);
+                        agregarHijo(i);
+                        RESULT=i;
+                    :};
+declaracion_valor ::= ASIGNACION OP_BOOLEANO:ob {:agregarHijos("ASIGNACION", ob);:} 
+                    | ASIGNACION {:agregarHijo("ASIGNACION");:} op_aritmetica;
 declaracion_tipo_dato ::= COMO tipo_dato:td {:RESULT = td;:};
 tipo_dato ::= ENTERO {:RESULT = "entero";:} | LOGICO {:RESULT = "logico";:}
                 | error {:reportarError("ES4", null); RESULT = "error";:};
-op_aritmetica ::= PARENTESIS_ABIERTO op_aritmetica:a PARENTESIS_CERRADO 
-                | NUMERO:a AR_SUMA op_aritmetica:b 
-                | NUMERO:a AR_RESTA op_aritmetica:b 
-                | NUMERO:a AR_MULTIPLICACION op_aritmetica:b 
-                | NUMERO:a AR_DIVISION op_aritmetica:b 
-                | NUMERO:a | IDENTIFICADOR:a 
-                | error {:reportarError("ES6", null);:};
+op_aritmetica ::=   {:agregarHijo("op_aritmetica", true);:} 
+                    op2 op1 {:retroceder();:};
+op1 ::= {:agregarHijo("op1", true);:} AR_SUMA {:agregarHijo("AR_SUMA");:}
+        op2 op1 {:retroceder();:} 
+    | {:agregarHijo("op1", true);:} AR_RESTA {:agregarHijo("AR_RESTA");:}
+    op2 op1 {:retroceder();:}
+    | {:retroceder();:};
+op2 ::= {:agregarHijo("op2", true);:} op4 op3 {:retroceder();:};
+op3 ::= {:agregarHijo("op3", true);:} AR_MULTIPLICACION {:agregarHijo("AR_MULTIPLICACION");:}
+        op4 op3 {:retroceder();:} 
+        | {:agregarHijo("op3", true);:} AR_DIVISION {:agregarHijo("AR_DIVISION");:}
+        op4 op3 {:retroceder();:} 
+        | {:retroceder();:};
+op4 ::= {:agregarHijo("op4", true);:} PARENTESIS_ABIERTO op_aritmetica PARENTESIS_CERRADO {:retroceder();:} 
+    | {:agregarHijo("op4", true);:} valores {:retroceder();:} 
+    | {:agregarHijo("op4", true);:} AR_RESTA {:agregarHijos("AR_RESTA");:} valores {:retroceder();:}
+    | OBTENER TEMPERATURA {:agregarHijo("sistema"); retroceder();:} 
+    | OBTENER PERSONAS {:agregarHijo("sistema"); retroceder();:} 
+    | error {:reportarError("ES6", null); agregarHijo("error"); retroceder();:};
+valores ::= NUMERO:n {:agregarHijo(n);:} | IDENTIFICADOR:i {:agregarHijo(i);:};
 condicion ::= PARENTESIS_ABIERTO sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA
             | PARENTESIS_ABIERTO sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA sino;
-sentencia_booleana ::= OP_BOOLEANO | OP_BOOLEANO LOGICO_AND sentencia_booleana 
+sentencia_booleana ::= OP_BOOLEANO 
+                | OP_BOOLEANO LOGICO_AND sentencia_booleana 
                 | OP_BOOLEANO LOGICO_OR sentencia_booleana
                 | IDENTIFICADOR 
-                | IDENTIFICADOR LOGICO_AND sentencia_booleana IDENTIFICADOR LOGICO_OR sentencia_booleana
+                | IDENTIFICADOR LOGICO_AND sentencia_booleana
+                | IDENTIFICADOR LOGICO_OR sentencia_booleana
+                | ESTADO estado
+                | ESTADO estado LOGICO_AND sentencia_booleana
+                | ESTADO estado LOGICO_OR sentencia_booleana
                 | negacion_identificador 
                 | negacion_identificador LOGICO_AND sentencia_booleana
                 | negacion_identificador LOGICO_OR sentencia_booleana 
@@ -270,4 +397,3 @@ relacional_booleana ::= IDENTIFICADOR REL_MENOR op_aritmetica | IDENTIFICADOR RE
 sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
 ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO;
 admitir ::= ADMITIR PARENTESIS_ABIERTO sentencia_booleana COMA tiempo_por COMA sentencia_booleana PARENTESIS_CERRADO;
-aula_vacia ::= AULAVACIA PARENTESIS_ABIERTO sentencia_booleana COMA tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO;

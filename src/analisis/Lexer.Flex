@@ -160,7 +160,7 @@ espacio=[ \t\r]+
                 }
 
 /* Numero */
-("(-"{D}+")")|{D}+ {return symbol(sym.NUMERO, Integer.parseInt(yytext()));}
+{D}+ {return symbol(sym.NUMERO, Integer.parseInt(yytext()));}
 
 /* Error general */
- [^ ;,{}[]()/<>=!&\+\-\*\n\t\|]+       {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}
+[^ ;,{}[]()/<>=!&\+\-\*\n\t\|]+       {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}
