@@ -216,11 +216,11 @@ gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA
             :} gramaticas
             | asignacion {:retroceder();:} PUNTO_COMA gramaticas 
             | asignacion {:reportarError("ES7", null); retroceder();:} gramaticas
-            | CONDICION condicion {:retroceder();:} gramaticas
-            | VENTILAR ventilar {:retroceder();:} PUNTO_COMA gramaticas
-            | VENTILAR ventilar {:reportarError("ES7", null);retroceder();:} gramaticas
-            | ADMITIR admitir {:retroceder();:} PUNTO_COMA gramaticas
-            | ADMITIR admitir {:reportarError("ES7", null); retroceder();:} gramaticas
+            | CONDICION {:agregarHijo("condicion", true);:} condicion {:retroceder();:} gramaticas
+            | ventilar {:retroceder();:} PUNTO_COMA gramaticas
+            | ventilar {:reportarError("ES7", null);retroceder();:} gramaticas
+            | admitir {:retroceder();:} PUNTO_COMA gramaticas
+            | admitir {:reportarError("ES7", null); retroceder();:} gramaticas
             | SALIR {:agregarHijo("SALIR");:} PUNTO_COMA gramaticas
             | SALIR {:reportarError("ES7", null); agregarHijo("SALIR");:} gramaticas
             | APAGAR LUCES {:
@@ -245,8 +245,17 @@ gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA
                 agregarHijos("ENCENDER", "LUCES");
                 retroceder();
             :} gramaticas
-            | ABRIR PUERTAS tiempo_por PUNTO_COMA gramaticas
-            | ABRIR PUERTAS tiempo_por {:reportarError("ES7", null);:} gramaticas
+            | ABRIR PUERTAS tiempo_por {:
+                agregarHijo("accion", true);
+                agregarHijos("ABRIR", "PUERTAS");
+                retroceder();
+            :} PUNTO_COMA gramaticas
+            | ABRIR PUERTAS tiempo_por {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("ABRIR", "PUERTAS");
+                retroceder();
+            :} gramaticas
             | ABRIR PUERTAS MANTENER {:
                 agregarHijo("accion", true);
                 agregarHijos("ABRIR", "PUERTAS", "MANTENER");
@@ -258,8 +267,17 @@ gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA
                 agregarHijos("ABRIR", "PUERTAS", "MANTENER");
                 retroceder();
             :} gramaticas
-            | CERRAR PUERTAS tiempo_por PUNTO_COMA gramaticas
-            | CERRAR PUERTAS tiempo_por {:reportarError("ES7", null);:} gramaticas
+            | CERRAR PUERTAS tiempo_por {:
+                agregarHijo("accion", true);
+                agregarHijos("CERRAR", "PUERTAS");
+                retroceder();
+            :} PUNTO_COMA gramaticas
+            | CERRAR PUERTAS tiempo_por {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("CERRAR", "PUERTAS");
+                retroceder();
+            :} gramaticas
             | CERRAR PUERTAS MANTENER {:
                 agregarHijo("accion", true);
                 agregarHijos("CERRAR", "PUERTAS", "MANTENER");
@@ -271,8 +289,17 @@ gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA
                 agregarHijos("CERRAR", "PUERTAS", "MANTENER");
                 retroceder();
             :} gramaticas
-            | ABRIR VENTANAS tiempo_por PUNTO_COMA gramaticas
-            | ABRIR VENTANAS tiempo_por {:reportarError("ES7", null);:} gramaticas
+            | ABRIR VENTANAS tiempo_por {:
+                agregarHijo("accion", true);
+                agregarHijos("ABRIR", "VENTANAS");
+                retroceder();
+            :} PUNTO_COMA gramaticas
+            | ABRIR VENTANAS tiempo_por {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("ABRIR", "VENTANAS");
+                retroceder();
+            :} gramaticas
             | ABRIR VENTANAS MANTENER {:
                 agregarHijo("accion", true);
                 agregarHijos("ABRIR", "VENTANAS", "MANTENER");
@@ -284,8 +311,17 @@ gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA
                 agregarHijos("ABRIR", "VENTANAS", "MANTENER");
                 retroceder();
             :} gramaticas
-            | CERRAR VENTANAS tiempo_por PUNTO_COMA gramaticas 
-            | CERRAR VENTANAS tiempo_por {:reportarError("ES7", null);:} gramaticas
+            | CERRAR VENTANAS tiempo_por {:
+                agregarHijo("accion", true);
+                agregarHijos("CERRAR", "VENTANAS");
+                retroceder();
+            :} PUNTO_COMA gramaticas 
+            | CERRAR VENTANAS tiempo_por {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijos("CERRAR", "VENTANAS");
+                retroceder();
+            :} gramaticas
             | CERRAR VENTANAS MANTENER {:
                 agregarHijo("accion", true);
                 agregarHijos("CERRAR", "VENTANAS", "MANTENER");
@@ -297,10 +333,28 @@ gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA
                 agregarHijos("CERRAR", "VENTANAS", "MANTENER");
                 retroceder();
             :} gramaticas
-            | SANITIZAR tiempo_por PUNTO_COMA gramaticas
-            | SANITIZAR tiempo_por {:reportarError("ES7", null);:} gramaticas
-            | DISPENSAR tiempo_por PUNTO_COMA gramaticas
-            | DISPENSAR tiempo_por {:reportarError("ES7", null);:} gramaticas
+            | SANITIZAR tiempo_por {:
+                agregarHijo("accion", true);
+                agregarHijo("SANITIZAR");
+                retroceder();
+            :} PUNTO_COMA gramaticas
+            | SANITIZAR tiempo_por {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijo("SANITIZAR");
+                retroceder();
+            :} gramaticas
+            | DISPENSAR tiempo_por {:
+                agregarHijo("accion", true);
+                agregarHijo("DISPENSAR");
+                retroceder();
+            :} PUNTO_COMA gramaticas
+            | DISPENSAR tiempo_por {:
+                reportarError("ES7", null);
+                agregarHijo("accion", true);
+                agregarHijo("DISPENSAR");
+                retroceder();
+            :} gramaticas
             | error {:reportarError("ES2", null);:} gramaticas
             | {:retroceder();:};
 tiempo_cada ::= CADA NUMERO:n {:
@@ -308,15 +362,8 @@ tiempo_cada ::= CADA NUMERO:n {:
                 agregarHijo("unidad_tiempo", true);
                 :} unidad_tiempo {:retroceder();:}
                 | error {:agregarHijo("error"); retroceder();:};
-tiempo_por ::= POR NUMERO:n {:
-                agregarHijo("tiempo_por", true);
-                agregarHijos("POR", n);
-                :} unidad_tiempo {:retroceder();:}
-                | error {:
-                    agregarHijo("tiempo_por", true);
-                    agregarHijo("error");
-                    retroceder();
-                :};
+tiempo_por ::= {:agregarHijo("tiempo_por", true);:} POR {:agregarHijo("POR");:} op_aritmetica
+                unidad_tiempo {:retroceder();:};
 unidad_tiempo ::= SEG {:agregarHijo("SEG");:} 
                 | MIN {:agregarHijo("MIN");:} 
                 | HR {:agregarHijo("HR");:} 
@@ -395,5 +442,7 @@ relacional_booleana ::= IDENTIFICADOR REL_MENOR op_aritmetica | IDENTIFICADOR RE
                 | IDENTIFICADOR REL_MENOR_IGUAL op_aritmetica | IDENTIFICADOR REL_MAYOR_IGUAL op_aritmetica
                 | IDENTIFICADOR REL_DIFERENTE op_aritmetica | IDENTIFICADOR REL_IGUAL op_aritmetica;
 sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
-ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO;
-admitir ::= ADMITIR PARENTESIS_ABIERTO sentencia_booleana COMA tiempo_por COMA sentencia_booleana PARENTESIS_CERRADO;
+ventilar ::= VENTILAR {:agregarHijo("ventilar", true);:} PARENTESIS_ABIERTO 
+            tiempo_por COMA sentencia_booleana COMA sentencia_booleana PARENTESIS_CERRADO;
+admitir ::= ADMITIR {:agregarHijo("admitir", true);:} PARENTESIS_ABIERTO
+            sentencia_booleana COMA tiempo_por COMA sentencia_booleana PARENTESIS_CERRADO;
