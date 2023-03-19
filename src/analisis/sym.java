@@ -9,24 +9,26 @@ package analisis;
 public class sym {
   /* terminals */
   public static final int APAGAR = 28;
-  public static final int NUMERO = 58;
+  public static final int NUMERO = 61;
   public static final int PUERTAS = 23;
   public static final int ENCENDER = 29;
   public static final int POR = 16;
   public static final int CADA = 15;
-  public static final int AR_MULTIPLICACION = 44;
-  public static final int REL_MENOR = 36;
+  public static final int CORCHETE_CERRADO = 58;
+  public static final int AR_MULTIPLICACION = 45;
+  public static final int REL_MENOR = 37;
   public static final int SEG = 17;
   public static final int ABRIR = 20;
   public static final int ENTERO = 4;
   public static final int FUNCION = 33;
   public static final int OBTENER = 25;
-  public static final int REL_MAYOR = 37;
-  public static final int PARENTESIS_ABIERTO = 52;
+  public static final int REL_MAYOR = 38;
+  public static final int USAR = 36;
+  public static final int PARENTESIS_ABIERTO = 53;
   public static final int FIN = 2;
-  public static final int LLAVE_ABIERTA = 54;
+  public static final int LLAVE_ABIERTA = 55;
   public static final int VENTILAR = 8;
-  public static final int IDENTIFICADOR = 60;
+  public static final int IDENTIFICADOR = 63;
   public static final int B = 35;
   public static final int COMIENZO = 3;
   public static final int A = 34;
@@ -34,39 +36,40 @@ public class sym {
   public static final int PERSONAS = 27;
   public static final int MANTENER = 24;
   public static final int DECLARAR = 13;
-  public static final int INC = 49;
+  public static final int INC = 50;
   public static final int COMO = 14;
-  public static final int OP_BOOLEANO = 59;
-  public static final int LOGICO_AND = 47;
+  public static final int OP_BOOLEANO = 62;
+  public static final int LOGICO_AND = 48;
   public static final int MIN = 18;
-  public static final int PUNTO_COMA = 56;
+  public static final int PUNTO_COMA = 59;
   public static final int CONDICION = 6;
-  public static final int AR_RESTA = 43;
+  public static final int AR_RESTA = 44;
   public static final int SALIR = 11;
+  public static final int CORCHETE_ABIERTO = 57;
   public static final int EOF = 0;
   public static final int error = 1;
-  public static final int COMA = 57;
-  public static final int NEGACION = 46;
+  public static final int COMA = 60;
+  public static final int NEGACION = 47;
   public static final int LOGICO = 5;
   public static final int DISPENSAR = 10;
   public static final int HR = 19;
-  public static final int ASIGNACION = 51;
-  public static final int REL_MAYOR_IGUAL = 39;
+  public static final int ASIGNACION = 52;
+  public static final int REL_MAYOR_IGUAL = 40;
   public static final int ADMITIR = 9;
   public static final int VENTANAS = 22;
-  public static final int REL_DIFERENTE = 40;
+  public static final int REL_DIFERENTE = 41;
   public static final int CERRAR = 21;
-  public static final int AR_DIVISION = 45;
+  public static final int AR_DIVISION = 46;
   public static final int ESTADO = 32;
   public static final int SANITIZAR = 30;
-  public static final int REL_MENOR_IGUAL = 38;
-  public static final int PARENTESIS_CERRADO = 53;
-  public static final int LOGICO_OR = 48;
-  public static final int REL_IGUAL = 41;
-  public static final int LLAVE_CERRADA = 55;
-  public static final int AR_SUMA = 42;
+  public static final int REL_MENOR_IGUAL = 39;
+  public static final int PARENTESIS_CERRADO = 54;
+  public static final int LOGICO_OR = 49;
+  public static final int REL_IGUAL = 42;
+  public static final int LLAVE_CERRADA = 56;
+  public static final int AR_SUMA = 43;
   public static final int INICIO = 12;
-  public static final int DEC = 50;
+  public static final int DEC = 51;
   public static final int LUCES = 31;
   public static final int TEMPERATURA = 26;
   public static final String[] terminalNames = new String[] {
@@ -106,6 +109,7 @@ public class sym {
   "FUNCION",
   "A",
   "B",
+  "USAR",
   "REL_MENOR",
   "REL_MAYOR",
   "REL_MENOR_IGUAL",
@@ -126,6 +130,8 @@ public class sym {
   "PARENTESIS_CERRADO",
   "LLAVE_ABIERTA",
   "LLAVE_CERRADA",
+  "CORCHETE_ABIERTO",
+  "CORCHETE_CERRADO",
   "PUNTO_COMA",
   "COMA",
   "NUMERO",

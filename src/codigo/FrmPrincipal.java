@@ -595,6 +595,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void btnCorrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorrerActionPerformed
         errores = new TablaErrores();
         tablaSimbolos = new TablaSimbolos();
+        funciones = new TablaFunciones();
         tokens.clear();
         txtError.setText("");
 

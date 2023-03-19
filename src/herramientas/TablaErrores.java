@@ -34,12 +34,17 @@ public class TablaErrores {
         tabla.put("ES6", "Error sintactico 6: en la linea %d el formato de su expresion aritmetica no es correcto");
         tabla.put("ES7", "Error sintactico 7: en la linea %d no se ha encontrado el punto y coma para la instruccion ingresada");
         tabla.put("ES8", "Error sintactico 8: en la linea %d mediante la cadena definida como \"%s\" se ha producido un error irrecuperable por el analizador, favor de revisar dicha linea");
+        tabla.put("ES9", "Error sintactico 9: en la linea %d no se ha encontrado el caracter que define el tipo de expresion de asignacion");
+        tabla.put("ES10", "Error sintactico 10: antes de la linea %d se esperaba \"salir;\"");
         tabla.put("ESM1", "Error semantico 1: en la linea %d el identificador %s no ha sido declarado");
         tabla.put("ESM2", "Error semantico 2: en la linea %d el tipo de dato del identificador %s no deberia ser %s");
         tabla.put("ESM3", "Error semantico 3: en la linea %d el identificador %s no tiene ningun valor");
         tabla.put("ESM4", "Error semantico 4: en la linea %d el identificador %s ya ha sido declarado");
         tabla.put("ESM5", "Error semantico 5: En la linea %d el valor %s de la expresion no se puede guardar en el identificador \"%s\" de tipo %s");
         tabla.put("ESM6", "Error semantico 6: En la linea %d el identificador %s no tiene ningun tipo asociado");
+        tabla.put("ESM7", "Error semantico 7: En la linea %d se ha llamado a la funcion %s, dicha funcion no ha sido declarada");
+        tabla.put("ESM8", "Error semantico 8: En la linea %d se han colocado %s parametros para la funcion %s y se esperaban %s parametros");
+        tabla.put("ESM9", "Error semantico 9: En la linea %d se ha colocado un tipo erroneo en el parametro numero %s, en dicho lugar se esperaba un valor %s");
     }
 
     public ArrayList<String> getErrores() {
@@ -52,7 +57,7 @@ public class TablaErrores {
 
     public void agregarErrorSintactico(String error, int linea, String... valores) {
         switch (error) {
-            case "ES1", "ES3", "ES4", "ES5", "ES6", "ES7" ->
+            case "ES1", "ES3", "ES4", "ES5", "ES6", "ES7", "ES9", "ES10" ->
                 errores.add(String.format(tabla.get(error), linea));
             case "ES2", "ES8" ->
                 errores.add(String.format(tabla.get(error), linea, valores[0]));
@@ -63,19 +68,14 @@ public class TablaErrores {
 
     public void agregarErrorSemantico(String error, int linea, String... valores) {
         switch (error) {
-            case "ESM1", "ESM3", "ESM4", "ESM7" -> {
+            case "ESM1", "ESM3", "ESM4", "ESM7" ->
                 errores.add(String.format(tabla.get(error), linea, valores[0]));
-
-            }
-            case "ESM2" ->
+            case "ESM2", "ESM9" ->
                 errores.add(String.format(tabla.get(error), linea, valores[0], valores[1]));
-            case "ESM5" ->
+            case "ESM5", "ESM8" ->
                 errores.add(String.format(tabla.get(error), linea, valores[0], valores[1], valores[2]));
             default ->
                 System.out.println("No se ha encontrado el error semantico introducido: " + error);
         }
-    }
-
-    public void agregarErrorSemantico(String error, String cuerpo) {
     }
 }

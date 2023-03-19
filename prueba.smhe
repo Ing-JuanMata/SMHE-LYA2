@@ -1,6 +1,7 @@
 inicio prueba{
 comienzo(cada 5 min){
-tiempo declarar como entero = b verdadero;
-tiempo = a tiempo + 1;
+tiempo declarar como logico;
+tiempo = b verdadero && falso || verdadero;
+salir;
 }
 }fin

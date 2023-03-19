@@ -24,7 +24,6 @@ public class LlaveTabla {
 
     @Override
     public int hashCode() {
-        System.out.println(id + " " + ambito);
         int hash = id.hashCode()*ambito.hashCode();
         
         return hash;

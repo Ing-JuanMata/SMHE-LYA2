@@ -43,6 +43,17 @@ public class TablaFunciones {
         });
     }
 
+    public boolean existe(String id) {
+        return tabla.containsKey(id);
+    }
+
+    public java.util.ArrayList<String> getTipos(String id) {
+        java.util.ArrayList<String> tipos = new java.util.ArrayList<>();
+
+        tabla.get(id).forEach(llave -> tipos.add(codigo.FrmPrincipal.tablaSimbolos.getTipo(llave)));
+        return tipos;
+    }
+
     @Override
     public String toString() {
         return tabla.toString();

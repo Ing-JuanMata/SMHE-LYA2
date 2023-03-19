@@ -55,11 +55,11 @@ espacio=[ \t\r]+
     "fin"      {return symbol(sym.FIN);}
     "comienzo" {return symbol(sym.COMIENZO);}
 
-    /* Tipos de datos */
+    /* Datos y funciones */
     "entero"    {return symbol(sym.ENTERO);}
     "logico"    {return symbol(sym.LOGICO);}
     "funcion"   {return symbol(sym.FUNCION);}
-
+    "usar"      {return symbol(sym.USAR);}
     /* Estructuras de control */
     "condicion" {return symbol(sym.CONDICION);}
     "sino" {return symbol(sym.SINO);}
@@ -146,6 +146,8 @@ espacio=[ \t\r]+
     ")" {return symbol(sym.PARENTESIS_CERRADO);}
     "{" {return symbol(sym.LLAVE_ABIERTA);}
     "}" {return symbol(sym.LLAVE_CERRADA);}
+    "[" {return symbol(sym.CORCHETE_ABIERTO);}
+    "]" {return symbol(sym.CORCHETE_CERRADO);}
 }
 
 /* Signos de puntuacion */
@@ -160,4 +162,4 @@ espacio=[ \t\r]+
 {D}+ {return symbol(sym.NUMERO, Integer.parseInt(yytext()));}
 
 /* Error general */
-[^ ;,{}[]()/<>=!&\+\-\*\n\t\|]+       {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}
+[^ ;,{}\[\]()/<>=!&\+\-\*\n\t\|]+       {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}
