@@ -604,25 +604,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
         try {
 
             sintax.parse();
-            sintax.arbolSintactico.getRaiz().getHijos().forEach(hijo -> System.out.println(hijo.valor));
+            //sintax.arbolSintactico.getRaiz().getHijos().forEach(hijo -> System.out.println(hijo.valor));
             errores.getErrores().forEach(error -> System.out.println(error));
             //System.out.println(tablaSimbolos);
             modeloDinamico.setRowCount(0);
             tablaSimbolos.verTabla(modeloDinamico);
         } catch (Exception ex) {
             System.out.println("Algo salio mal: " + ex.getMessage());
-
+            System.out.println(ex.getStackTrace()[0].getClassName());;
         }
-        /*
-        if (errores.isEmpty()) {
+        
+        if (errores.getErrores().isEmpty()) {
             txtError.setText("Analisis realizado correctamente");
             txtError.setForeground(new Color(25, 111, 61));
         } else {
             txtError.setForeground(Color.red);
-            for (String st : errores) {
+            for (String st : errores.getErrores()) {
                 txtError.setText(txtError.getText() + st + "\n");
             }
-        }*/
+        }
     }//GEN-LAST:event_btnCorrerActionPerformed
 
     private void FuenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FuenteActionPerformed

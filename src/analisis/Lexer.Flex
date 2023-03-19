@@ -47,6 +47,8 @@ espacio=[ \t\r]+
 "\n"     {/*Ignore*/}
 /* PALABRAS RESERVADAS */
 <YYINITIAL> {
+    "a"     {return symbol(sym.A);}
+    "b"     {return symbol(sym.B);}
     /* inicio, fin y terminacion de programa  */
     "salir" {return symbol(sym.SALIR);}
     "inicio" {return symbol(sym.INICIO);}
@@ -65,7 +67,6 @@ espacio=[ \t\r]+
     /* funciones propias del lenguaje */
     "ventilar"  {return symbol(sym.VENTILAR);}
     "admitir"   {return symbol(sym.ADMITIR);}
-    "aulaVacia" {return symbol(sym.AULAVACIA);}
     "dispensar" {return symbol(sym.DISPENSAR);}
     "sanitizar" {return symbol(sym.SANITIZAR);}
 
@@ -153,11 +154,7 @@ espacio=[ \t\r]+
     "," {return symbol(sym.COMA);}
 }
 /* Identificador */
-{L}({L}|{D})*   {
-                LlaveTabla llave = new LlaveTabla(yytext());
-                agregarTabla(llave, yyline + 1);
-                return symbol(sym.IDENTIFICADOR, llave);
-                }
+{L}({L}|{D})*   {return symbol(sym.IDENTIFICADOR, yytext());}
 
 /* Numero */
 {D}+ {return symbol(sym.NUMERO, Integer.parseInt(yytext()));}

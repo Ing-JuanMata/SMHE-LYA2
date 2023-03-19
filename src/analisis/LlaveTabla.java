@@ -14,6 +14,29 @@ public class LlaveTabla {
 
     public LlaveTabla(String id) {
         this.id = id;
+        this.ambito = "";
+    }
+    
+    public LlaveTabla(String id, String ambito){
+        this.id = id;
+        this.ambito = ambito;
+    }
+
+    @Override
+    public int hashCode() {
+        System.out.println(id + " " + ambito);
+        int hash = id.hashCode()*ambito.hashCode();
+        
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof LlaveTabla){
+            LlaveTabla llave = (LlaveTabla) obj;
+            return llave.id.equals(id) && llave.ambito.equals(ambito);
+        }
+        return false;
     }
 
     @Override

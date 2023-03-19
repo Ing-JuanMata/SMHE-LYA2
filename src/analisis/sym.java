@@ -8,66 +8,67 @@ package analisis;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int APAGAR = 29;
-  public static final int NUMERO = 57;
-  public static final int PUERTAS = 24;
-  public static final int ENCENDER = 30;
-  public static final int POR = 17;
-  public static final int CADA = 16;
-  public static final int AR_MULTIPLICACION = 43;
-  public static final int REL_MENOR = 35;
-  public static final int SEG = 18;
-  public static final int ABRIR = 21;
+  public static final int APAGAR = 28;
+  public static final int NUMERO = 58;
+  public static final int PUERTAS = 23;
+  public static final int ENCENDER = 29;
+  public static final int POR = 16;
+  public static final int CADA = 15;
+  public static final int AR_MULTIPLICACION = 44;
+  public static final int REL_MENOR = 36;
+  public static final int SEG = 17;
+  public static final int ABRIR = 20;
   public static final int ENTERO = 4;
-  public static final int FUNCION = 34;
-  public static final int OBTENER = 26;
-  public static final int REL_MAYOR = 36;
-  public static final int PARENTESIS_ABIERTO = 51;
+  public static final int FUNCION = 33;
+  public static final int OBTENER = 25;
+  public static final int REL_MAYOR = 37;
+  public static final int PARENTESIS_ABIERTO = 52;
   public static final int FIN = 2;
-  public static final int LLAVE_ABIERTA = 53;
+  public static final int LLAVE_ABIERTA = 54;
   public static final int VENTILAR = 8;
-  public static final int IDENTIFICADOR = 59;
+  public static final int IDENTIFICADOR = 60;
+  public static final int B = 35;
   public static final int COMIENZO = 3;
+  public static final int A = 34;
   public static final int SINO = 7;
-  public static final int PERSONAS = 28;
-  public static final int MANTENER = 25;
-  public static final int DECLARAR = 14;
-  public static final int INC = 48;
-  public static final int COMO = 15;
-  public static final int OP_BOOLEANO = 58;
-  public static final int LOGICO_AND = 46;
-  public static final int MIN = 19;
-  public static final int PUNTO_COMA = 55;
+  public static final int PERSONAS = 27;
+  public static final int MANTENER = 24;
+  public static final int DECLARAR = 13;
+  public static final int INC = 49;
+  public static final int COMO = 14;
+  public static final int OP_BOOLEANO = 59;
+  public static final int LOGICO_AND = 47;
+  public static final int MIN = 18;
+  public static final int PUNTO_COMA = 56;
   public static final int CONDICION = 6;
-  public static final int AR_RESTA = 42;
-  public static final int SALIR = 12;
+  public static final int AR_RESTA = 43;
+  public static final int SALIR = 11;
   public static final int EOF = 0;
   public static final int error = 1;
-  public static final int COMA = 56;
-  public static final int NEGACION = 45;
+  public static final int COMA = 57;
+  public static final int NEGACION = 46;
   public static final int LOGICO = 5;
-  public static final int DISPENSAR = 11;
-  public static final int HR = 20;
-  public static final int ASIGNACION = 50;
-  public static final int REL_MAYOR_IGUAL = 38;
+  public static final int DISPENSAR = 10;
+  public static final int HR = 19;
+  public static final int ASIGNACION = 51;
+  public static final int REL_MAYOR_IGUAL = 39;
   public static final int ADMITIR = 9;
-  public static final int VENTANAS = 23;
-  public static final int REL_DIFERENTE = 39;
-  public static final int CERRAR = 22;
-  public static final int AR_DIVISION = 44;
-  public static final int ESTADO = 33;
-  public static final int SANITIZAR = 31;
-  public static final int REL_MENOR_IGUAL = 37;
-  public static final int PARENTESIS_CERRADO = 52;
-  public static final int LOGICO_OR = 47;
-  public static final int REL_IGUAL = 40;
-  public static final int LLAVE_CERRADA = 54;
-  public static final int AR_SUMA = 41;
-  public static final int INICIO = 13;
-  public static final int DEC = 49;
-  public static final int LUCES = 32;
-  public static final int AULAVACIA = 10;
-  public static final int TEMPERATURA = 27;
+  public static final int VENTANAS = 22;
+  public static final int REL_DIFERENTE = 40;
+  public static final int CERRAR = 21;
+  public static final int AR_DIVISION = 45;
+  public static final int ESTADO = 32;
+  public static final int SANITIZAR = 30;
+  public static final int REL_MENOR_IGUAL = 38;
+  public static final int PARENTESIS_CERRADO = 53;
+  public static final int LOGICO_OR = 48;
+  public static final int REL_IGUAL = 41;
+  public static final int LLAVE_CERRADA = 55;
+  public static final int AR_SUMA = 42;
+  public static final int INICIO = 12;
+  public static final int DEC = 50;
+  public static final int LUCES = 31;
+  public static final int TEMPERATURA = 26;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -79,7 +80,6 @@ public class sym {
   "SINO",
   "VENTILAR",
   "ADMITIR",
-  "AULAVACIA",
   "DISPENSAR",
   "SALIR",
   "INICIO",
@@ -104,6 +104,8 @@ public class sym {
   "LUCES",
   "ESTADO",
   "FUNCION",
+  "A",
+  "B",
   "REL_MENOR",
   "REL_MAYOR",
   "REL_MENOR_IGUAL",

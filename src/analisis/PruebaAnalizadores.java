@@ -6,6 +6,7 @@ package analisis;
 
 import codigo.FrmPrincipal;
 import herramientas.ArbolSintactico;
+import herramientas.ContenidoTabla;
 import herramientas.NodoSintactico;
 import herramientas.TablaErrores;
 import java_cup.runtime.Symbol;
@@ -17,10 +18,13 @@ import java_cup.runtime.Symbol;
 public class PruebaAnalizadores {
 
     public static void main(String[] args) throws Exception {
-        ArbolSintactico arbol = new ArbolSintactico();
-        arbol.setValorRaiz("inicio");
-        arbol.agregarHijo(new NodoSintactico("INICIO"));
-        arbol.agregarHijo(new NodoSintactico("IDENTIFICADOR"));
-        arbol.getRaiz().getHijos().forEach(hijo -> System.out.println(hijo.valor));
+        java.util.HashMap<LlaveTabla, ContenidoTabla> datos = new java.util.HashMap<>();
+        datos.put(new LlaveTabla("id"), new ContenidoTabla(0));
+        ContenidoTabla aux = datos.get(new LlaveTabla("id"));
+        LlaveTabla conAmbito = new LlaveTabla("id", "ambito");
+        datos.remove(new LlaveTabla("id"));
+        datos.put(conAmbito, aux);
+        System.out.println(datos.get(new LlaveTabla("nada")));
+        
     }
 }

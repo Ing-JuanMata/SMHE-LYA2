@@ -1,10 +1,6 @@
 inicio prueba{
 comienzo(cada 5 min){
-tiempo declarar como entero;
+tiempo declarar como entero = b verdadero;
+tiempo = a tiempo + 1;
 }
-funcion f(var declarar como entero, var2 declarar como logico){
-tiempo declarar como logico = 10;
-tiempo2 declarar como entero;
-}
-funcion a(){}
 }fin

@@ -33,6 +33,10 @@ public class TablaSimbolos {
         tabla.get(id).tipo = tipo;
     }
 
+    public String getTipo(LlaveTabla id) {
+        return tabla.get(id).tipo;
+    }
+
     public void agregarAmbito(LlaveTabla id, String ambito) {
         id.ambito = ambito;
     }
@@ -44,8 +48,8 @@ public class TablaSimbolos {
     public void quitarDeTabla(LlaveTabla id) {
         tabla.remove(id);
     }
-    
-    public Object getValor(LlaveTabla identificador){
+
+    public Object getValor(LlaveTabla identificador) {
         return tabla.get(identificador).valor;
     }
 
@@ -60,6 +64,11 @@ public class TablaSimbolos {
             fila[4] = contenido.linea;
             modelo.addRow(fila);
         });
+    }
+
+    public boolean existe(LlaveTabla llave) {
+        ContenidoTabla val = tabla.get(llave);
+        return val == null ? false : val.linea >= 0;
     }
 
     @Override
