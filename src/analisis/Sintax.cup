@@ -10,7 +10,7 @@ parser code
 {:
     private String ambito;
     private Symbol s;
-    private int valActual = 0, valAux = 0, relActual = 0;
+    private int valActual = 0, valAux1 = 0, valAux2 = 0, relActual = 0;
     private boolean logActual = false, logAux = false;
     private herramientas.Funcion funcionActual;
     private java.util.ArrayList<herramientas.Funcion> funcionesLlamadas = new java.util.ArrayList<>();
@@ -62,14 +62,14 @@ parser code
     }
 
     private void verificarIdentificador(String id, boolean declarando){
-        System.out.println("verificando: " + id);
         if(!FrmPrincipal.tablaSimbolos.existe(new LlaveTabla(id, ambito)) && !declarando){
             reportarErrorSemantico("ESM1", id);
             agregarSimbolo(id, -1);
-        }else if(FrmPrincipal.tablaSimbolos.existe(new LlaveTabla(id, ambito)) && declarando){
+        }
+        if(FrmPrincipal.tablaSimbolos.existe(new LlaveTabla(id, ambito)) && declarando){
             reportarErrorSemantico("ESM4", id);
-        }else if(FrmPrincipal.funciones.existe(id)){
-            System.out.println("error de funcion");
+        }
+        if(FrmPrincipal.funciones.existe(id)){
             reportarErrorSemantico("ESM4", id);
         }
     }
@@ -172,7 +172,7 @@ terminal String IDENTIFICADOR;
 non terminal inicio, gramaticas, tiempo_cada, tiempo_por, unidad_tiempo, 
             declaracion_valor, ventilar, admitir, estado, funcion, inicio_fin, 
             parametros, asignacion, expresion, parametros_llamar, usar;
-non terminal Integer valores, valores_rel, op_aritmetica, op1, op2, op3, op4;
+non terminal Integer valores, op_aritmetica, op1, op2, op3, op4;
 non terminal String declaracion_tipo_dato, tipo_dato, declaracion_inicio;
 non terminal Boolean condicion, sentencia_booleana, relacional_booleana, sino, sb2,
                     rb2, terminal_logico;
@@ -195,9 +195,7 @@ inicio ::=
             ambito = "rutina_principal";
             :}
         gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:};
-inicio_fin ::= LLAVE_CERRADA FIN {:System.out.println("ANALISIS TERMINADO");:}
-                | error {:reportarError("ES1", null);:} 
-                FIN {:System.out.println("ANALISIS TERMINADO");:}
+inicio_fin ::= LLAVE_CERRADA FIN | error {:reportarError("ES1", null);:} FIN
                 | FUNCION funcion inicio_fin
                 | error {:reportarError("ES1", null);:} funcion inicio_fin;
 funcion ::= IDENTIFICADOR:i {:
@@ -249,13 +247,13 @@ gramaticas ::= IDENTIFICADOR:i INC {:
             | declaracion_inicio {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | declaracion_inicio:i declaracion_valor:v {:ponerValor(i,v);:} PUNTO_COMA gramaticas
             | declaracion_inicio:i declaracion_valor:v {:reportarError("ES7", null);ponerValor(i,v);:} gramaticas
-            | asignacion PUNTO_COMA gramaticas 
+            | asignacion PUNTO_COMA gramaticas
             | asignacion {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | CONDICION  condicion gramaticas
             | ventilar PUNTO_COMA gramaticas
             | ventilar {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | admitir PUNTO_COMA gramaticas
-            | admitir {:reportarError("ES7", null); :} gramaticas
+            | admitir {:s=cur_token;reportarError("ES7", null); :} gramaticas
             | APAGAR LUCES PUNTO_COMA gramaticas
             | APAGAR LUCES {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | ENCENDER LUCES PUNTO_COMA gramaticas
@@ -313,12 +311,12 @@ declaracion_tipo_dato ::= COMO tipo_dato:td {:RESULT = td;:};
 tipo_dato ::= ENTERO {:RESULT = "entero";:} | LOGICO {:RESULT = "logico";:}
                 | error {:reportarError("ES4", null); RESULT = "error";:};
 op_aritmetica ::= op2:v1 {:valActual = v1;:} op1:v2 {:RESULT=v2;:};
-op1 ::= AR_SUMA {:valAux=valActual;:} op2:v {:valActual=valAux+v;:} op1:r {:RESULT=r;:}
-    | AR_RESTA {:valAux=valActual;:} op2:v {:valActual=valAux-v;:} op1:r {:RESULT=r;:} 
+op1 ::= AR_SUMA {:valAux1=valActual;:} op2:v {:valActual=valAux1+v;:} op1:r {:RESULT=r;:}
+    | AR_RESTA {:valAux1=valActual;:} op2:v {:valActual=valAux1-v;:} op1:r {:RESULT=r;:} 
     | {:RESULT=valActual;:};
 op2 ::= op4:v1 {:valActual=v1;:} op3:v2 {:RESULT=v2;:};
-op3 ::= AR_MULTIPLICACION {:valAux=valActual;:} op4:v {:valActual=valAux*v;:} op3:r {:RESULT=r;:}
-    | AR_DIVISION {:valAux=valActual;:} op4:v {:valActual=valAux/v;:} op3:r {:RESULT=r;:} | {:RESULT=valActual;:};
+op3 ::= AR_MULTIPLICACION {:valAux2=valActual;:} op4:v {:valActual=valAux2*v;:} op3:r {:RESULT=r;:}
+    | AR_DIVISION {:valAux2=valActual;:} op4:v {:valActual=valAux2/v;:} op3:r {:RESULT=r;:} | {:RESULT=valActual;:};
 op4 ::= valores:v {:RESULT=v;:} | AR_RESTA valores:v {:RESULT=-v;:} 
             | error {:reportarError("ES6", null);RESULT=0;:};
 valores ::= NUMERO:n {:RESULT=n;:} 
@@ -327,26 +325,22 @@ valores ::= NUMERO:n {:RESULT=n;:}
             | PARENTESIS_ABIERTO op_aritmetica:oa PARENTESIS_CERRADO {:RESULT=oa;:};
 condicion ::= PARENTESIS_ABIERTO B sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA
             | PARENTESIS_ABIERTO B sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA sino;
-sentencia_booleana ::= terminal_logico:tl {:logActual=tl;:} sb2:r {:RESULT=r;System.out.println("res: " + r);:} 
+sentencia_booleana ::= terminal_logico:tl {:logActual=tl;:} sb2:r {:RESULT=r;:} 
                     | relacional_booleana:rb {:logActual=rb;:} sb2:r {:RESULT=r;:};
 sb2 ::= LOGICO_AND {:logAux = logActual;:} terminal_logico:tl {:logActual=logAux&&tl;:} sb2:sb {:RESULT=sb;:} 
     | LOGICO_OR {:logAux = logActual;:} terminal_logico:tl {:logActual=logAux||tl;:} sb2:sb {:RESULT=sb;:}
     | LOGICO_AND {:logAux = logActual;:} relacional_booleana:rb {:logActual=logAux&&rb;:} sb2:sb {:RESULT=sb;:} 
     | LOGICO_OR {:logAux = logActual;:} relacional_booleana:rb {:logActual=logAux||rb;:} sb2:sb {:RESULT=sb;:}
     | {:RESULT=logActual;:};
-relacional_booleana ::= CORCHETE_ABIERTO valores_rel:v {:relActual=v;:} rb2:r {:RESULT=r;:} CORCHETE_CERRADO;
+relacional_booleana ::= CORCHETE_ABIERTO valores:v {:relActual=v;:} rb2:r {:RESULT=r;:} CORCHETE_CERRADO;
 rb2 ::= REL_MENOR op_aritmetica:oa {:RESULT=relActual<oa;:} 
-    | REL_MAYOR op_aritmetica:oa {:RESULT=relActual>oa;System.out.println(RESULT);:} 
+    | REL_MAYOR op_aritmetica:oa {:RESULT=relActual>oa;:} 
     | REL_MENOR_IGUAL op_aritmetica:oa {:RESULT=relActual<=oa;:} 
     | REL_MAYOR_IGUAL op_aritmetica:oa {:RESULT=relActual>=oa;:}
     | REL_DIFERENTE op_aritmetica:oa {:RESULT=relActual!=oa;:} 
     | REL_IGUAL op_aritmetica:oa {:RESULT=relActual==oa;:};
-valores_rel ::= IDENTIFICADOR:i {:validarEntero(i);:} | NUMERO:n {:RESULT=n;:} 
-            | OBTENER TEMPERATURA {:RESULT=0;:} | OBTENER PERSONAS {:RESULT=0;:}
-            | AR_RESTA valores_rel:v {:RESULT = -v;:}
-            | error {:reportarError("ES6", null);RESULT=0;:};
 terminal_logico ::= IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, false);RESULT=validarLogico(i);:} 
-                | OP_BOOLEANO:ob {:RESULT=ob;System.out.println("OP " + ob);:}  
+                | OP_BOOLEANO:ob {:RESULT=ob;:}  
                 | PARENTESIS_ABIERTO sentencia_booleana:sb PARENTESIS_CERRADO {:RESULT=sb;:}
                 | ESTADO estado {:RESULT=false;:} 
                 | NEGACION terminal_logico:tl {:RESULT = !tl;:} 
@@ -354,5 +348,4 @@ terminal_logico ::= IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, fals
 sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
 ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA B sentencia_booleana COMA
             B sentencia_booleana PARENTESIS_CERRADO;
-admitir ::= ADMITIR PARENTESIS_ABIERTO B sentencia_booleana COMA tiempo_por COMA 
-            B sentencia_booleana PARENTESIS_CERRADO;
+admitir ::= ADMITIR PARENTESIS_ABIERTO B sentencia_booleana COMA tiempo_por PARENTESIS_CERRADO;

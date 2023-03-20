@@ -34,6 +34,12 @@ public class TablaSimbolos {
     }
 
     public String getTipo(LlaveTabla id) {
+        if (tabla.get(id) == null) {
+            return "";
+        }
+        if(tabla.get(id).tipo == null){
+            return "";
+        }
         return tabla.get(id).tipo;
     }
 

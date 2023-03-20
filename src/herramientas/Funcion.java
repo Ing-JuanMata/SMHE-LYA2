@@ -36,15 +36,15 @@ public class Funcion {
         }
         int pos = 1;
         for (Object parametro : parametros) {
-            if (parametrosOriginales.get(pos - 1).equals("entero") && !(parametro instanceof Integer)) {
+            String tipo = parametrosOriginales.get(pos - 1);
+            pos++;
+            if (tipo.equals("entero") && !(parametro instanceof Integer)) {
                 codigo.FrmPrincipal.errores.agregarErrorSemantico("ESM9", linea, String.valueOf(pos), "entero");
-                pos++;
                 return;
             }
 
-            if (parametrosOriginales.get(pos - 1).equals("logico") && !(parametro instanceof Boolean)) {
+            if (tipo.equals("logico") && !(parametro instanceof Boolean)) {
                 codigo.FrmPrincipal.errores.agregarErrorSemantico("ESM9", linea, String.valueOf(pos), "logico");
-                pos++;
                 return;
             }
         }

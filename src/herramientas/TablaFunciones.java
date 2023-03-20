@@ -24,6 +24,12 @@ public class TablaFunciones {
 
     public void agregarParametro(String id, LlaveTabla parametro) {
         tabla.get(id).add(parametro);
+        switch (codigo.FrmPrincipal.tablaSimbolos.getTipo(parametro)) {
+            case "entero" ->
+                codigo.FrmPrincipal.tablaSimbolos.agregarValor(parametro, 0);
+            case "logico" ->
+                codigo.FrmPrincipal.tablaSimbolos.agregarValor(parametro, false);
+        }
     }
 
     public void mostrarTabla(javax.swing.table.DefaultTableModel modelo) {

@@ -1,7 +1,26 @@
 inicio prueba{
-comienzo(cada 5 min){
-tiempo declarar como logico;
-tiempo = b verdadero && falso || verdadero;
+comienzo(cada 2 min){
+comotu declarar como entero = a 20;
+condicional declarar como logico = b !estado ventanas && !estado puertas;
+comotu = a 5+10*15/3-3*8/2/2+10/5*3/2;
+condicion(b condicional){
+abrir ventanas mantener;
+abrir puertas por comotu min;
+salir;
+}
+admitir(b verdadero, por 10 min);
+usar limpiarSalon(a 5, b verdadero);
+salir;
+}
+
+funcion limpiarSalon(tiempo declarar como entero, mantenerCerrado declarar como logico){
+cerrar puertas mantener;
+cerrar ventanas mantener;
+apagar luces;
+sanitizar por tiempo min;
+encender luces;
+abrir puertas mantener;
+abrir ventanas mantener;
 salir;
 }
 }fin

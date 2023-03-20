@@ -12,7 +12,6 @@ L=[A-Za-z_]+
 D= 0 | [1-9][0-9]*
 espacio=[ \t\r]+
 %{
-    StringBuffer string = new StringBuffer();
     private Symbol symbol(int type){
         Symbol s = new Symbol(type, yyline, yycolumn);
         codigo.FrmPrincipal.tokens.add(s);
@@ -28,12 +27,7 @@ espacio=[ \t\r]+
         codigo.FrmPrincipal.errores.agregarErrorLexico(error, linea, cuerpo);
         //System.out.println(cuerpo);
     }
-
-    private void agregarTabla(LlaveTabla llave, int linea){
-        codigo.FrmPrincipal.tablaSimbolos.agregarSimbolo(llave, linea);
-    }
 %}
-%state STRING
 %%
 
 

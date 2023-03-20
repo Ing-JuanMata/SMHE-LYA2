@@ -16,22 +16,20 @@ public class LlaveTabla {
         this.id = id;
         this.ambito = "";
     }
-    
-    public LlaveTabla(String id, String ambito){
+
+    public LlaveTabla(String id, String ambito) {
         this.id = id;
         this.ambito = ambito;
     }
 
     @Override
     public int hashCode() {
-        int hash = id.hashCode()*ambito.hashCode();
-        
-        return hash;
+        return id == null || ambito == null ? 0 : id.hashCode() * ambito.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof LlaveTabla){
+        if (obj instanceof LlaveTabla) {
             LlaveTabla llave = (LlaveTabla) obj;
             return llave.id.equals(id) && llave.ambito.equals(ambito);
         }

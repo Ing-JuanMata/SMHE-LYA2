@@ -514,7 +514,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("TXT", "txt");
         f.setFileFilter(filtro);
 
-        String dir = "C:\\Users\\ximen\\OneDrive\\Documentos\\NetBeansProjects\\SmartHealth_V3\\SmartHealth\\";
+        String dir = System.getProperty("user.dir");
         File directorio = new File(dir);
         f.setCurrentDirectory(directorio);
 
@@ -605,16 +605,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
         try {
 
             sintax.parse();
-            //sintax.arbolSintactico.getRaiz().getHijos().forEach(hijo -> System.out.println(hijo.valor));
-            errores.getErrores().forEach(error -> System.out.println(error));
-            //System.out.println(tablaSimbolos);
             modeloDinamico.setRowCount(0);
             tablaSimbolos.verTabla(modeloDinamico);
         } catch (Exception ex) {
             System.out.println("Algo salio mal: " + ex.getMessage());
-            System.out.println(ex.getStackTrace()[0].getClassName());;
+            System.out.println(ex.getStackTrace()[0].getClassName() + ex.getStackTrace()[0].getLineNumber());
         }
-        
+
         if (errores.getErrores().isEmpty()) {
             txtError.setText("Analisis realizado correctamente");
             txtError.setForeground(new Color(25, 111, 61));
@@ -721,7 +718,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         f.setCurrentDirectory(directorio);
 
         if (f.showSaveDialog(this) == APPROVE_OPTION && f.getFileFilter() == filtro) {
-            archivo = System.getProperty("user.dir") + "\\" + f.getSelectedFile().getName() + ".smhe";
+            archivo = System.getProperty("user.dir") + System.getProperty("file.separator") + 
+                    (f.getSelectedFile().getName().endsWith(".smhe") ? f.getSelectedFile().getName() : f.getSelectedFile().getName() + ".smhe");
             guardarArchivo();
         } else {
             showMessageDialog(this, "Solo archivos de texto");
