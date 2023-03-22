@@ -32,18 +32,23 @@ public class TablaFunciones {
         }
     }
 
+    public boolean tieneDatos() {
+        return !tabla.isEmpty();
+    }
+
     public void mostrarTabla(javax.swing.table.DefaultTableModel modelo) {
         modelo.setRowCount(0);
-        modelo.setColumnCount(1);
+        modelo.setColumnCount(0);
+        modelo.addColumn("ID");
         tabla.forEach((id, parametros) -> {
             Object[] fila = new Object[5];
             int i = 0;
             fila[i++] = id;
             while (modelo.getColumnCount() < parametros.size()) {
-                modelo.addColumn("Parametro: " + (modelo.getColumnCount() + 1));
+                modelo.addColumn("Parametro: " + (modelo.getColumnCount()));
             }
             for (LlaveTabla llave : parametros) {
-                fila[i++] = llave.toString();
+                fila[i++] = llave.id + ": " + codigo.FrmPrincipal.tablaSimbolos.getTipo(llave);
             }
             modelo.addRow(fila);
         });

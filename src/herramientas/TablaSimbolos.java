@@ -33,11 +33,15 @@ public class TablaSimbolos {
         tabla.get(id).tipo = tipo;
     }
 
+    public boolean tieneDatos() {
+        return !tabla.isEmpty();
+    }
+
     public String getTipo(LlaveTabla id) {
         if (tabla.get(id) == null) {
             return "";
         }
-        if(tabla.get(id).tipo == null){
+        if (tabla.get(id).tipo == null) {
             return "";
         }
         return tabla.get(id).tipo;
@@ -61,6 +65,12 @@ public class TablaSimbolos {
 
     public void verTabla(javax.swing.table.DefaultTableModel modelo) {
         modelo.setRowCount(0);
+        modelo.addColumn("ID");
+        modelo.addColumn("AMBITO");
+        modelo.addColumn("TIPO");
+        modelo.addColumn("VALOR");
+        modelo.addColumn("LINEA");
+
         tabla.forEach((llave, contenido) -> {
             Object[] fila = new Object[5];
             fila[0] = llave.id;

@@ -55,14 +55,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         NumLinea = new NumeroLinea(txtEntrada);
         scrollEntrada.setRowHeaderView(NumLinea);
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/Atlas.png")).getImage());
-        //modeloEstatico = (DefaultTableModel) tablaEstatica.getModel();
-        modeloDinamico = (DefaultTableModel) tablaDinamica.getModel();
-
-        //tablaEstatica.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
-        tablaDinamica.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
-
-        // Oculta/Mustra las tablas a pantalla
-        validarTablas();
 
         // Administrador de cambios en sintaxis
         administradorCambios = new UndoManager();                //construye una instancia de UndoManager
@@ -79,6 +71,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jSeparator3 = new javax.swing.JSeparator();
+        jMenu2 = new javax.swing.JMenu();
         barraHerramientas = new javax.swing.JToolBar();
         sep0 = new javax.swing.JToolBar.Separator();
         btnAbrir = new javax.swing.JButton();
@@ -91,17 +84,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
         sep3 = new javax.swing.JToolBar.Separator();
         btnCorrer = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
+        scrollEntrada = new javax.swing.JScrollPane();
+        txtEntrada = new javax.swing.JTextPane();
         panelConsola = new javax.swing.JPanel();
         scrollConsola = new javax.swing.JScrollPane();
         txtError = new javax.swing.JTextArea();
         lblConsola = new javax.swing.JLabel();
-        splitPanelContenedor = new javax.swing.JSplitPane();
-        scrollEntrada = new javax.swing.JScrollPane();
-        txtEntrada = new javax.swing.JTextPane();
-        pestañasTablas = new javax.swing.JTabbedPane();
-        pTablaDinamica = new javax.swing.JPanel();
-        scrollTablaDinamica = new javax.swing.JScrollPane();
-        tablaDinamica = new javax.swing.JTable();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
@@ -116,7 +104,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        ckbTablas = new javax.swing.JCheckBoxMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        menuFunciones = new javax.swing.JMenuItem();
+        menuSimbolos = new javax.swing.JMenuItem();
+
+        jMenu2.setText("jMenu2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -215,6 +207,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jSplitPane1.setResizeWeight(1);
         jSplitPane1.setPreferredSize(new java.awt.Dimension(1230, 650));
 
+        txtEntrada.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
+        txtEntrada.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEntradaKeyReleased(evt);
+            }
+        });
+        scrollEntrada.setViewportView(txtEntrada);
+
+        jSplitPane1.setTopComponent(scrollEntrada);
+
         panelConsola.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panelConsola.setFocusable(false);
         panelConsola.setPreferredSize(new java.awt.Dimension(1230, 150));
@@ -235,52 +237,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         panelConsola.add(lblConsola, java.awt.BorderLayout.NORTH);
 
         jSplitPane1.setBottomComponent(panelConsola);
-
-        splitPanelContenedor.setDividerLocation(700);
-        splitPanelContenedor.setResizeWeight(1);
-        splitPanelContenedor.setMinimumSize(new java.awt.Dimension(113, 120));
-        splitPanelContenedor.setPreferredSize(new java.awt.Dimension(1025, 300));
-
-        txtEntrada.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
-        txtEntrada.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtEntradaKeyReleased(evt);
-            }
-        });
-        scrollEntrada.setViewportView(txtEntrada);
-
-        splitPanelContenedor.setLeftComponent(scrollEntrada);
-
-        pestañasTablas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-
-        pTablaDinamica.setLayout(new java.awt.BorderLayout());
-
-        tablaDinamica.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        tablaDinamica.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID", "Ambito", "Tipo", "Valor", "Linea"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        scrollTablaDinamica.setViewportView(tablaDinamica);
-
-        pTablaDinamica.add(scrollTablaDinamica, java.awt.BorderLayout.CENTER);
-
-        pestañasTablas.addTab("Tabla Dinamica", pTablaDinamica);
-
-        splitPanelContenedor.setRightComponent(pestañasTablas);
-
-        jSplitPane1.setTopComponent(splitPanelContenedor);
 
         getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
 
@@ -379,14 +335,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
-        ckbTablas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        ckbTablas.setText("Visualizar tablas ");
-        ckbTablas.addActionListener(new java.awt.event.ActionListener() {
+        jMenu4.setText("Tablas");
+
+        menuFunciones.setText("Tabla de funciones");
+        menuFunciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ckbTablasActionPerformed(evt);
+                menuFuncionesActionPerformed(evt);
             }
         });
-        jMenu1.add(ckbTablas);
+        jMenu4.add(menuFunciones);
+
+        menuSimbolos.setText("Tabla de simbolos");
+        menuSimbolos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSimbolosActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuSimbolos);
+
+        jMenu1.add(jMenu4);
 
         jMenuBar2.add(jMenu1);
 
@@ -407,58 +374,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         //tokens.forEach(token -> System.out.println(analisis.sym.terminalNames[token.sym]));
     }
     //</editor-fold>
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        try {
-            analizarLexico();
-        } catch (IOException ex) {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-
-    private void btnArchivoActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(null);
-        File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
-
-        try {
-            String ST = new String(Files.readAllBytes(archivo.toPath()));
-            //txtTokens.setText(ST);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        if (tokens.isEmpty()) {
-            txtError.setText("ERROR SINTACTICO: No se han encontrado tokens");
-            txtError.setForeground(Color.red);
-        }
-        String ST = txtEntrada.getText();
-        //Sintax s = new Sintax(tokens);
-
-        //s.parse();
-        if (errores.getErrores().isEmpty()) {
-            txtError.setText("Analisis realizado correctamente");
-            txtError.setForeground(new Color(25, 111, 61));
-        } else {
-            txtError.setForeground(Color.red);
-            for (String st : errores.getErrores()) {
-                txtError.setText(txtError.getText() + st + "\n");
-            }
-        }
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void mnuNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNuevoActionPerformed
         if (txtEntrada.getText().equals("")) {
@@ -543,10 +458,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenu3ActionPerformed
 
-    private void ckbTablasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbTablasActionPerformed
-        validarTablas();
-    }//GEN-LAST:event_ckbTablasActionPerformed
-
     private void btnCortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCortarActionPerformed
         txtEntrada.cut();
     }//GEN-LAST:event_btnCortarActionPerformed
@@ -605,8 +516,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         try {
 
             sintax.parse();
-            modeloDinamico.setRowCount(0);
-            tablaSimbolos.verTabla(modeloDinamico);
         } catch (Exception ex) {
             System.out.println("Algo salio mal: " + ex.getMessage());
             System.out.println(ex.getStackTrace()[0].getClassName() + ex.getStackTrace()[0].getLineNumber());
@@ -638,6 +547,79 @@ public class FrmPrincipal extends javax.swing.JFrame {
             System.out.println("Error inesperado");
         }*/
     }//GEN-LAST:event_txtEntradaKeyReleased
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        if (tokens.isEmpty()) {
+            txtError.setText("ERROR SINTACTICO: No se han encontrado tokens");
+            txtError.setForeground(Color.red);
+        }
+        String ST = txtEntrada.getText();
+        //Sintax s = new Sintax(tokens);
+
+        //s.parse();
+        if (errores.getErrores().isEmpty()) {
+            txtError.setText("Analisis realizado correctamente");
+            txtError.setForeground(new Color(25, 111, 61));
+        } else {
+            txtError.setForeground(Color.red);
+            for (String st : errores.getErrores()) {
+                txtError.setText(txtError.getText() + st + "\n");
+            }
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        try {
+            analizarLexico();
+        } catch (IOException ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+
+    private void btnArchivoActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(null);
+        File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
+
+        try {
+            String ST = new String(Files.readAllBytes(archivo.toPath()));
+            //txtTokens.setText(ST);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void menuFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFuncionesActionPerformed
+        if (funciones.tieneDatos()) {
+            Tabla tabla = new Tabla("tabla de funciones");
+            funciones.mostrarTabla((javax.swing.table.DefaultTableModel) tabla.getModel());
+            tabla.setVisible(true);
+            return;
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Es posible que no se haya hecho un intento de compilacion, favor de tratar de compilar para crear las tablas", "tabla de funciones vacia", javax.swing.JOptionPane.PLAIN_MESSAGE);
+    }//GEN-LAST:event_menuFuncionesActionPerformed
+
+    private void menuSimbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSimbolosActionPerformed
+        if (tablaSimbolos.tieneDatos()) {
+            Tabla tabla = new Tabla("tabla de simbolos");
+            tablaSimbolos.verTabla((javax.swing.table.DefaultTableModel) tabla.getModel());
+            tabla.setVisible(true);
+            return;
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Es posible que no se haya hecho un intento de compilacion, favor de tratar de compilar para crear las tablas", "tabla de simbolos vacia", javax.swing.JOptionPane.PLAIN_MESSAGE);
+    }//GEN-LAST:event_menuSimbolosActionPerformed
 
     // Funciones
     //Pendiente
@@ -718,8 +700,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         f.setCurrentDirectory(directorio);
 
         if (f.showSaveDialog(this) == APPROVE_OPTION && f.getFileFilter() == filtro) {
-            archivo = System.getProperty("user.dir") + System.getProperty("file.separator") + 
-                    (f.getSelectedFile().getName().endsWith(".smhe") ? f.getSelectedFile().getName() : f.getSelectedFile().getName() + ".smhe");
+            archivo = System.getProperty("user.dir") + System.getProperty("file.separator")
+                    + (f.getSelectedFile().getName().endsWith(".smhe") ? f.getSelectedFile().getName() : f.getSelectedFile().getName() + ".smhe");
             guardarArchivo();
         } else {
             showMessageDialog(this, "Solo archivos de texto");
@@ -820,15 +802,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         revalidate();
     }
 
-    private void validarTablas() {
-        int div = 0;
-        div = splitPanelContenedor.getDividerLocation();
-
-        pestañasTablas.setVisible(ckbTablas.getState());
-        splitPanelContenedor.setDividerLocation(600);
-        revalidate();
-    }
-
     public String[] ordenarLista(String[] lista) {
         for (int i = 0; i < lista.length; i++) {
             for (int j = i + 1; j < lista.length; j++) {
@@ -908,9 +881,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnCortar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnPegar;
-    private javax.swing.JCheckBoxMenuItem ckbTablas;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
@@ -920,23 +894,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel lblConsola;
+    private javax.swing.JMenuItem menuFunciones;
+    private javax.swing.JMenuItem menuSimbolos;
     private javax.swing.JMenuItem mnuAbrir;
     private javax.swing.JMenuItem mnuCerrar;
     private javax.swing.JMenuItem mnuGuardar;
     private javax.swing.JMenuItem mnuGuardarC;
     private javax.swing.JMenuItem mnuNuevo;
-    private javax.swing.JPanel pTablaDinamica;
     private javax.swing.JPanel panelConsola;
-    private javax.swing.JTabbedPane pestañasTablas;
     private javax.swing.JScrollPane scrollConsola;
     private javax.swing.JScrollPane scrollEntrada;
-    private javax.swing.JScrollPane scrollTablaDinamica;
     private javax.swing.JToolBar.Separator sep0;
     private javax.swing.JToolBar.Separator sep1;
     private javax.swing.JToolBar.Separator sep2;
     private javax.swing.JToolBar.Separator sep3;
-    private javax.swing.JSplitPane splitPanelContenedor;
-    private javax.swing.JTable tablaDinamica;
     public static javax.swing.JTextPane txtEntrada;
     public static javax.swing.JTextArea txtError;
     // End of variables declaration//GEN-END:variables
