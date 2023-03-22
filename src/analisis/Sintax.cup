@@ -2,8 +2,6 @@ package analisis;
 
 import java_cup.runtime.Symbol;
 import codigo.FrmPrincipal;
-import herramientas.ArbolSintactico;
-import herramientas.NodoSintactico;
 
 
 parser code
