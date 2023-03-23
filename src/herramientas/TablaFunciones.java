@@ -44,7 +44,7 @@ public class TablaFunciones {
             Object[] fila = new Object[5];
             int i = 0;
             fila[i++] = id;
-            while (modelo.getColumnCount() < parametros.size()) {
+            while (modelo.getColumnCount() <= parametros.size()) {
                 modelo.addColumn("Parametro: " + (modelo.getColumnCount()));
             }
             for (LlaveTabla llave : parametros) {

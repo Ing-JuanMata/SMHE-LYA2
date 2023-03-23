@@ -6,7 +6,6 @@ import herramientas.TablaErrores;
 import herramientas.TablaFunciones;
 import herramientas.TablaSimbolos;
 import java.awt.Color;
-import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -102,8 +101,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         mnuGuardar = new javax.swing.JMenuItem();
         mnuGuardarC = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        menuLexico = new javax.swing.JMenuItem();
+        menuSintactico = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         menuFunciones = new javax.swing.JMenuItem();
         menuSimbolos = new javax.swing.JMenuItem();
@@ -317,23 +316,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu1.setText("Ver");
         jMenu1.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem1.setText("Analisis Léxico");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        menuLexico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuLexico.setText("Analisis Léxico");
+        menuLexico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                menuLexicoActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(menuLexico);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem2.setText("Analisis Sintactico");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        menuSintactico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuSintactico.setText("Analisis Sintactico");
+        menuSintactico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                menuSintacticoActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(menuSintactico);
 
         jMenu4.setText("Tablas");
 
@@ -365,20 +364,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
     //<editor-fold defaultstate="collapsed" desc=" analizadorLexico ">
     private void analizarLexico() throws IOException {
         tablaSimbolos = new TablaSimbolos();
+        tokens.clear();
         String expr = txtEntrada.getText();
         Lexer lexer = new Lexer(new StringReader(expr));
         Symbol t;
         while ((t = lexer.next_token()).sym != analisis.sym.EOF) {
-
         }
         //tokens.forEach(token -> System.out.println(analisis.sym.terminalNames[token.sym]));
     }
     //</editor-fold>
 
     private void mnuNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNuevoActionPerformed
-        if (txtEntrada.getText().equals("")) {
-            return;
-        }
         int op = javax.swing.JOptionPane.showConfirmDialog(this, "Desea guardar?");
         if (op == -1 || op == 2) {
             return;
@@ -387,6 +383,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         txtEntrada.setText("");
         archivo = "";
+        this.setTitle("SMHE - Nuevo Archivo");
     }//GEN-LAST:event_mnuNuevoActionPerformed
 
     private void mnuAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAbrirActionPerformed
@@ -401,44 +398,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuCerrarActionPerformed
 
     private void mnuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGuardarActionPerformed
-        if (archivo.equals("")) {
-            mnuGuardarCActionPerformed(evt);
-        }
-        try {
-            /*Flujos de Bytes
-            java.io.FileOutputStream fbs=new java.io.FileOutputStream("Archivo.txt");
-            byte b[]=txtEditor.getText().getBytes();
-            fbs.write(b);
-            fbs.flush();
-            fbs.close();
-             */
-            //Flujos de Caracteres
-            java.io.FileWriter fcs = new java.io.FileWriter(archivo);
-            fcs.write(txtEntrada.getText());
-            fcs.flush();
-            fcs.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        guardarArchivo();
     }//GEN-LAST:event_mnuGuardarActionPerformed
 
     private void mnuGuardarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGuardarCActionPerformed
-        javax.swing.JFileChooser f = new JFileChooser();
-        FileNameExtensionFilter filtro = new FileNameExtensionFilter("TXT", "txt");
-        f.setFileFilter(filtro);
-
-        String dir = System.getProperty("user.dir");
-        File directorio = new File(dir);
-        f.setCurrentDirectory(directorio);
-
-        if (f.showSaveDialog(this) == APPROVE_OPTION && f.getFileFilter() == filtro) {
-            archivo = f.getSelectedFile().getName() + ".txt";
-            mnuGuardarActionPerformed(evt);
-        } else {
-            showMessageDialog(this, "Solo archivos de texto");
-        }
+        guardarCArchivo();
     }//GEN-LAST:event_mnuGuardarCActionPerformed
 
     private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
@@ -504,6 +468,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
         txtEntrada.setCaretPosition(posicion);
     }*/
     private void btnCorrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorrerActionPerformed
+        if (txtEntrada.getText().isBlank()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No hay código fuente para realizar el análisis");
+        } else {
+            analisisSintactico();
+        }
+    }//GEN-LAST:event_btnCorrerActionPerformed
+    private void analisisSintactico() {
         errores = new TablaErrores();
         tablaSimbolos = new TablaSimbolos();
         funciones = new TablaFunciones();
@@ -514,7 +485,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         Lexer lex = new Lexer(new java.io.StringReader(ST));
         SintaxPrueba sintax = new SintaxPrueba(lex);
         try {
-
             sintax.parse();
         } catch (Exception ex) {
             System.out.println("Algo salio mal: " + ex.getMessage());
@@ -530,8 +500,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 txtError.setText(txtError.getText() + st + "\n");
             }
         }
-    }//GEN-LAST:event_btnCorrerActionPerformed
-
+    }
     private void FuenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FuenteActionPerformed
         JFontChooser fc = new JFontChooser();
         JOptionPane.showMessageDialog(null, fc, "Elegir fuente", JOptionPane.PLAIN_MESSAGE);
@@ -548,31 +517,100 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_txtEntradaKeyReleased
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        if (tokens.isEmpty()) {
-            txtError.setText("ERROR SINTACTICO: No se han encontrado tokens");
-            txtError.setForeground(Color.red);
-        }
-        String ST = txtEntrada.getText();
-        //Sintax s = new Sintax(tokens);
-
-        //s.parse();
-        if (errores.getErrores().isEmpty()) {
-            txtError.setText("Analisis realizado correctamente");
-            txtError.setForeground(new Color(25, 111, 61));
+    private void menuSintacticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSintacticoActionPerformed
+        if (txtEntrada.getText().isBlank()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No hay código fuente para realizar el análisis");
         } else {
-            txtError.setForeground(Color.red);
-            for (String st : errores.getErrores()) {
-                txtError.setText(txtError.getText() + st + "\n");
-            }
+            analisisSintactico();
         }
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_menuSintacticoActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void menuLexicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLexicoActionPerformed
+        if (txtEntrada.getText().isBlank()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No hay código fuente para realizar el análisis");
+            return;
+        }
+
         try {
             analizarLexico();
         } catch (IOException ex) {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+
+        if (!tokens.isEmpty()) {
+            Tabla tabla = new Tabla("Tabla de tokens");
+            javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tabla.getModel();
+            modelo.setRowCount(0);
+            modelo.setColumnCount(0);
+            modelo.addColumn("LEXEMA");
+            modelo.addColumn("COMPONENTE LEXICO");
+            modelo.addColumn("LINEA");
+            tokens.forEach(token -> {
+                String sym = analisis.sym.terminalNames[token.sym];
+                int linea = token.left + 1;
+                switch (sym) {
+
+                    case "REL_MENOR" ->
+                        modelo.addRow(new Object[]{"<", "REL_MENOR", linea});
+                    case "REL_MAYOR" ->
+                        modelo.addRow(new Object[]{">", "REL_MAYOR", linea});
+                    case "REL_IGUAL" ->
+                        modelo.addRow(new Object[]{"==", "REL_MAYOR", linea});
+                    case "REL_DIFERENTE" ->
+                        modelo.addRow(new Object[]{"!=", "REL_DIFERENTE", linea});
+                    case "REL_MAYOR_IGUAL" ->
+                        modelo.addRow(new Object[]{">=", "REL_MAYOR_IGUAL", linea});
+                    case "REL_MENOR_IGUAL" ->
+                        modelo.addRow(new Object[]{"<=", "REL_MENOR_IGUAL", linea});
+                    case "AR_SUMA" ->
+                        modelo.addRow(new Object[]{"+", "AR_SUMA", linea});
+                    case "AR_RESTA" ->
+                        modelo.addRow(new Object[]{"-", "AR_RESTA", linea});
+                    case "AR_MULTIPLICACION" ->
+                        modelo.addRow(new Object[]{"*", "AR_MULTIPLICACION", linea});
+                    case "AR_DIVISION" ->
+                        modelo.addRow(new Object[]{"/", "AR_DIVISION", linea});
+                    case "NEGACION" ->
+                        modelo.addRow(new Object[]{"!", "NEGACION", linea});
+                    case "LOGICO_AND" ->
+                        modelo.addRow(new Object[]{"||", "LOGICO_AND", linea});
+                    case "LOGICO_OR" ->
+                        modelo.addRow(new Object[]{"&&", "LOGICO_OR", linea});
+                    case "INC" ->
+                        modelo.addRow(new Object[]{"++", "INC", linea});
+                    case "DEC" ->
+                        modelo.addRow(new Object[]{"--", "DEC", linea});
+                    case "ASIGNACION" ->
+                        modelo.addRow(new Object[]{"=", "ASIGNACION", linea});
+                    case "PARENTESIS_ABIERTO" ->
+                        modelo.addRow(new Object[]{"(", "PARENTESIS_ABIERTO", linea});
+                    case "PARENTESIS_CERRADO" ->
+                        modelo.addRow(new Object[]{")", "PARENTESIS_CERRADO", linea});
+                    case "LLAVE_ABIERTA" ->
+                        modelo.addRow(new Object[]{"{", "LLAVE_ABIERTA", linea});
+                    case "LLAVE_CERRADA" ->
+                        modelo.addRow(new Object[]{"}", "LLAVE_CERRADA", linea});
+                    case "CORCHETE_ABIERTO" ->
+                        modelo.addRow(new Object[]{"[", "CORCHETE_ABIERTO", linea});
+                    case "CORCHETE_CERRADO" ->
+                        modelo.addRow(new Object[]{"]", "CORCHETE_CERRADO", linea});
+                    case "COMA" ->
+                        modelo.addRow(new Object[]{",", "COMA", linea});
+                    case "PUNTO_COMA" ->
+                        modelo.addRow(new Object[]{";", "PUNTO_COMA", linea});
+                    case "NUMERO" ->
+                        modelo.addRow(new Object[]{token.value, "NUMERO", linea});
+                    case "OP_BOOLEANO" ->
+                        modelo.addRow(new Object[]{((boolean) token.value) ? "verdadero" : "falso", "OP_BOOLEANO", linea});
+                    case "IDENTIFICADOR" ->
+                        modelo.addRow(new Object[]{token.value, "IDENTIFICADOR", linea});
+                    case "error" ->
+                        modelo.addRow(new Object[]{token.value, "error", linea});
+                    default ->
+                        modelo.addRow(new Object[]{sym.toLowerCase(), sym, linea});
+                }
+            });
+            tabla.setVisible(true);
         }
     }
 
@@ -597,7 +635,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_menuLexicoActionPerformed
 
     private void menuFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFuncionesActionPerformed
         if (funciones.tieneDatos()) {
@@ -660,7 +698,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     sl = sl + "\n" + s1;
                 }
                 txtEntrada.setText(sl);
-                analizarLexico();
+                //analizarLexico();
                 //colorear();
 
                 br.close();    //cierra el flujo
@@ -700,8 +738,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         f.setCurrentDirectory(directorio);
 
         if (f.showSaveDialog(this) == APPROVE_OPTION && f.getFileFilter() == filtro) {
-            archivo = System.getProperty("user.dir") + System.getProperty("file.separator")
+            archivo = dir + System.getProperty("file.separator")
                     + (f.getSelectedFile().getName().endsWith(".smhe") ? f.getSelectedFile().getName() : f.getSelectedFile().getName() + ".smhe");
+            this.setTitle("SMHE - " + f.getSelectedFile().getName());
             guardarArchivo();
         } else {
             showMessageDialog(this, "Solo archivos de texto");
@@ -887,15 +926,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel lblConsola;
     private javax.swing.JMenuItem menuFunciones;
+    private javax.swing.JMenuItem menuLexico;
     private javax.swing.JMenuItem menuSimbolos;
+    private javax.swing.JMenuItem menuSintactico;
     private javax.swing.JMenuItem mnuAbrir;
     private javax.swing.JMenuItem mnuCerrar;
     private javax.swing.JMenuItem mnuGuardar;

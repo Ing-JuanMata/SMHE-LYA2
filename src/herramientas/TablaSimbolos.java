@@ -19,32 +19,21 @@ public class TablaSimbolos {
     }
 
     public void agregarSimbolo(LlaveTabla id, int linea) {
+        if (tabla.containsKey(id)) {
+            return;
+        }
         tabla.put(id, new ContenidoTabla(linea));
-    }
-
-    public void agregarContenido(LlaveTabla id, String tipo, String ambito, Object valor) {
-        id.ambito = ambito;
-        ContenidoTabla contenido = tabla.get(id);
-        contenido.tipo = tipo;
-        contenido.valor = valor;
-    }
-
-    public void agregarTipo(LlaveTabla id, String tipo) {
-        tabla.get(id).tipo = tipo;
     }
 
     public boolean tieneDatos() {
         return !tabla.isEmpty();
     }
 
-    public String getTipo(LlaveTabla id) {
-        if (tabla.get(id) == null) {
-            return "";
+    public void agregarTipo(LlaveTabla id, String tipo) {
+        if (tabla.get(id).tipo != null) {
+            return;
         }
-        if (tabla.get(id).tipo == null) {
-            return "";
-        }
-        return tabla.get(id).tipo;
+        tabla.get(id).tipo = tipo;
     }
 
     public void agregarAmbito(LlaveTabla id, String ambito) {
@@ -55,8 +44,14 @@ public class TablaSimbolos {
         tabla.get(id).valor = valor;
     }
 
-    public void quitarDeTabla(LlaveTabla id) {
-        tabla.remove(id);
+    public String getTipo(LlaveTabla id) {
+        if (tabla.get(id) == null) {
+            return "";
+        }
+        if (tabla.get(id).tipo == null) {
+            return "";
+        }
+        return tabla.get(id).tipo;
     }
 
     public Object getValor(LlaveTabla identificador) {

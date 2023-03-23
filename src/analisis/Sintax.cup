@@ -330,7 +330,7 @@ sb2 ::= LOGICO_AND {:logAux = logActual;:} terminal_logico:tl {:logActual=logAux
     | LOGICO_AND {:logAux = logActual;:} relacional_booleana:rb {:logActual=logAux&&rb;:} sb2:sb {:RESULT=sb;:} 
     | LOGICO_OR {:logAux = logActual;:} relacional_booleana:rb {:logActual=logAux||rb;:} sb2:sb {:RESULT=sb;:}
     | {:RESULT=logActual;:};
-relacional_booleana ::= CORCHETE_ABIERTO valores:v {:relActual=v;:} rb2:r {:RESULT=r;:} CORCHETE_CERRADO;
+relacional_booleana ::= CORCHETE_ABIERTO op_aritmetica:v {:relActual=v;:} rb2:r {:RESULT=r;:} CORCHETE_CERRADO;
 rb2 ::= REL_MENOR op_aritmetica:oa {:RESULT=relActual<oa;:} 
     | REL_MAYOR op_aritmetica:oa {:RESULT=relActual>oa;:} 
     | REL_MENOR_IGUAL op_aritmetica:oa {:RESULT=relActual<=oa;:} 
