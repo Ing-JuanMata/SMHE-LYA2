@@ -8,21 +8,16 @@ package codigo;
  *
  * @author jujemataso
  */
-public class Tabla extends javax.swing.JFrame {
+public class InfoErrores extends javax.swing.JFrame {
 
     /**
-     * Creates new form Tabla
-     * @param titulo
+     * Creates new form InfoErrores
+     * @param contenido
      */
-    public Tabla(String titulo) {
+    public InfoErrores(String contenido) {
         initComponents();
+        this.txtInfo.setText(contenido);
         this.setLocationRelativeTo(null);
-        this.setTitle(titulo);
-        
-    }
-
-    public javax.swing.table.TableModel getModel() {
-        return this.tblDatos.getModel();
     }
 
     /**
@@ -35,33 +30,31 @@ public class Tabla extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblDatos = new javax.swing.JTable();
+        txtInfo = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Tabla de errores");
         setMinimumSize(new java.awt.Dimension(968, 500));
 
-        tblDatos.setFont(new java.awt.Font("Source Code Pro Semibold", 0, 16)); // NOI18N
-        tblDatos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-            },
-            new String [] {
-
-            }
-        ));
-        tblDatos.setRowHeight(25);
-        tblDatos.setRowSelectionAllowed(false);
-        tblDatos.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblDatos);
+        txtInfo.setEditable(false);
+        txtInfo.setColumns(20);
+        txtInfo.setFont(new java.awt.Font("Source Code Pro Semibold", 0, 16)); // NOI18N
+        txtInfo.setLineWrap(true);
+        txtInfo.setRows(5);
+        txtInfo.setWrapStyleWord(true);
+        txtInfo.setMargin(new java.awt.Insets(20, 20, 20, 20));
+        txtInfo.setMinimumSize(new java.awt.Dimension(968, 500));
+        jScrollPane1.setViewportView(txtInfo);
 
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblDatos;
+    private javax.swing.JTextArea txtInfo;
     // End of variables declaration//GEN-END:variables
 }

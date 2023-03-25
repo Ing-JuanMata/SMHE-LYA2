@@ -1,0 +1,39 @@
+inicio controlYLimpieza{
+comienzo(cada 1 min){
+	usar admitir(b verdadero, por 25 min);
+	condicion(b [obtener personas == 0]){
+		usar ventilar(por 5 min, b verdadero, b falso);
+		usar admitir(b falso, por 29 min);
+		salir;
+	}sino{
+		usar controlPuertasYVentanas(a 30);
+		usar ventilar(por 5 min, b falso, b falso);
+		salir;
+	}
+salir;
+}
+
+funcion controlPuertasYVentanas(tiempoClase declarar como entero){
+	edoPuertas declarar como logico = b estado puertas;
+	edoVentanas declarar como logico = b estado ventanas;
+	condicion(b edoPuertas && !edoVentanas){
+	cerrar puertas mantener;
+	abrir ventanas mantener;
+	salir;
+	}sino condicion(b edoPuertas){
+		cerrar puertas mantener;
+		salir;
+	}sino condicion(b !edoVentanas){
+		abrir ventanas mantener;
+		salir;
+	}
+	condicion(b [tiempoClase > 25]){
+		usar admitir(b falso, por tiempoClase - 25 min);
+		salir;
+	}sino{
+		usar admitir(b falso, por tiempoClase min);
+		salir;
+	}
+	salir;
+}
+}fin

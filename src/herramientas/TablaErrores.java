@@ -23,9 +23,7 @@ public class TablaErrores {
 
     private void llenarTabla() {
         tabla.put("EL1", "Error lexico 1: en la linea %d la cadena \"%s\" no es considerada una cadena valida");
-        tabla.put("ES1", "Error sintactico 1: en la linea %d se ha encontrado que las cadenas "
-                + "de la estructura principal no concuerdan con el formato solicitado,"
-                + " favor de revisar en la ayuda");
+        tabla.put("ES1", "Error sintactico 1: en la linea %d se ha encontrado que las cadenas de la estructura principal no concuerdan con el formato solicitado, favor de revisar en la ayuda");
         tabla.put("ES2", "Error sintactico 2: en la linea %d la expresion escrita tiene un error"
                 + " en su estructura en la cadena %s");
         tabla.put("ES3", "Error sintactico 3: en la linea %d la unidad de tiempo no es la correcta, recuerda que debe ser [\"seg\", \"min\", \"hr\"]");
@@ -45,10 +43,19 @@ public class TablaErrores {
         tabla.put("ESM7", "Error semantico 7: En la linea %d se ha llamado a la funcion %s, dicha funcion no ha sido declarada");
         tabla.put("ESM8", "Error semantico 8: En la linea %d se han colocado %s parametros para la funcion %s y se esperaban %s parametros");
         tabla.put("ESM9", "Error semantico 9: En la linea %d se ha colocado un tipo erroneo en el parametro numero %s, en dicho lugar se esperaba un valor %s");
+        tabla.put("ESM10", "Error semantico 10: En la linea %d el tipo definido de la expresion %s y el valor ingresado son incompatibles");
     }
 
     public ArrayList<String> getErrores() {
         return errores;
+    }
+
+    public String infoErrores() {
+        String info = "";
+        for (String codigo : tabla.keySet()) {
+            info += codigo + ": " + tabla.get(codigo) + "\n\n";
+        }
+        return info;
     }
 
     public void agregarErrorLexico(String error, int linea, String cuerpo) {
@@ -57,8 +64,10 @@ public class TablaErrores {
 
     public void agregarErrorSintactico(String error, int linea, String... valores) {
         switch (error) {
-            case "ES1", "ES3", "ES4", "ES5", "ES6", "ES7", "ES9", "ES10" ->
+            case "ES1", "ES3", "ES4", "ES5", "ES6", "ES9", "ES10" ->
                 errores.add(String.format(tabla.get(error), linea));
+            case "ES7" ->
+                errores.add(String.format(tabla.get(error), linea - 1));
             case "ES2", "ES8" ->
                 errores.add(String.format(tabla.get(error), linea, valores[0]));
             default ->
@@ -67,8 +76,9 @@ public class TablaErrores {
     }
 
     public void agregarErrorSemantico(String error, int linea, String... valores) {
+        System.out.println(error);
         switch (error) {
-            case "ESM1", "ESM3", "ESM4", "ESM7" ->
+            case "ESM1", "ESM3", "ESM4", "ESM7", "ESM10" ->
                 errores.add(String.format(tabla.get(error), linea, valores[0]));
             case "ESM2", "ESM9" ->
                 errores.add(String.format(tabla.get(error), linea, valores[0], valores[1]));

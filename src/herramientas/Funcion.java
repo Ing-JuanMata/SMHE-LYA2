@@ -34,9 +34,9 @@ public class Funcion {
             codigo.FrmPrincipal.errores.agregarErrorSemantico("ESM8", linea, String.valueOf(parametros.size()), id, String.valueOf(parametrosOriginales.size()));
             return;
         }
-        int pos = 1;
+        int pos = 0;
         for (Object parametro : parametros) {
-            String tipo = parametrosOriginales.get(pos - 1);
+            String tipo = parametrosOriginales.get(pos);
             pos++;
             if (tipo.equals("entero") && !(parametro instanceof Integer)) {
                 codigo.FrmPrincipal.errores.agregarErrorSemantico("ESM9", linea, String.valueOf(pos), "entero");

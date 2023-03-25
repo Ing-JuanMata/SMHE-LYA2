@@ -19,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import static javax.swing.JFileChooser.APPROVE_OPTION;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -36,9 +35,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private String archivo = "";
     private NumeroLinea NumLinea;
-    DefaultTableModel modeloEstatico;
-    DefaultTableModel modeloDinamico;
-    public static HashMap<String, String> tablaErrores = new HashMap<>();
     public static ArrayList<Symbol> tokens = new ArrayList<>();
     public static TablaSimbolos tablaSimbolos = new TablaSimbolos();
     public static TablaErrores errores = new TablaErrores();
@@ -71,6 +67,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jSeparator3 = new javax.swing.JSeparator();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         barraHerramientas = new javax.swing.JToolBar();
         sep0 = new javax.swing.JToolBar.Separator();
         btnAbrir = new javax.swing.JButton();
@@ -106,8 +103,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         menuFunciones = new javax.swing.JMenuItem();
         menuSimbolos = new javax.swing.JMenuItem();
+        menuErrores = new javax.swing.JMenuItem();
 
         jMenu2.setText("jMenu2");
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -351,6 +351,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu4.add(menuSimbolos);
+
+        menuErrores.setText("Tabla de errores");
+        menuErrores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuErroresActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuErrores);
 
         jMenu1.add(jMenu4);
 
@@ -659,6 +667,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         javax.swing.JOptionPane.showMessageDialog(this, "Es posible que no se haya hecho un intento de compilacion, favor de tratar de compilar para crear las tablas", "tabla de simbolos vacia", javax.swing.JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_menuSimbolosActionPerformed
 
+    private void menuErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuErroresActionPerformed
+        InfoErrores info = new InfoErrores(errores.infoErrores());
+        info.setVisible(true);
+    }//GEN-LAST:event_menuErroresActionPerformed
+
     // Funciones
     //Pendiente
     private void nuevoArchivo() {
@@ -713,6 +726,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void guardarArchivo() {
         if (archivo.equals("")) {
             guardarCArchivo();
+            return;
         }
         try {
             //Flujos de Caracteres
@@ -736,109 +750,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
         String dir = System.getProperty("user.dir");
         File directorio = new File(dir);
         f.setCurrentDirectory(directorio);
-
-        if (f.showSaveDialog(this) == APPROVE_OPTION && f.getFileFilter() == filtro) {
+        int opcion = f.showSaveDialog(this);
+        if (opcion == javax.swing.JFileChooser.APPROVE_OPTION && f.getFileFilter() == filtro) {
             archivo = dir + System.getProperty("file.separator")
                     + (f.getSelectedFile().getName().endsWith(".smhe") ? f.getSelectedFile().getName() : f.getSelectedFile().getName() + ".smhe");
             this.setTitle("SMHE - " + f.getSelectedFile().getName());
             guardarArchivo();
+        } else if (opcion == javax.swing.JFileChooser.CANCEL_OPTION || opcion == javax.swing.JFileChooser.ABORT) {
         } else {
             showMessageDialog(this, "Solo archivos de texto");
         }
-    }
-
-    private void llenadoTEstatico(int index) {
-
-        int col = 0;
-        int row = 0;
-
-        String[] palabras_reservadas = new String[]{
-            "Atlas", "End", "begin", "int", "char", "logic", "float", "str", "while", "for", "condition", "else", "ventilate", "admit", "emptyRoom", "dispense", "distance", "deviceControl", "driverLights", "openDoor", "registerA", "exit", "true", "false", "Declare", "As"
-        };
-        palabras_reservadas = ordenarLista(palabras_reservadas);
-
-        String[] operaciones = new String[]{
-            "*", "+", "-", "/", // Aritmeticos   0-3
-            "==", "<=", ">=", "<", ">", "!=", // Comparaciones 4-9
-            "&&", "||", "!", // Logicos       10-12
-            "*=", "+=", "/=", "-=", "=", // Asignacion    13-17
-            "{", "}", "[", "]", "(", ")" // Agrupación    18-23
-        };
-
-        switch (index) {
-            case -1:
-                limpiarTablaEstatica();
-                for (int i = 0; i < palabras_reservadas.length; i++) {
-                    modeloEstatico.addRow(new Object[]{"", ""});
-                    //tablaEstatica.setValueAt(palabras_reservadas[i], row, col);
-                    col++;
-                    //tablaEstatica.setValueAt("Palabra reservada", row, col);
-                    row++;
-                    col--;
-                }
-                break;
-            case 0:
-                limpiarTablaEstatica();
-                for (int i = 0; i < palabras_reservadas.length; i++) {
-                    modeloEstatico.addRow(new Object[]{"", ""});
-                    //tablaEstatica.setValueAt(palabras_reservadas[i], row, col);
-                    col++;
-                    //tablaEstatica.setValueAt("Palabra reservada", row, col);
-                    row++;
-                    col--;
-                }
-                break;
-            case 1:
-                limpiarTablaEstatica();
-                for (int i = 0; i < operaciones.length; i++) {
-                    modeloEstatico.addRow(new Object[]{"", ""});
-                    //tablaEstatica.setValueAt(operaciones[i], row, col);
-                    col++;
-                    // Aritmeticos   0-3
-                    // Comparaciones 4-9
-                    // Logicos       10-12
-                    // Asignacion    13-17
-                    // Agrupación    18-23
-
-                    if (i >= 0 && i <= 3) {
-                        //tablaEstatica.setValueAt("Op. Aritmetica", row, col);
-                    }
-                    if (i >= 4 && i <= 9) {
-                        //tablaEstatica.setValueAt("Op. Comparativa", row, col);
-                    }
-                    if (i >= 10 && i <= 12) {
-                        //tablaEstatica.setValueAt("Op. Logica", row, col);
-                    }
-                    if (i >= 13 && i <= 17) {
-                        //tablaEstatica.setValueAt("Dec. Asignación", row, col);
-                    }
-                    if (i >= 18 && i <= 23) {
-                        //tablaEstatica.setValueAt("Dec. Agrupación", row, col);
-                    }
-
-                    row++;
-                    col--;
-                }
-                break;
-            case 2:
-                limpiarTablaEstatica();
-                break;
-            default:
-                System.out.println("hello");
-        }
-
-    }
-
-    public void limpiarTablaEstatica() {
-        modeloEstatico.getDataVector().removeAllElements();
-        modeloEstatico.fireTableDataChanged();
-        revalidate();
-    }
-
-    public void limpiarTablaDinamica() {
-        modeloDinamico.getDataVector().removeAllElements();
-        modeloDinamico.fireTableDataChanged();
-        revalidate();
     }
 
     public String[] ordenarLista(String[] lista) {
@@ -926,11 +847,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel lblConsola;
+    private javax.swing.JMenuItem menuErrores;
     private javax.swing.JMenuItem menuFunciones;
     private javax.swing.JMenuItem menuLexico;
     private javax.swing.JMenuItem menuSimbolos;

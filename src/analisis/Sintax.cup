@@ -247,11 +247,7 @@ gramaticas ::= IDENTIFICADOR:i INC {:
             | declaracion_inicio:i declaracion_valor:v {:reportarError("ES7", null);ponerValor(i,v);:} gramaticas
             | asignacion PUNTO_COMA gramaticas
             | asignacion {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | CONDICION  condicion gramaticas
-            | ventilar PUNTO_COMA gramaticas
-            | ventilar {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | admitir PUNTO_COMA gramaticas
-            | admitir {:s=cur_token;reportarError("ES7", null); :} gramaticas
+            | CONDICION condicion gramaticas
             | APAGAR LUCES PUNTO_COMA gramaticas
             | APAGAR LUCES {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | ENCENDER LUCES PUNTO_COMA gramaticas
@@ -284,7 +280,8 @@ gramaticas ::= IDENTIFICADOR:i INC {:
             | error {:reportarError("ES2", null);:} PUNTO_COMA gramaticas
             | {:s=cur_token;reportarError("ES10", null);:};
 usar ::= USAR IDENTIFICADOR:i {:funcionActual = new herramientas.Funcion(i, cur_token.left+1);:}
-        PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO;
+        PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO |
+        USAR admitir | USAR ventilar;
 parametros_llamar ::= expresion:e {:agregarExpresion(e);:} COMA parametros_llamar 
                     | expresion:e {:agregarExpresion(e);guardarFuncion();:}  
                     | {:guardarFuncion();:};
@@ -316,7 +313,11 @@ op2 ::= op4:v1 {:valActual=v1;:} op3:v2 {:RESULT=v2;:};
 op3 ::= AR_MULTIPLICACION {:valAux2=valActual;:} op4:v {:valActual=valAux2*v;:} op3:r {:RESULT=r;:}
     | AR_DIVISION {:valAux2=valActual;:} op4:v {:valActual=valAux2/v;:} op3:r {:RESULT=r;:} | {:RESULT=valActual;:};
 op4 ::= valores:v {:RESULT=v;:} | AR_RESTA valores:v {:RESULT=-v;:} 
-            | error {:reportarError("ES6", null);RESULT=0;:};
+            | error {:
+                reportarError("ES6", null);
+                reportarErrorSemantico("ESM10", "aritmetica");
+                RESULT=0;
+            :};
 valores ::= NUMERO:n {:RESULT=n;:} 
             | IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, false);RESULT=validarEntero(i);:} 
             | OBTENER TEMPERATURA {:RESULT=0;:} | OBTENER PERSONAS {:RESULT=0;:}
@@ -342,7 +343,11 @@ terminal_logico ::= IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, fals
                 | PARENTESIS_ABIERTO sentencia_booleana:sb PARENTESIS_CERRADO {:RESULT=sb;:}
                 | ESTADO estado {:RESULT=false;:} 
                 | NEGACION terminal_logico:tl {:RESULT = !tl;:} 
-                | error {:reportarError("ES5", null); RESULT=false;:};
+                | error {:
+                    reportarError("ES5", null);
+                    reportarErrorSemantico("ESM10", "logica");
+                    RESULT=false;
+                :};
 sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
 ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA B sentencia_booleana COMA
             B sentencia_booleana PARENTESIS_CERRADO;
