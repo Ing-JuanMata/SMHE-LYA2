@@ -1,32 +1,32 @@
 inicio prueba{
 comienzo(cada 2 min){
-aulaAbierta declarar como logico = b estado puertas && estado ventanas;
-condicion(b !aulaAbierta){
-usar abrirPuertasYVentanas();
-salir;
-}sino condicion(b !estado puertas){
-usar abrirPuertasTiempo(a 10);
-salir;
-}sino {
-usar abrirVentanasTiempo(a 10);
-salir;
-}
-salir;
+	aulaAbierta declarar como logico = b estado puertas && estado ventanas;
+	condicion(b !aulaAbierta){
+		usar abrirPuertasYVentanas();
+		salir;
+	}sino condicion(b !estado puertas){
+		usar abrirPuertasTiempo(a 10);
+		salir;
+	}sino {
+		usar abrirVentanasTiempo(a 10);
+		salir;
+	}
+	salir;
 }
 
 funcion abrirPuertasTiempo(tiempo declarar como entero){
-abrir puertas por tiempo min;
-salir;
+	abrir puertas por tiempo min;
+	salir;
 }
 
 funcion abrirVentanasTiempo(tiempo declarar como entero){
-abrir ventanas por tiempo min;
-salir;
+	abrir ventanas por tiempo min;
+	salir;
 }
 
 funcion abrirPuertasYVentanas(){
-abrir puertas mantener;
-abrir ventanas mantener;
-salir;
+	abrir puertas mantener;
+	abrir ventanas mantener;
+	salir;
 }
 }fin
