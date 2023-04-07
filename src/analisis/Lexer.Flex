@@ -41,8 +41,6 @@ espacio=[ \t\r]+
 "\n"     {/*Ignore*/}
 /* PALABRAS RESERVADAS */
 <YYINITIAL> {
-    "a"     {return symbol(sym.A);}
-    "b"     {return symbol(sym.B);}
     /* inicio, fin y terminacion de programa  */
     "salir" {return symbol(sym.SALIR);}
     "inicio" {return symbol(sym.INICIO);}
@@ -140,8 +138,6 @@ espacio=[ \t\r]+
     ")" {return symbol(sym.PARENTESIS_CERRADO);}
     "{" {return symbol(sym.LLAVE_ABIERTA);}
     "}" {return symbol(sym.LLAVE_CERRADA);}
-    "[" {return symbol(sym.CORCHETE_ABIERTO);}
-    "]" {return symbol(sym.CORCHETE_CERRADO);}
 }
 
 /* Signos de puntuacion */
@@ -149,11 +145,14 @@ espacio=[ \t\r]+
     ";" {return symbol(sym.PUNTO_COMA);}
     "," {return symbol(sym.COMA);}
 }
-/* Identificador */
-{L}({L}|{D})*   {return symbol(sym.IDENTIFICADOR, yytext());}
 
-/* Numero */
-{D}+ {return symbol(sym.NUMERO, Integer.parseInt(yytext()));}
+<YYINITIAL> {
+    /* Identificador */
+    {L}({L}|{D})*   {return symbol(sym.IDENTIFICADOR, yytext());}
 
-/* Error general */
-[^ ;,{}\[\]()/<>=!&\+\-\*\n\t\|]+       {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}
+    /* Numero */
+    {D}+ {return symbol(sym.NUMERO, Integer.parseInt(yytext()));}
+
+    /* Error general */
+    .       {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}
+}

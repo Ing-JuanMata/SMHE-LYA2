@@ -226,7 +226,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         txtError.setEditable(false);
         txtError.setColumns(20);
         txtError.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
+        txtError.setLineWrap(true);
         txtError.setRows(5);
+        txtError.setWrapStyleWord(true);
         scrollConsola.setViewportView(txtError);
 
         panelConsola.add(scrollConsola, java.awt.BorderLayout.CENTER);

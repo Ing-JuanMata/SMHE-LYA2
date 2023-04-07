@@ -8,8 +8,9 @@ parser code
 {:
     private String ambito;
     private Symbol s;
-    private int valActual = 0, valAux1 = 0, valAux2 = 0, relActual = 0;
-    private boolean logActual = false, logAux = false;
+    private Object valActual;
+    private boolean aux1;
+    private int aux2, aux3, aux4;
     private herramientas.Funcion funcionActual;
     private java.util.ArrayList<herramientas.Funcion> funcionesLlamadas = new java.util.ArrayList<>();
     
@@ -36,6 +37,7 @@ parser code
     }
 
     private void ponerValor(String identificador, Object valor){
+        if(valor == null) return;
         String tipo = getTipo(identificador);
         if(tipo == null) {
             reportarErrorSemantico("ESM1", identificador);
@@ -104,12 +106,8 @@ parser code
                 return 0;
             }
             case "entero" -> {
-                Object valor = getValor(id);
-                if(valor == null){
-                    reportarErrorSemantico("ESM3", id);
-                    return 0;
-                }
-                return (int) valor;
+                
+                return (int) verificarValor(id);
             }
             default -> {
                 reportarErrorSemantico("ESM2", id, "sin tipo");
@@ -118,25 +116,12 @@ parser code
         }
     }
 
-    private boolean validarLogico(String id){
-        switch(getTipo(id)){
-            case "entero" -> {
-                reportarErrorSemantico("ESM2", id, "entero");
-                return false;
-            }
-            case "logico" -> {
-                Object valor = getValor(id);
-                if(valor == null){
-                    reportarErrorSemantico("ESM3", id);
-                    return false;
-                }
-                return (boolean) valor;
-            }
-            default -> {
-                reportarErrorSemantico("ESM2", id, "sin tipo");
-                return false;
-            }
+    private Object verificarValor(String id){
+        Object valor = getValor(id);
+        if(valor == null){
+            reportarErrorSemantico("ESM3", id);
         }
+        return valor;
     }
 
     private void agregarExpresion(Object expresion){
@@ -149,19 +134,36 @@ parser code
     private void guardarFuncion(){
         funcionesLlamadas.add(funcionActual);
     }
+
+    private int getEntero(Object v){
+        if(v == null) return 0;
+        if(v instanceof Integer) return Integer.parseInt(v.toString());
+        else {
+            reportarErrorSemantico("ESM11", "Lógico", "Entero");
+            return 0;
+        }
+    }
+
+    private boolean getLogico(Object v){
+        if(v == null) return false;
+        if(v instanceof Boolean) return Boolean.parseBoolean(v.toString());
+        else {
+            reportarErrorSemantico("ESM11", "Entero", "Lógico");
+            return false;
+        }
+    }
 :};
 
 terminal FIN, COMIENZO, ENTERO, LOGICO, CONDICION, SINO, VENTILAR,
         ADMITIR, DISPENSAR, SALIR, INICIO, DECLARAR, COMO, CADA, POR, SEG,
         MIN, HR, ABRIR, CERRAR, VENTANAS, PUERTAS, MANTENER, OBTENER, TEMPERATURA,
-        PERSONAS, APAGAR, ENCENDER, SANITIZAR, LUCES, ESTADO, FUNCION, A, B, USAR;
+        PERSONAS, APAGAR, ENCENDER, SANITIZAR, LUCES, ESTADO, FUNCION, USAR;
 terminal REL_MENOR, REL_MAYOR, REL_MENOR_IGUAL, REL_MAYOR_IGUAL, REL_DIFERENTE, 
         REL_IGUAL;
 terminal AR_SUMA, AR_RESTA, AR_MULTIPLICACION, AR_DIVISION;
 terminal NEGACION, LOGICO_AND, LOGICO_OR;
 terminal INC, DEC, ASIGNACION;
-terminal PARENTESIS_ABIERTO, PARENTESIS_CERRADO, LLAVE_ABIERTA, LLAVE_CERRADA,
-        CORCHETE_ABIERTO, CORCHETE_CERRADO;
+terminal PARENTESIS_ABIERTO, PARENTESIS_CERRADO, LLAVE_ABIERTA, LLAVE_CERRADA;
 terminal PUNTO_COMA, COMA;
 terminal Integer NUMERO;
 terminal Boolean OP_BOOLEANO;
@@ -169,33 +171,20 @@ terminal String IDENTIFICADOR;
 
 non terminal inicio, gramaticas, tiempo_cada, tiempo_por, unidad_tiempo, 
             declaracion_valor, ventilar, admitir, estado, funcion, inicio_fin, 
-            parametros, asignacion, expresion, parametros_llamar, usar;
-non terminal Integer valores, op_aritmetica, op1, op2, op3, op4;
+            parametros, asignacion, expresion, parametros_llamar, usar, valores,
+            op1, op2, op3, op4, op5, op6, op7, op8, tiempo_abrir_cerrar, 
+            usar_funcion;
 non terminal String declaracion_tipo_dato, tipo_dato, declaracion_inicio;
-non terminal Boolean condicion, sentencia_booleana, relacional_booleana, sino, sb2,
-                    rb2, terminal_logico;
+non terminal Boolean condicion, sino;
 
 start with inicio;
 
-inicio ::=
-        INICIO IDENTIFICADOR:i {:
+inicio ::= INICIO IDENTIFICADOR:i {:
             ambito = i;
             agregarFuncion(i);
         :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO 
-        LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
-        | INICIO error {:
-            reportarError("ES1", null);
-            ambito="rutina_principal";
-            :}
-        gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
-        | error {:
-            reportarError("ES1", null);
-            ambito = "rutina_principal";
-            :}
-        gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:};
-inicio_fin ::= LLAVE_CERRADA FIN | error {:reportarError("ES1", null);:} FIN
-                | FUNCION funcion inicio_fin
-                | error {:reportarError("ES1", null);:} funcion inicio_fin;
+        LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:};
+inicio_fin ::= LLAVE_CERRADA FIN | FUNCION funcion inicio_fin;
 funcion ::= IDENTIFICADOR:i {:
                                 s = cur_token;
                                 agregarFuncion(i);
@@ -252,22 +241,14 @@ gramaticas ::= IDENTIFICADOR:i INC {:
             | APAGAR LUCES {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | ENCENDER LUCES PUNTO_COMA gramaticas
             | ENCENDER LUCES {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | ABRIR PUERTAS tiempo_por PUNTO_COMA gramaticas
-            | ABRIR PUERTAS tiempo_por {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | ABRIR PUERTAS MANTENER PUNTO_COMA gramaticas 
-            | ABRIR PUERTAS MANTENER {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | CERRAR PUERTAS tiempo_por PUNTO_COMA gramaticas
-            | CERRAR PUERTAS tiempo_por {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | CERRAR PUERTAS MANTENER PUNTO_COMA gramaticas
-            | CERRAR PUERTAS MANTENER {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | ABRIR VENTANAS tiempo_por PUNTO_COMA gramaticas
-            | ABRIR VENTANAS tiempo_por {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | ABRIR VENTANAS MANTENER PUNTO_COMA gramaticas 
-            | ABRIR VENTANAS MANTENER {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | CERRAR VENTANAS tiempo_por PUNTO_COMA gramaticas 
-            | CERRAR VENTANAS tiempo_por {:s=cur_token;reportarError("ES7", null);:} gramaticas
-            | CERRAR VENTANAS MANTENER PUNTO_COMA gramaticas
-            | CERRAR VENTANAS MANTENER {:s=cur_token;reportarError("ES7", null);:} gramaticas
+            | ABRIR PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | ABRIR PUERTAS tiempo_abrir_cerrar {:s=cur_token;reportarError("ES7", null);:} gramaticas
+            | CERRAR PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | CERRAR PUERTAS tiempo_abrir_cerrar {:s=cur_token;reportarError("ES7", null);:} gramaticas
+            | ABRIR VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | ABRIR VENTANAS tiempo_abrir_cerrar {:s=cur_token;reportarError("ES7", null);:} gramaticas
+            | CERRAR VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas 
+            | CERRAR VENTANAS tiempo_abrir_cerrar {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | SANITIZAR tiempo_por PUNTO_COMA gramaticas
             | SANITIZAR tiempo_por {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | DISPENSAR tiempo_por PUNTO_COMA gramaticas
@@ -276,25 +257,51 @@ gramaticas ::= IDENTIFICADOR:i INC {:
             | usar {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | SALIR PUNTO_COMA
             | SALIR {:s=cur_token;reportarError("ES7", null);:}
-            | error {:reportarError("ES2", null);:} gramaticas
+            | SALIR error
+            | SALIR error PUNTO_COMA
             | error {:reportarError("ES2", null);:} PUNTO_COMA gramaticas
+            | error {:System.out.println("Faltó identificador");:} INC PUNTO_COMA gramaticas
+            | error {:System.out.println("Faltó identificador");:} DEC PUNTO_COMA gramaticas
+            | INC error {:System.out.println("Faltó identificador");:} PUNTO_COMA gramaticas
+            | DEC error {:System.out.println("Faltó identificador");:} PUNTO_COMA gramaticas
+            | error {:System.out.println("Faltó condicion");:} condicion gramaticas
+            | error {:System.out.println("Faltó encender/apagar");:} LUCES PUNTO_COMA gramaticas
+            | ENCENDER error {:System.out.println("Faltó luces");:} PUNTO_COMA gramaticas
+            | APAGAR error {:System.out.println("Faltó luces");:} PUNTO_COMA gramaticas
+            | error {:System.out.println("Faltó abrir/cerrar");:} PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | error {:System.out.println("Faltó abrir/cerrar");:} VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | error {:System.out.println("Faltó sanitizar/dispensar");:} tiempo_por PUNTO_COMA gramaticas
             | {:s=cur_token;reportarError("ES10", null);:};
-usar ::= USAR IDENTIFICADOR:i {:funcionActual = new herramientas.Funcion(i, cur_token.left+1);:}
-        PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO |
-        USAR admitir | USAR ventilar;
+tiempo_abrir_cerrar ::= MANTENER 
+    | tiempo_por
+    | error {:System.out.println("Se esperaba \"mantener\" o \"por <Expresión aritmética> <\"seg\", \"min\", \"hr\">\"");:};
+usar ::= USAR usar_funcion | USAR admitir | USAR ventilar
+    | error usar_funcion {:System.out.println("Faltó <\"usar\">");:}
+    | error admitir {:System.out.println("Faltó <\"usar\">");:}
+    | error ventilar {:System.out.println("Faltó <\"usar\">");:};
+usar_funcion ::= IDENTIFICADOR:i {:funcionActual = new herramientas.Funcion(i, cur_token.left+1);:}
+                PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO
+            | error {:
+                        System.out.println("No se ha encontrado el identificador de la función");
+                        funcionActual = new herramientas.Funcion("0sin_id", cur_token.left+1);
+                    :} PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO;
 parametros_llamar ::= expresion:e {:agregarExpresion(e);:} COMA parametros_llamar 
                     | expresion:e {:agregarExpresion(e);guardarFuncion();:}  
                     | {:guardarFuncion();:};
 tiempo_cada ::= CADA NUMERO unidad_tiempo;
-tiempo_por ::= POR op_aritmetica unidad_tiempo;
+tiempo_por ::= POR expresion:e {:getEntero(e);:} unidad_tiempo;
 unidad_tiempo ::= SEG | MIN | HR | error {:reportarError("ES3", null);:};
-estado ::= LUCES | PUERTAS | VENTANAS;
-expresion ::= A op_aritmetica:oa {:RESULT=oa;:} | B sentencia_booleana:sb {:RESULT=sb;:}
-            | error {:s=cur_token;reportarError("ES9", null);RESULT = 0;:};
+estado ::= LUCES | PUERTAS | VENTANAS | error {:System.out.println("Se esperaba <\"luces\", \"puertas\", \"ventanas\">");:};
 asignacion ::= IDENTIFICADOR:i {:
                 s = cur_token;
                 verificarIdentificador(i, false);
-            :} ASIGNACION expresion:e {:ponerValor(i,e);:};
+            :} ASIGNACION expresion:e {:ponerValor(i,e);:}
+        | error {:System.out.println("No se ha encontrado el identificador para la asignación");:} ASIGNACION expresion
+        | IDENTIFICADOR:i {:
+                s = cur_token;
+                verificarIdentificador(i, false);
+                System.out.println("No se ha encontrado el simbolo \"=\"");
+            :} expresion:e {:ponerValor(i,e);:};
 declaracion_inicio ::= IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, true);:} 
                     DECLARAR declaracion_tipo_dato:td {:
                         agregarSimbolo(i, cur_token.left+1);
@@ -305,50 +312,37 @@ declaracion_valor ::= ASIGNACION expresion:e {:RESULT=e;:};
 declaracion_tipo_dato ::= COMO tipo_dato:td {:RESULT = td;:};
 tipo_dato ::= ENTERO {:RESULT = "entero";:} | LOGICO {:RESULT = "logico";:}
                 | error {:reportarError("ES4", null); RESULT = "error";:};
-op_aritmetica ::= op2:v1 {:valActual = v1;:} op1:v2 {:RESULT=v2;:};
-op1 ::= AR_SUMA {:valAux1=valActual;:} op2:v {:valActual=valAux1+v;:} op1:r {:RESULT=r;:}
-    | AR_RESTA {:valAux1=valActual;:} op2:v {:valActual=valAux1-v;:} op1:r {:RESULT=r;:} 
+expresion ::= op2:v {:valActual=v;:} op1:r {:RESULT=r;:};
+op1 ::= LOGICO_AND {:aux1=getLogico(valActual);:} op2:v {:valActual=aux1&&getLogico(v);:} op1:r {:RESULT=r;:} 
+    | LOGICO_OR {:aux1=getLogico(valActual);:} op2:v {:valActual=aux1||getLogico(v);:} op1:r {:RESULT=r;:} 
     | {:RESULT=valActual;:};
-op2 ::= op4:v1 {:valActual=v1;:} op3:v2 {:RESULT=v2;:};
-op3 ::= AR_MULTIPLICACION {:valAux2=valActual;:} op4:v {:valActual=valAux2*v;:} op3:r {:RESULT=r;:}
-    | AR_DIVISION {:valAux2=valActual;:} op4:v {:valActual=valAux2/v;:} op3:r {:RESULT=r;:} | {:RESULT=valActual;:};
-op4 ::= valores:v {:RESULT=v;:} | AR_RESTA valores:v {:RESULT=-v;:} 
-            | error {:
-                reportarError("ES6", null);
-                reportarErrorSemantico("ESM10", "aritmetica");
-                RESULT=0;
-            :};
-valores ::= NUMERO:n {:RESULT=n;:} 
-            | IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, false);RESULT=validarEntero(i);:} 
+op2 ::= op4:v {:valActual=v;:} op3:r {:RESULT=r;:};
+op3 ::= REL_MENOR {:aux2=getEntero(valActual);:} op4:v {:RESULT=aux2<getEntero(v);:} 
+    | REL_MAYOR {:aux2=getEntero(valActual);:} op4:v {:RESULT=aux2>getEntero(v);:} 
+    | REL_MENOR_IGUAL {:aux2=getEntero(valActual);:} op4:v {:RESULT=aux2<=getEntero(v);:} 
+    | REL_MAYOR_IGUAL {:aux2=getEntero(valActual);:} op4:v {:RESULT=aux2>=getEntero(v);:}
+    | REL_DIFERENTE {:aux2=getEntero(valActual);:} op4:v {:RESULT=aux2!=getEntero(v);:} 
+    | REL_IGUAL {:aux2=getEntero(valActual);:} op4:v {:RESULT=aux2==getEntero(v);:} 
+    | {:RESULT=valActual;:};
+op4 ::= op6:v {:valActual=v;:} op5:r {:RESULT=r;:};
+op5 ::= AR_SUMA {:aux3=getEntero(valActual);:} op6:v {:valActual=aux3+getEntero(v);:} op5:r {:RESULT=r;:}
+    | AR_RESTA {:aux3=getEntero(valActual);:} op6:v {:valActual=aux3-getEntero(v);:} op5:r {:RESULT=r;:}
+    | {:RESULT=valActual;:};
+op6 ::= op8:v {:valActual=v;:} op7:r {:RESULT=r;:};
+op7 ::= AR_DIVISION {:aux4=getEntero(valActual);:} op8:v {:valActual=aux4/getEntero(v);:} op7:r {:RESULT=r;:} 
+    | AR_MULTIPLICACION {:aux4=getEntero(valActual);:} op8:v {:valActual=aux4*getEntero(v);:} op7:r {:RESULT=r;:}
+    | {:RESULT=valActual;:};
+op8 ::= valores:v {:RESULT=v;:} 
+    | AR_RESTA valores:v {:RESULT=-getEntero(v);:} 
+    | NEGACION valores:v {:RESULT=!getLogico(v);:}
+    | error {:System.out.println("No se ha encontrado un operador o un operando en la expresión ingresada");:};
+valores ::= NUMERO:n {:RESULT=n;:}
+            | IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, false);RESULT=getValor(i);:} 
             | OBTENER TEMPERATURA {:RESULT=0;:} | OBTENER PERSONAS {:RESULT=0;:}
-            | PARENTESIS_ABIERTO op_aritmetica:oa PARENTESIS_CERRADO {:RESULT=oa;:};
-condicion ::= PARENTESIS_ABIERTO B sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA
-            | PARENTESIS_ABIERTO B sentencia_booleana PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA sino;
-sentencia_booleana ::= terminal_logico:tl {:logActual=tl;:} sb2:r {:RESULT=r;:} 
-                    | relacional_booleana:rb {:logActual=rb;:} sb2:r {:RESULT=r;:};
-sb2 ::= LOGICO_AND {:logAux = logActual;:} terminal_logico:tl {:logActual=logAux&&tl;:} sb2:sb {:RESULT=sb;:} 
-    | LOGICO_OR {:logAux = logActual;:} terminal_logico:tl {:logActual=logAux||tl;:} sb2:sb {:RESULT=sb;:}
-    | LOGICO_AND {:logAux = logActual;:} relacional_booleana:rb {:logActual=logAux&&rb;:} sb2:sb {:RESULT=sb;:} 
-    | LOGICO_OR {:logAux = logActual;:} relacional_booleana:rb {:logActual=logAux||rb;:} sb2:sb {:RESULT=sb;:}
-    | {:RESULT=logActual;:};
-relacional_booleana ::= CORCHETE_ABIERTO op_aritmetica:v {:relActual=v;:} rb2:r {:RESULT=r;:} CORCHETE_CERRADO;
-rb2 ::= REL_MENOR op_aritmetica:oa {:RESULT=relActual<oa;:} 
-    | REL_MAYOR op_aritmetica:oa {:RESULT=relActual>oa;:} 
-    | REL_MENOR_IGUAL op_aritmetica:oa {:RESULT=relActual<=oa;:} 
-    | REL_MAYOR_IGUAL op_aritmetica:oa {:RESULT=relActual>=oa;:}
-    | REL_DIFERENTE op_aritmetica:oa {:RESULT=relActual!=oa;:} 
-    | REL_IGUAL op_aritmetica:oa {:RESULT=relActual==oa;:};
-terminal_logico ::= IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, false);RESULT=validarLogico(i);:} 
-                | OP_BOOLEANO:ob {:RESULT=ob;:}  
-                | PARENTESIS_ABIERTO sentencia_booleana:sb PARENTESIS_CERRADO {:RESULT=sb;:}
-                | ESTADO estado {:RESULT=false;:} 
-                | NEGACION terminal_logico:tl {:RESULT = !tl;:} 
-                | error {:
-                    reportarError("ES5", null);
-                    reportarErrorSemantico("ESM10", "logica");
-                    RESULT=false;
-                :};
+            | OP_BOOLEANO:ob {:RESULT=ob;:} | ESTADO estado {:RESULT=false;:}
+            | PARENTESIS_ABIERTO expresion:e PARENTESIS_CERRADO {:RESULT=e;:};
+condicion ::= PARENTESIS_ABIERTO expresion PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA
+            | PARENTESIS_ABIERTO expresion PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA sino;
 sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
-ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA B sentencia_booleana COMA
-            B sentencia_booleana PARENTESIS_CERRADO;
-admitir ::= ADMITIR PARENTESIS_ABIERTO B sentencia_booleana COMA tiempo_por PARENTESIS_CERRADO;
+ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA expresion COMA expresion PARENTESIS_CERRADO;
+admitir ::= ADMITIR PARENTESIS_ABIERTO expresion COMA tiempo_por PARENTESIS_CERRADO;

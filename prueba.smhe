@@ -1,14 +1,15 @@
 inicio prueba{
 comienzo(cada 2 min){
-	aulaAbierta declarar como logico = b estado puertas && estado ventanas;
-	condicion(b !aulaAbierta){
+	aulaAbierta declarar como logico;
+	aulaAbierta = estado puertas && estado ventanas;
+	condicion(!aulaAbierta){
 		usar abrirPuertasYVentanas();
 		salir;
-	}sino condicion(b !estado puertas){
-		usar abrirPuertasTiempo(a 10);
+	}sino condicion(!estado puertas){
+		usar abrirPuertasTiempo(10);
 		salir;
 	}sino {
-		usar abrirVentanasTiempo(a 10);
+		usar abrirVentanasTiempo(10);
 		salir;
 	}
 	salir;
