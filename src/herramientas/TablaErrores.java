@@ -34,6 +34,7 @@ public class TablaErrores {
         tabla.put("ES8", "Error sintáctico 8: en la línea %d mediante la cadena definida como \"%s\" se ha producido un error irrecuperable por el analizador, favor de revisar dicha línea");
         tabla.put("ES9", "Error sintáctico 9: en la línea %d no se ha encontrado el carácter que define el tipo de expresión de asignación");
         tabla.put("ES10", "Error sintáctico 10: antes de la línea %d se esperaba \"salir;\"");
+        tabla.put("ES11", "Error sintáctico 11: En la línea %d %s");
         tabla.put("ESM1", "Error semántico 1: en la línea %d el identificador %s no ha sido declarado");
         tabla.put("ESM2", "Error semántico 2: en la línea %d el tipo de dato del identificador %s no debería ser %s");
         tabla.put("ESM3", "Error semántico 3: en la línea %d el identificador %s no tiene ningún valor");
@@ -69,7 +70,7 @@ public class TablaErrores {
                 errores.add(String.format(tabla.get(error), línea));
             case "ES7" ->
                 errores.add(String.format(tabla.get(error), línea - 1));
-            case "ES2", "ES8" ->
+            case "ES2", "ES8", "ES11" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0]));
             default ->
                 System.out.println("Error no encontrado: " + error);
