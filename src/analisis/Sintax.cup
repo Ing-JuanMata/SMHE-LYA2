@@ -179,17 +179,39 @@ non terminal Boolean condicion, sino;
 
 start with inicio;
 
-inicio ::= INICIO IDENTIFICADOR:i {:
-            ambito = i;
-            agregarFuncion(i);
+inicio ::= INICIO IDENTIFICADOR {:
+            ambito = "comienzo";
+            agregarFuncion("comienzo");
         :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO 
-        LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:};
-inicio_fin ::= LLAVE_CERRADA FIN | FUNCION funcion inicio_fin;
+        LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
+        | error {:reportarError("ES11", "No se ha encontrado \"inicio\"");:} IDENTIFICADOR {:
+            ambito = "comienzo";
+            agregarFuncion("comienzo");
+        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO 
+        LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
+        | INICIO error {:
+            ambito = "comienzo";
+            agregarFuncion("comienzo");
+            reportarError("ES11", "No se ha encontrado el nombre del programa");
+        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO 
+        LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
+        | error {:reportarError("ES11", "No se ha encontrado \"{\"");:} COMIENZO 
+        PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas 
+        LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
+        | error {:reportarError("ES11", "No se ha encontrado \"comienzo\"");:} 
+        PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO LLAVE_ABIERTA 
+        gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:};
+inicio_fin ::= LLAVE_CERRADA FIN | FUNCION funcion inicio_fin
+            | LLAVE_CERRADA {:reportarError("ES11", No se ha encontrado \"fin\"");:}
+            | {:reportarError("ES11", "No se ha encontrado \"funcion\"");:} funcion inicio_fin;
 funcion ::= IDENTIFICADOR:i {:
                                 s = cur_token;
                                 agregarFuncion(i);
                                 ambito = i;
                             :}
+            PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA 
+            gramaticas LLAVE_CERRADA |
+            error {:reportarError("ES11", "No se ha encontrado el identificador de la función");:}
             PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA 
             gramaticas LLAVE_CERRADA;
 parametros ::= declaracion_inicio:i {:agregarParametro(i);:} COMA parametros 
@@ -290,7 +312,7 @@ parametros_llamar ::= expresion:e {:agregarExpresion(e);:} COMA parametros_llama
                     | expresion:e {:agregarExpresion(e);guardarFuncion();:}
                     | expresion:e {:agregarExpresion(e);guardarFuncion();:} error {:reportarError("ES11", "No se ha encontrado \",\" después de la expresión");:} parametros_llamar
                     | {:guardarFuncion();:};
-tiempo_cada ::= CADA NUMERO unidad_tiempo;
+tiempo_cada ::= CADA expresion unidad_tiempo | error {:reportarError("ES11", "Se esperaba \"cada\"");:} expresion unidad_tiempo;
 tiempo_por ::= POR expresion:e {:getEntero(e);:} unidad_tiempo;
 unidad_tiempo ::= SEG | MIN | HR | error {:reportarError("ES3", null);:};
 estado ::= LUCES | PUERTAS | VENTANAS | error {:reportarError("ES11", "Se esperaba <\"luces\", \"puertas\", \"ventanas\">");:};

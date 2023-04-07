@@ -70,8 +70,10 @@ public class TablaErrores {
                 errores.add(String.format(tabla.get(error), línea));
             case "ES7" ->
                 errores.add(String.format(tabla.get(error), línea - 1));
-            case "ES2", "ES8", "ES11" ->
+            case "ES2", "ES8" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0]));
+            case "ES11" ->
+                errores.add(String.format(tabla.get(error), línea, valores[1]));
             default ->
                 System.out.println("Error no encontrado: " + error);
         }
@@ -79,7 +81,7 @@ public class TablaErrores {
 
     public void agregarErrorSemantico(String error, int línea, String... valores) {
         switch (error) {
-            case "ESM1", "ESM3", "ESM4", "ESM7", "ESM10" ->
+            case "ESM1", "ESM3", "ESM4", "ESM6", "ESM7", "ESM10" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0]));
             case "ESM2", "ESM9", "ESM11" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0], valores[1]));
