@@ -8,9 +8,9 @@ parser code
 {:
     private String ambito;
     private Symbol s;
-    private Object valActual;
-    private boolean aux1;
-    private int aux2, aux3, aux4;
+    private Object valActual = 0;
+    private boolean aux1 = false;
+    private int aux2 = 0, aux3 = 0, aux4 = 0;
     private herramientas.Funcion funcionActual;
     private java.util.ArrayList<herramientas.Funcion> funcionesLlamadas = new java.util.ArrayList<>();
     
@@ -139,7 +139,7 @@ parser code
         if(v == null) return 0;
         if(v instanceof Integer) return Integer.parseInt(v.toString());
         else {
-            reportarErrorSemantico("ESM11", "Lógico", "Entero");
+            reportarErrorSemantico("ESM11", "Lógico", "Entera");
             return 0;
         }
     }
@@ -148,7 +148,7 @@ parser code
         if(v == null) return false;
         if(v instanceof Boolean) return Boolean.parseBoolean(v.toString());
         else {
-            reportarErrorSemantico("ESM11", "Entero", "Lógico");
+            reportarErrorSemantico("ESM11", "Entero", "Lógica");
             return false;
         }
     }
@@ -157,7 +157,7 @@ parser code
 terminal FIN, COMIENZO, ENTERO, LOGICO, CONDICION, SINO, VENTILAR,
         ADMITIR, DISPENSAR, SALIR, INICIO, DECLARAR, COMO, CADA, POR, SEG,
         MIN, HR, ABRIR, CERRAR, VENTANAS, PUERTAS, MANTENER, OBTENER, TEMPERATURA,
-        PERSONAS, APAGAR, ENCENDER, SANITIZAR, LUCES, ESTADO, FUNCION, USAR;
+        PERSONAS, APAGAR, ENCENDER, SANITIZAR, LUCES, ESTADO, FUNCION, USAR, MIENTRAS;
 terminal REL_MENOR, REL_MAYOR, REL_MENOR_IGUAL, REL_MAYOR_IGUAL, REL_DIFERENTE, 
         REL_IGUAL;
 terminal AR_SUMA, AR_RESTA, AR_MULTIPLICACION, AR_DIVISION;
@@ -169,11 +169,11 @@ terminal Integer NUMERO;
 terminal Boolean OP_BOOLEANO;
 terminal String IDENTIFICADOR;
 
-non terminal inicio, gramaticas, tiempo_cada, tiempo_por, unidad_tiempo, 
+non terminal inicio, inicio1, inicio2, gramaticas, tiempo_cada, tiempo_por, unidad_tiempo, 
             declaracion_valor, ventilar, admitir, estado, funcion, inicio_fin, 
             parametros, asignacion, expresion, parametros_llamar, usar, valores,
             op1, op2, op3, op4, op5, op6, op7, op8, tiempo_abrir_cerrar, 
-            usar_funcion;
+            usar_funcion, mientras, cabecera_condicional;
 non terminal String declaracion_tipo_dato, tipo_dato, declaracion_inicio;
 non terminal Boolean condicion, sino;
 
@@ -182,27 +182,34 @@ start with inicio;
 inicio ::= INICIO IDENTIFICADOR {:
             ambito = "comienzo";
             agregarFuncion("comienzo");
-        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO 
-        LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
-        | error {:reportarError("ES11", "No se ha encontrado \"inicio\"");:} IDENTIFICADOR {:
+        :} LLAVE_ABIERTA inicio1
+        | INICIO IDENTIFICADOR {:
             ambito = "comienzo";
             agregarFuncion("comienzo");
-        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO 
-        LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
+            s=cur_token;reportarError("ES11", "No se ha encontrado \"{\"");
+        :} inicio1
+        | error {:s=cur_token;reportarError("ES11", "No se ha encontrado \"inicio\"");:} IDENTIFICADOR {:
+            ambito = "comienzo";
+            agregarFuncion("comienzo");
+        :} LLAVE_ABIERTA inicio1
         | INICIO error {:
+            s=cur_token;
             ambito = "comienzo";
             agregarFuncion("comienzo");
             reportarError("ES11", "No se ha encontrado el nombre del programa");
-        :} LLAVE_ABIERTA COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO 
-        LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
-        | error {:reportarError("ES11", "No se ha encontrado \"{\"");:} COMIENZO 
-        PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas 
-        LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
-        | error {:reportarError("ES11", "No se ha encontrado \"comienzo\"");:} 
-        PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO LLAVE_ABIERTA 
+        :} LLAVE_ABIERTA inicio1;
+inicio1 ::= COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO inicio2
+        | error {:s=cur_token;reportarError("ES11", "No se ha encontrado \"comienzo\"");:}
+        PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO inicio2
+        | COMIENZO {:s=cur_token;reportarError("ES11", "No se ha encontrado \"(\"");:}
+        tiempo_cada PARENTESIS_CERRADO inicio2
+        | COMIENZO PARENTESIS_ABIERTO tiempo_cada 
+        {:s=cur_token;reportarError("ES11", "No se ha encontrado \")\"");:} inicio2;
+inicio2 ::= LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:}
+        | {:s=cur_token;reportarError("ES11", "No se ha encontrado \"{\"");:} 
         gramaticas LLAVE_CERRADA inicio_fin {:comprobarFunciones();:};
 inicio_fin ::= LLAVE_CERRADA FIN | FUNCION funcion inicio_fin
-            | LLAVE_CERRADA {:reportarError("ES11", No se ha encontrado \"fin\"");:}
+            | LLAVE_CERRADA {:reportarError("ES11", "No se ha encontrado \"fin\"");:}
             | {:reportarError("ES11", "No se ha encontrado \"funcion\"");:} funcion inicio_fin;
 funcion ::= IDENTIFICADOR:i {:
                                 s = cur_token;
@@ -211,7 +218,7 @@ funcion ::= IDENTIFICADOR:i {:
                             :}
             PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA 
             gramaticas LLAVE_CERRADA |
-            error {:reportarError("ES11", "No se ha encontrado el identificador de la función");:}
+            error {:s=cur_token;reportarError("ES11", "No se ha encontrado el identificador de la función");:}
             PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA 
             gramaticas LLAVE_CERRADA;
 parametros ::= declaracion_inicio:i {:agregarParametro(i);:} COMA parametros 
@@ -259,6 +266,7 @@ gramaticas ::= IDENTIFICADOR:i INC {:
             | asignacion PUNTO_COMA gramaticas
             | asignacion {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | CONDICION condicion gramaticas
+            | MIENTRAS mientras gramaticas
             | APAGAR LUCES PUNTO_COMA gramaticas
             | APAGAR LUCES {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | ENCENDER LUCES PUNTO_COMA gramaticas
@@ -281,46 +289,47 @@ gramaticas ::= IDENTIFICADOR:i INC {:
             | SALIR {:s=cur_token;reportarError("ES7", null);:}
             | SALIR error
             | SALIR error PUNTO_COMA
-            | error {:reportarError("ES2", null);:} PUNTO_COMA gramaticas
-            | error {:reportarError("ES11", "Faltó identificador");:} INC PUNTO_COMA gramaticas
-            | error {:reportarError("ES11", "Faltó identificador");:} DEC PUNTO_COMA gramaticas
-            | INC error {:reportarError("ES11", "Faltó identificador");:} PUNTO_COMA gramaticas
-            | DEC error {:reportarError("ES11", "Faltó identificador");:} PUNTO_COMA gramaticas
-            | error {:reportarError("ES11", "Faltó la palabra \"condicion\"");:} condicion gramaticas
-            | error {:reportarError("ES11", "Faltó <\"encender\",\"apagar\">");:} LUCES PUNTO_COMA gramaticas
-            | ENCENDER error {:reportarError("ES11", "Faltó \"luces\"");:} PUNTO_COMA gramaticas
-            | APAGAR error {:reportarError("ES11", "Faltó \"luces\"");:} PUNTO_COMA gramaticas
-            | error {:reportarError("ES11", "Faltó <\"abrir\",\"cerrar\">");:} PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
-            | error {:reportarError("ES11", "Faltó <\"abrir\",\"cerrar\">");:} VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
-            | error {:reportarError("ES11", "Faltó <\"sanitizar\",\"dispensar\">");:} tiempo_por PUNTO_COMA gramaticas
+            | error{:s=cur_token;reportarError("ES2", null);:} PUNTO_COMA gramaticas
+            | error{:s=cur_token;reportarError("ES11", "Faltó identificador");:} INC PUNTO_COMA gramaticas
+            | error{:s=cur_token;reportarError("ES11", "Faltó identificador");:} DEC PUNTO_COMA gramaticas
+            | INC error{:s=cur_token;reportarError("ES11", "Faltó identificador");:} PUNTO_COMA gramaticas
+            | DEC error{:s=cur_token;reportarError("ES11", "Faltó identificador");:} PUNTO_COMA gramaticas
+            | error{:s=cur_token;reportarError("ES11", "Faltó <\"condicion\", \"mientras\">");:} condicion gramaticas
+            | error{:s=cur_token;reportarError("ES11", "Faltó <\"encender\",\"apagar\">");:} LUCES PUNTO_COMA gramaticas
+            | ENCENDER error{:s=cur_token;reportarError("ES11", "Faltó \"luces\"");:} PUNTO_COMA gramaticas
+            | APAGAR error{:s=cur_token;reportarError("ES11", "Faltó \"luces\"");:} PUNTO_COMA gramaticas
+            | error{:s=cur_token;reportarError("ES11", "Faltó <\"abrir\",\"cerrar\">");:} PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | error{:s=cur_token;reportarError("ES11", "Faltó <\"abrir\",\"cerrar\">");:} VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | error{:s=cur_token;reportarError("ES11", "Faltó <\"sanitizar\",\"dispensar\">");:} tiempo_por PUNTO_COMA gramaticas
             | {:s=cur_token;reportarError("ES10", null);:};
 tiempo_abrir_cerrar ::= MANTENER 
     | tiempo_por
-    | error {:reportarError("ES11", "Se esperaba \"mantener\" o \"por <Expresión aritmética> <\"seg\", \"min\", \"hr\">\"");:};
+    | error{:s=cur_token;reportarError("ES11", "Se esperaba \"mantener\" o \"por <Expresión aritmética> <\"seg\", \"min\", \"hr\">\"");:};
 usar ::= USAR usar_funcion | USAR admitir | USAR ventilar
     | error usar_funcion {:reportarError("ES11", "Faltó <\"usar\">");:}
     | error admitir {:reportarError("ES11", "Faltó <\"usar\">");:}
     | error ventilar {:reportarError("ES11", "Faltó <\"usar\">");:};
 usar_funcion ::= IDENTIFICADOR:i {:funcionActual = new herramientas.Funcion(i, cur_token.left+1);:}
                 PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO
-            | error {:
+            | error{:
+                        s=cur_token;
                         reportarError("ES11", "No se ha encontrado el identificador de la función");
                         funcionActual = new herramientas.Funcion("0sin_id", cur_token.left+1);
                     :} PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO
-            | error {:reportarError("ES11", "No se ha encontrado <\"(\", \")\"> en el llamado de la función");:};
+            | error{:s=cur_token;reportarError("ES11", "No se ha encontrado <\"(\", \")\"> en el llamado de la función");:};
 parametros_llamar ::= expresion:e {:agregarExpresion(e);:} COMA parametros_llamar 
                     | expresion:e {:agregarExpresion(e);guardarFuncion();:}
-                    | expresion:e {:agregarExpresion(e);guardarFuncion();:} error {:reportarError("ES11", "No se ha encontrado \",\" después de la expresión");:} parametros_llamar
+                    | expresion:e {:agregarExpresion(e);:} error{:s=cur_token;reportarError("ES11", "No se ha encontrado \",\" después de la expresión");:} parametros_llamar
                     | {:guardarFuncion();:};
-tiempo_cada ::= CADA expresion unidad_tiempo | error {:reportarError("ES11", "Se esperaba \"cada\"");:} expresion unidad_tiempo;
+tiempo_cada ::= CADA expresion unidad_tiempo | error{:s=cur_token;reportarError("ES11", "Se esperaba \"cada\"");:} expresion unidad_tiempo;
 tiempo_por ::= POR expresion:e {:getEntero(e);:} unidad_tiempo;
-unidad_tiempo ::= SEG | MIN | HR | error {:reportarError("ES3", null);:};
-estado ::= LUCES | PUERTAS | VENTANAS | error {:reportarError("ES11", "Se esperaba <\"luces\", \"puertas\", \"ventanas\">");:};
+unidad_tiempo ::= SEG | MIN | HR | error{:s=cur_token;reportarError("ES3", null);:};
+estado ::= LUCES | PUERTAS | VENTANAS | error{:s=cur_token;reportarError("ES11", "Se esperaba <\"luces\", \"puertas\", \"ventanas\">");:};
 asignacion ::= IDENTIFICADOR:i {:
                 s = cur_token;
                 verificarIdentificador(i, false);
             :} ASIGNACION expresion:e {:ponerValor(i,e);:}
-        | error {:reportarError("ES11", "No se ha encontrado el identificador para la asignación");:} ASIGNACION expresion
+        | error{:s=cur_token;reportarError("ES11", "No se ha encontrado el identificador para la asignación");:} ASIGNACION expresion
         | IDENTIFICADOR:i {:
                 s = cur_token;
                 verificarIdentificador(i, false);
@@ -332,14 +341,14 @@ declaracion_inicio ::= IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, t
                         ponerTipoDato(i,td);
                         RESULT=i;
                     :}
-                | error {:reportarError("ES11", "No se ha encontrado un identificador");:}
+                | error{:s=cur_token;reportarError("ES11", "No se ha encontrado un identificador");:}
                     DECLARAR declaracion_tipo_dato
-                | error {:reportarError("ES11", "No se ha encontrado \"declarar\"");:}
+                | error{:s=cur_token;reportarError("ES11", "No se ha encontrado \"declarar\"");:}
                     declaracion_tipo_dato;
 declaracion_valor ::= ASIGNACION expresion:e {:RESULT=e;:};
 declaracion_tipo_dato ::= COMO tipo_dato:td {:RESULT = td;:};
 tipo_dato ::= ENTERO {:RESULT = "entero";:} | LOGICO {:RESULT = "logico";:}
-                | error {:reportarError("ES4", null); RESULT = "error";:};
+                | error{:s=cur_token;reportarError("ES4", null); RESULT = "error";:};
 expresion ::= op2:v {:valActual=v;:} op1:r {:RESULT=r;:};
 op1 ::= LOGICO_AND {:aux1=getLogico(valActual);:} op2:v {:valActual=aux1&&getLogico(v);:} op1:r {:RESULT=r;:} 
     | LOGICO_OR {:aux1=getLogico(valActual);:} op2:v {:valActual=aux1||getLogico(v);:} op1:r {:RESULT=r;:} 
@@ -363,14 +372,16 @@ op7 ::= AR_DIVISION {:aux4=getEntero(valActual);:} op8:v {:valActual=aux4/getEnt
 op8 ::= valores:v {:RESULT=v;:} 
     | AR_RESTA valores:v {:RESULT=-getEntero(v);:} 
     | NEGACION valores:v {:RESULT=!getLogico(v);:}
-    | error {:reportarError("ES11", "No se ha encontrado un operador o un operando en la expresión ingresada");:};
+    | error{:s=cur_token;s=cur_token;reportarError("ES11", "No se ha encontrado un operador o un operando en la expresión ingresada");:};
 valores ::= NUMERO:n {:RESULT=n;:}
             | IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, false);RESULT=getValor(i);:} 
             | OBTENER TEMPERATURA {:RESULT=0;:} | OBTENER PERSONAS {:RESULT=0;:}
             | OP_BOOLEANO:ob {:RESULT=ob;:} | ESTADO estado {:RESULT=false;:}
             | PARENTESIS_ABIERTO expresion:e PARENTESIS_CERRADO {:RESULT=e;:};
-condicion ::= PARENTESIS_ABIERTO expresion PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA
-            | PARENTESIS_ABIERTO expresion PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA sino;
+condicion ::=  cabecera_condicional LLAVE_ABIERTA gramaticas LLAVE_CERRADA
+            | cabecera_condicional LLAVE_ABIERTA gramaticas LLAVE_CERRADA sino;
 sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
 ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA expresion COMA expresion PARENTESIS_CERRADO;
 admitir ::= ADMITIR PARENTESIS_ABIERTO expresion COMA tiempo_por PARENTESIS_CERRADO;
+mientras ::= cabecera_condicional LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
+cabecera_condicional ::= PARENTESIS_ABIERTO expresion:e {:s=cur_token;getLogico(e);:} PARENTESIS_CERRADO;

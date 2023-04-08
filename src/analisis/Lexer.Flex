@@ -42,10 +42,10 @@ espacio=[ \t\r]+
 /* PALABRAS RESERVADAS */
 <YYINITIAL> {
     /* inicio, fin y terminacion de programa  */
-    "salir" {return symbol(sym.SALIR);}
-    "inicio" {return symbol(sym.INICIO);}
-    "fin"      {return symbol(sym.FIN);}
-    "comienzo" {return symbol(sym.COMIENZO);}
+    "salir"     {return symbol(sym.SALIR);}
+    "inicio"    {return symbol(sym.INICIO);}
+    "fin"       {return symbol(sym.FIN);}
+    "comienzo"  {return symbol(sym.COMIENZO);}
 
     /* Datos y funciones */
     "entero"    {return symbol(sym.ENTERO);}
@@ -54,7 +54,8 @@ espacio=[ \t\r]+
     "usar"      {return symbol(sym.USAR);}
     /* Estructuras de control */
     "condicion" {return symbol(sym.CONDICION);}
-    "sino" {return symbol(sym.SINO);}
+    "sino"      {return symbol(sym.SINO);}
+    "mientras"  {return symbol(sym.MIENTRAS);}
 
     /* funciones propias del lenguaje */
     "ventilar"  {return symbol(sym.VENTILAR);}
@@ -67,7 +68,7 @@ espacio=[ \t\r]+
     "como"      {return symbol(sym.COMO);}
     
     /* Estructura de tiempo */
-    "cada"   {return symbol(sym.CADA);}
+    "cada"  {return symbol(sym.CADA);}
     "por"   {return symbol(sym.POR);}
     "seg"   {return symbol(sym.SEG);}
     "min"   {return symbol(sym.MIN);}
@@ -147,12 +148,12 @@ espacio=[ \t\r]+
 }
 
 <YYINITIAL> {
-    /* Identificador */
-    {L}({L}|{D})*   {return symbol(sym.IDENTIFICADOR, yytext());}
-
     /* Numero */
     {D}+ {return symbol(sym.NUMERO, Integer.parseInt(yytext()));}
 
+    /* Identificador */
+    {L}({L}|{D})*   {return symbol(sym.IDENTIFICADOR, yytext().length() <= 16 ? yytext(): yytext().substring(0,16));}
+    {D}+({L}|{D})+  {reportarError("EL2", yytext().length() <= 16 ? yytext(): yytext().substring(0,16), yyline + 1);return symbol(sym.error, yytext());}
     /* Error general */
     .       {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}
 }

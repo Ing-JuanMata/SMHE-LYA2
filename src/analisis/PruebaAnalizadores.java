@@ -14,11 +14,8 @@ import java_cup.runtime.Symbol;
 public class PruebaAnalizadores {
 
     public static void main(String[] args) throws Exception {
-        Lexer lex = new Lexer(new StringReader("salir."));
+        Lexer lex = new Lexer(new StringReader("0a"));
         Symbol s = lex.next_token();
         System.out.println(sym.terminalNames[s.sym]);
-        Object b = null;
-        System.out.println(b instanceof Integer);
-        System.out.println(Boolean.parseBoolean(b.toString()));
     }
 }

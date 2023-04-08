@@ -23,6 +23,7 @@ public class TablaErrores {
 
     private void llenarTabla() {
         tabla.put("EL1", "Error léxico 1: en la línea %d el carácter \"%s\" no es valido");
+        tabla.put("EL2", "Error léxico 2: en la línea %d la cadena \"%s\" no es valida");
         tabla.put("ES1", "Error sintáctico 1: en la línea %d se ha encontrado que las cadenas de la estructura principal no concuerdan con el formato solicitado, favor de revisar en la ayuda");
         tabla.put("ES2", "Error sintáctico 2: en la línea %d la expresión escrita tiene un error"
                 + " en su estructura en la cadena %s");
