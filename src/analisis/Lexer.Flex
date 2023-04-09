@@ -10,6 +10,7 @@ import java_cup.runtime.*;
 %column
 L=[A-Za-z_]+
 D= 0 | [1-9][0-9]*
+DD= [1-9]+
 espacio=[ \t\r]+
 %{
     private Symbol symbol(int type){
@@ -152,8 +153,8 @@ espacio=[ \t\r]+
     {D}+ {return symbol(sym.NUMERO, Integer.parseInt(yytext()));}
 
     /* Identificador */
-    {L}({L}|{D})*   {return symbol(sym.IDENTIFICADOR, yytext().length() <= 16 ? yytext(): yytext().substring(0,16));}
-    {D}+({L}|{D})+  {reportarError("EL2", yytext().length() <= 16 ? yytext(): yytext().substring(0,16), yyline + 1);return symbol(sym.error, yytext());}
+    {L}({L}|{DD})*   {return symbol(sym.IDENTIFICADOR, yytext().length() <= 16 ? yytext(): yytext().substring(0,16));}
+    {D}+({L}|{DD})+  {reportarError("EL2", yytext().length() <= 16 ? yytext(): yytext().substring(0,16), yyline + 1);return symbol(sym.error, yytext());}
     /* Error general */
     .       {reportarError("EL1", yytext(), yyline + 1);return symbol(sym.error);}
 }
