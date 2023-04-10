@@ -20,13 +20,16 @@ parser code
             anidamientos.add(1);
             anidamientos.add(0);
             anidamiento++;
+            System.out.println("Anidamiento inicial " + anidamientos + " " + anidamiento);
             return 1;
         }
         anidamientos.set(anidamiento, anidamientos.get(anidamiento) + 1);
         anidamientos.add(0);
+        System.out.println("Anidando " + anidamientos + " " + anidamiento);
         return anidamientos.get(anidamiento++);
     }
     private void quitarAnidamiento(){
+        System.out.println("quitando anidamiento " + anidamientos + " " + anidamiento);
         if(anidamiento == 0){
             ambito = ambito.split(":")[0];
             //anidamientos.clear();
@@ -246,7 +249,6 @@ funcion ::= IDENTIFICADOR:i {:
                                 ambito = i;
                                 anidamientos.clear();
                                 anidamiento = 0;
-                                enFuncion = true;
                             :}
             PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA 
             gramaticas LLAVE_CERRADA |

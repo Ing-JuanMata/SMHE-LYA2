@@ -1115,16 +1115,13 @@ public class SintaxPrueba extends java_cup.runtime.lr_parser {
             anidamientos.add(1);
             anidamientos.add(0);
             anidamiento++;
-            System.out.println("Anidamiento inicial " + anidamientos + " " + anidamiento);
             return 1;
         }
         anidamientos.set(anidamiento, anidamientos.get(anidamiento) + 1);
         anidamientos.add(0);
-        System.out.println("Anidando " + anidamientos + " " + anidamiento);
         return anidamientos.get(anidamiento++);
     }
     private void quitarAnidamiento(){
-        System.out.println("quitando anidamiento " + anidamientos + " " + anidamiento);
         if(anidamiento == 0){
             ambito = ambito.split(":")[0];
             //anidamientos.clear();
@@ -1581,6 +1578,7 @@ reportarError("ES11", "No se ha encontrado \"funcion\"");
                                 ambito = i;
                                 anidamientos.clear();
                                 anidamiento = 0;
+                                enFuncion = true;
                             
               CUP$SintaxPrueba$result = parser.getSymbolFactory().newSymbol("NT$10",47, ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()), RESULT);
             }
