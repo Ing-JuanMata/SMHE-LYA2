@@ -2,19 +2,12 @@ inicio prueba{
 comienzo (cada 2 min){
 	aulaAbierta declarar como logico =  estado puertas && estado ventanas;
 	condicion(!aulaAbierta){
-		var declarar como entero;
-		condicion(aulaAbierta){var declarar como entero;}
 		usar abrirPuertasYVentanas();
-		salir;
 	}sino condicion(!estado puertas){
-		var2 declarar como entero;
 		usar abrirPuertasTiempo(10);
-		salir;
 	}sino {
 		usar abrirVentanasTiempo(10);
-		salir;
 	}
-	salir;
 }
 
 funcion abrirPuertasTiempo(tiempo declarar como entero){
