@@ -1,0 +1,98 @@
+package codigo_intermedio;
+
+import java_cup.runtime.Symbol;
+import codigo.FrmPrincipal;
+
+
+parser code
+{:
+    public generadorIntermedio(analisis.Lexer lexer){
+        super(lexer);
+    }
+:};
+
+terminal FIN, COMIENZO, ENTERO, LOGICO, CONDICION, SINO, VENTILAR,
+        ADMITIR, DISPENSAR, SALIR, INICIO, DECLARAR, COMO, CADA, POR, SEG,
+        MIN, HR, ABRIR, CERRAR, VENTANAS, PUERTAS, MANTENER, OBTENER, TEMPERATURA,
+        PERSONAS, APAGAR, ENCENDER, SANITIZAR, LUCES, ESTADO, FUNCION, USAR, MIENTRAS;
+terminal REL_MENOR, REL_MAYOR, REL_MENOR_IGUAL, REL_MAYOR_IGUAL, REL_DIFERENTE, 
+        REL_IGUAL;
+terminal AR_SUMA, AR_RESTA, AR_MULTIPLICACION, AR_DIVISION;
+terminal NEGACION, LOGICO_AND, LOGICO_OR;
+terminal INC, DEC, ASIGNACION;
+terminal PARENTESIS_ABIERTO, PARENTESIS_CERRADO, LLAVE_ABIERTA, LLAVE_CERRADA;
+terminal PUNTO_COMA, COMA;
+terminal Integer NUMERO;
+terminal Boolean OP_BOOLEANO;
+terminal String IDENTIFICADOR;
+
+non terminal inicio, inicio1, inicio2, gramaticas, tiempo_cada, tiempo_por, unidad_tiempo, 
+            declaracion_valor, ventilar, admitir, estado, funcion, inicio_fin, 
+            parametros, asignacion, expresion, parametros_llamar, usar, valores,
+            op1, op2, op3, op4, op5, op6, op7, op8, tiempo_abrir_cerrar, 
+            usar_funcion, mientras, cabecera_condicional, cuerpo_estructura;
+non terminal String declaracion_tipo_dato, tipo_dato, declaracion_inicio;
+non terminal Boolean condicion, sino;
+
+start with inicio;
+
+inicio ::= INICIO IDENTIFICADOR LLAVE_ABIERTA inicio1;
+inicio1 ::= COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO inicio2;
+inicio2 ::= LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin;
+inicio_fin ::= LLAVE_CERRADA FIN | FUNCION funcion inicio_fin;
+funcion ::= IDENTIFICADOR PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
+parametros ::= declaracion_inicio COMA parametros | declaracion_inicio | /**/;
+gramaticas ::= IDENTIFICADOR INC PUNTO_COMA gramaticas
+            | IDENTIFICADOR DEC PUNTO_COMA gramaticas
+            | INC IDENTIFICADOR PUNTO_COMA gramaticas
+            | DEC IDENTIFICADOR PUNTO_COMA gramaticas
+            | declaracion_inicio PUNTO_COMA gramaticas
+            | declaracion_inicio declaracion_valor PUNTO_COMA gramaticas
+            | asignacion PUNTO_COMA gramaticas
+            | CONDICION condicion gramaticas
+            | MIENTRAS mientras gramaticas
+            | APAGAR LUCES PUNTO_COMA gramaticas
+            | ENCENDER LUCES PUNTO_COMA gramaticas
+            | ABRIR PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | CERRAR PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | ABRIR VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
+            | CERRAR VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas 
+            | SANITIZAR tiempo_por PUNTO_COMA gramaticas
+            | DISPENSAR tiempo_por PUNTO_COMA gramaticas
+            | usar PUNTO_COMA gramaticas
+            | SALIR PUNTO_COMA
+            | {::};
+tiempo_abrir_cerrar ::= MANTENER | tiempo_por;
+usar ::= USAR usar_funcion | USAR admitir | USAR ventilar;
+usar_funcion ::= IDENTIFICADOR PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO;
+parametros_llamar ::= expresion COMA parametros_llamar | expresion | {::};
+tiempo_cada ::= CADA expresion unidad_tiempo;
+tiempo_por ::= POR expresion unidad_tiempo;
+unidad_tiempo ::= SEG | MIN | HR;
+estado ::= LUCES | PUERTAS | VENTANAS;
+asignacion ::= IDENTIFICADOR ASIGNACION expresion;
+declaracion_inicio ::= IDENTIFICADOR DECLARAR declaracion_tipo_dato;
+declaracion_valor ::= ASIGNACION expresion;
+declaracion_tipo_dato ::= COMO tipo_dato;
+tipo_dato ::= ENTERO | LOGICO;
+expresion ::= op2 op1;
+op1 ::= LOGICO_AND op2 op1 | LOGICO_OR op2 op1 | {::};
+op2 ::= op4 op3;
+op3 ::= REL_MENOR op4 | REL_MAYOR op4 | REL_MENOR_IGUAL op4
+        | REL_MAYOR_IGUAL op4 | REL_DIFERENTE op4 | REL_IGUAL op4 | {::};
+op4 ::= op6 op5;
+op5 ::= AR_SUMA op6 op5 | AR_RESTA op6 op5 | {::};
+op6 ::= op8 op7;
+op7 ::= AR_DIVISION op8 op7 | AR_MULTIPLICACION op8 op7 | {::};
+op8 ::= valores | AR_RESTA valores | NEGACION valores;
+valores ::= NUMERO | IDENTIFICADOR | OBTENER TEMPERATURA | OBTENER PERSONAS 
+            | OP_BOOLEANO | ESTADO estado 
+            | PARENTESIS_ABIERTO expresion PARENTESIS_CERRADO;
+condicion ::=  cabecera_condicional cuerpo_estructura
+            | cabecera_condicional cuerpo_estructura sino;
+sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
+ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA expresion COMA expresion PARENTESIS_CERRADO;
+admitir ::= ADMITIR PARENTESIS_ABIERTO expresion COMA tiempo_por PARENTESIS_CERRADO;
+mientras ::= cabecera_condicional cuerpo_estructura;
+cabecera_condicional ::= PARENTESIS_ABIERTO expresion PARENTESIS_CERRADO;
+cuerpo_estructura ::= LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
