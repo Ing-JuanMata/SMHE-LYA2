@@ -19,7 +19,8 @@ public class TablaSimbolos {
     }
 
     public void agregarSimbolo(LlaveTabla id, int linea) {
-        if (tabla.containsKey(id)) {
+        LlaveTabla prueba = new LlaveTabla(id.id, getAmbito(id));
+        if (tabla.containsKey(prueba)) {
             return;
         }
         tabla.put(id, new ContenidoTabla(linea));
@@ -30,6 +31,7 @@ public class TablaSimbolos {
     }
 
     public void agregarTipo(LlaveTabla id, String tipo) {
+        id.ambito = getAmbito(id);
         if (tabla.get(id).tipo != null) {
             return;
         }
@@ -41,10 +43,12 @@ public class TablaSimbolos {
     }
 
     public void agregarValor(LlaveTabla id, Object valor) {
+        id.ambito = getAmbito(id);
         tabla.get(id).valor = valor;
     }
 
     public String getTipo(LlaveTabla id) {
+        id.ambito = getAmbito(id);
         if (tabla.get(id) == null) {
             return "";
         }
@@ -55,6 +59,7 @@ public class TablaSimbolos {
     }
 
     public Object getValor(LlaveTabla identificador) {
+        identificador.ambito = getAmbito(identificador);
         return tabla.get(identificador).valor;
     }
 
@@ -78,8 +83,23 @@ public class TablaSimbolos {
     }
 
     public boolean existe(LlaveTabla llave) {
-        ContenidoTabla val = tabla.get(llave);
+        ContenidoTabla val = tabla.get(new LlaveTabla(llave.id, getAmbito(llave)));
         return val == null ? false : val.linea >= 0;
+    }
+
+    private String getAmbito(LlaveTabla llave) {
+        String ambito = llave.ambito;
+        //System.out.println("Llamado al ambito");
+        while (ambito.split(":").length > 1) {
+            ContenidoTabla v = tabla.get(new LlaveTabla(llave.id, ambito));
+
+            if (v != null) {
+                return ambito;
+            } else {
+                ambito = ambito.substring(0, ambito.lastIndexOf(":"));
+            }
+        }
+        return llave.ambito.split(":")[0];
     }
 
     @Override

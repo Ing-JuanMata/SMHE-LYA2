@@ -25,8 +25,7 @@ public class TablaErrores {
         tabla.put("EL1", "Error léxico 1: en la línea %d el carácter \"%s\" no es valido");
         tabla.put("EL2", "Error léxico 2: en la línea %d la cadena \"%s\" no es valida");
         tabla.put("ES1", "Error sintáctico 1: en la línea %d se ha encontrado que las cadenas de la estructura principal no concuerdan con el formato solicitado, favor de revisar en la ayuda");
-        tabla.put("ES2", "Error sintáctico 2: en la línea %d la expresión escrita tiene un error"
-                + " en su estructura en la cadena %s");
+        tabla.put("ES2", "Error sintáctico 2: en la línea %d la expresión escrita tiene un error en su estructura en la cadena %s");
         tabla.put("ES3", "Error sintáctico 3: en la línea %d la unidad de tiempo no es la correcta, recuerda que debe ser [\"seg\", \"min\", \"hr\"]");
         tabla.put("ES4", "Error sintáctico 4: en la línea %d no se ha seleccionado un tipo de dato valido");
         tabla.put("ES5", "Error sintáctico 5: en la línea %d el formato de su expresión lógica no es correcto");

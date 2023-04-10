@@ -15,7 +15,9 @@ public class PruebaAnalizadores {
 
     public static void main(String[] args) throws Exception {
         Lexer lex = new Lexer(new StringReader("AA1"));
-        Symbol s = lex.next_token();
-        System.out.println(sym.terminalNames[s.sym]);
+        int val = 0;
+        java.util.ArrayList<Integer> vals = new java.util.ArrayList<>();
+        String cad = "val:1:1";
+        System.out.println(cad.substring(0, cad.lastIndexOf(":")));
     }
 }

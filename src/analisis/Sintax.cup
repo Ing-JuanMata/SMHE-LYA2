@@ -9,11 +9,43 @@ parser code
     private String ambito;
     private Symbol s;
     private Object valActual = 0;
-    private boolean aux1 = false;
-    private int aux2 = 0, aux3 = 0, aux4 = 0;
+    private boolean aux1 = false, enFuncion = false;
+    private int aux2 = 0, aux3 = 0, aux4 = 0, anidamiento = 0;
     private herramientas.Funcion funcionActual;
     private java.util.ArrayList<herramientas.Funcion> funcionesLlamadas = new java.util.ArrayList<>();
+    private java.util.ArrayList<Integer> anidamientos = new java.util.ArrayList<>();
     
+    private int agregarAnidamiento(){
+        if(anidamiento == 0 && anidamientos.size() == 0){
+            anidamientos.add(1);
+            anidamientos.add(0);
+            anidamiento++;
+            System.out.println("Anidamiento inicial " + anidamientos + " " + anidamiento);
+            return 1;
+        }
+        anidamientos.set(anidamiento, anidamientos.get(anidamiento) + 1);
+        anidamientos.add(0);
+        System.out.println("Anidando " + anidamientos + " " + anidamiento);
+        return anidamientos.get(anidamiento++);
+    }
+    private void quitarAnidamiento(){
+        System.out.println("quitando anidamiento " + anidamientos + " " + anidamiento);
+        if(anidamiento == 0){
+            ambito = ambito.split(":")[0];
+            //anidamientos.clear();
+            return;
+        }
+        if(anidamiento == 1){
+            ambito = ambito.split(":")[0];
+            anidamiento--;
+            return;
+        }
+        anidamientos.remove(anidamiento--);
+        anidamientos.remove(anidamiento--);
+        String cadena = "";
+        for(int i: anidamientos) cadena += ":" + i;
+        ambito = ambito.split(":")[0] + cadena;
+    }
     public void syntax_error(Symbol s){
         this.s = s;
     }
@@ -173,7 +205,7 @@ non terminal inicio, inicio1, inicio2, gramaticas, tiempo_cada, tiempo_por, unid
             declaracion_valor, ventilar, admitir, estado, funcion, inicio_fin, 
             parametros, asignacion, expresion, parametros_llamar, usar, valores,
             op1, op2, op3, op4, op5, op6, op7, op8, tiempo_abrir_cerrar, 
-            usar_funcion, mientras, cabecera_condicional;
+            usar_funcion, mientras, cabecera_condicional, cuerpo_estructura;
 non terminal String declaracion_tipo_dato, tipo_dato, declaracion_inicio;
 non terminal Boolean condicion, sino;
 
@@ -215,6 +247,8 @@ funcion ::= IDENTIFICADOR:i {:
                                 s = cur_token;
                                 agregarFuncion(i);
                                 ambito = i;
+                                anidamientos.clear();
+                                anidamiento = 0;
                             :}
             PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA 
             gramaticas LLAVE_CERRADA |
@@ -287,7 +321,7 @@ gramaticas ::= IDENTIFICADOR:i INC {:
             | usar {:s=cur_token;reportarError("ES7", null);:} gramaticas
             | SALIR PUNTO_COMA
             | SALIR {:s=cur_token;reportarError("ES7", null);:}
-            | SALIR error
+            | SALIR error {:s=cur_token;reportarError("ES7", null);:}
             | SALIR error PUNTO_COMA
             | error{:s=cur_token;reportarError("ES2", null);:} PUNTO_COMA gramaticas
             | error{:s=cur_token;reportarError("ES11", "Faltó identificador");:} INC PUNTO_COMA gramaticas
@@ -301,7 +335,12 @@ gramaticas ::= IDENTIFICADOR:i INC {:
             | error{:s=cur_token;reportarError("ES11", "Faltó <\"abrir\",\"cerrar\">");:} PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
             | error{:s=cur_token;reportarError("ES11", "Faltó <\"abrir\",\"cerrar\">");:} VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
             | error{:s=cur_token;reportarError("ES11", "Faltó <\"sanitizar\",\"dispensar\">");:} tiempo_por PUNTO_COMA gramaticas
-            | {:s=cur_token;reportarError("ES10", null);:};
+            | {:
+                if(enFuncion && anidamiento == 0){
+                    s=cur_token;
+                    reportarError("ES10", null);
+                }
+            :};
 tiempo_abrir_cerrar ::= MANTENER 
     | tiempo_por
     | error{:s=cur_token;reportarError("ES11", "Se esperaba \"mantener\" o \"por <Expresión aritmética> <\"seg\", \"min\", \"hr\">\"");:};
@@ -378,10 +417,11 @@ valores ::= NUMERO:n {:RESULT=n;:}
             | OBTENER TEMPERATURA {:RESULT=0;:} | OBTENER PERSONAS {:RESULT=0;:}
             | OP_BOOLEANO:ob {:RESULT=ob;:} | ESTADO estado {:RESULT=false;:}
             | PARENTESIS_ABIERTO expresion:e PARENTESIS_CERRADO {:RESULT=e;:};
-condicion ::=  cabecera_condicional LLAVE_ABIERTA gramaticas LLAVE_CERRADA
-            | cabecera_condicional LLAVE_ABIERTA gramaticas LLAVE_CERRADA sino;
+condicion ::=  cabecera_condicional cuerpo_estructura
+            | cabecera_condicional cuerpo_estructura sino;
 sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
 ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA expresion COMA expresion PARENTESIS_CERRADO;
 admitir ::= ADMITIR PARENTESIS_ABIERTO expresion COMA tiempo_por PARENTESIS_CERRADO;
-mientras ::= cabecera_condicional LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
+mientras ::= cabecera_condicional cuerpo_estructura;
 cabecera_condicional ::= PARENTESIS_ABIERTO expresion:e {:s=cur_token;getLogico(e);:} PARENTESIS_CERRADO;
+cuerpo_estructura ::= {:ambito+=":"+(agregarAnidamiento());:} LLAVE_ABIERTA gramaticas {:quitarAnidamiento();:} LLAVE_CERRADA;
