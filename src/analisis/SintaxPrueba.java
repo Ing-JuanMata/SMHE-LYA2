@@ -3236,7 +3236,7 @@ aux1=getLogico(valActual);
 		int vleft = ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()).right;
 		Object v = (Object)((java_cup.runtime.Symbol) CUP$SintaxPrueba$stack.peek()).value;
-valActual=aux1||getLogico(v);
+valActual=getLogico(v)||aux1;
               CUP$SintaxPrueba$result = parser.getSymbolFactory().newSymbol("NT$63",100, ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()), RESULT);
             }
           return CUP$SintaxPrueba$result;

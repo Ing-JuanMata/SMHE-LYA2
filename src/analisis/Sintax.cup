@@ -388,7 +388,7 @@ tipo_dato ::= ENTERO {:RESULT = "entero";:} | LOGICO {:RESULT = "logico";:}
                 | error{:s=cur_token;reportarError("ES4", null); RESULT = "error";:};
 expresion ::= op2:v {:valActual=v;:} op1:r {:RESULT=r;:};
 op1 ::= LOGICO_AND {:aux1=getLogico(valActual);:} op2:v {:valActual=aux1&&getLogico(v);:} op1:r {:RESULT=r;:} 
-    | LOGICO_OR {:aux1=getLogico(valActual);:} op2:v {:valActual=aux1||getLogico(v);:} op1:r {:RESULT=r;:} 
+    | LOGICO_OR {:aux1=getLogico(valActual);:} op2:v {:valActual=getLogico(v)||aux1;:} op1:r {:RESULT=r;:} 
     | {:RESULT=valActual;:};
 op2 ::= op4:v {:valActual=v;:} op3:r {:RESULT=r;:};
 op3 ::= REL_MENOR {:aux2=getEntero(valActual);:} op4:v {:RESULT=aux2<getEntero(v);:} 
