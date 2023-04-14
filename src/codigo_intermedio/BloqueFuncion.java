@@ -10,13 +10,11 @@ package codigo_intermedio;
  */
 public class BloqueFuncion extends BloqueTripletas {
 
-    public BloqueFuncion() {
-        super();
-    }
+    private String nombre;
 
-    @Override
-    protected int enumerarTripletas(int inicio) {
-        return -1;
+    public BloqueFuncion(String nombre) {
+        super();
+        this.nombre = nombre;
     }
 
 }

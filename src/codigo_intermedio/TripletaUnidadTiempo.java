@@ -8,11 +8,16 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaEstado extends Tripleta {
+public class TripletaUnidadTiempo extends Tripleta {
 
-    public TripletaEstado(String objeto) {
-        super("estado");
-        this.operando1 = objeto;
+    public TripletaUnidadTiempo(String unidad, Object expresion) {
+        super(unidad);
+        if (expresion instanceof Tripleta) {
+            super.ref1 = (Tripleta) expresion;
+            return;
+        }
+
+        super.operando1 = expresion;
     }
 
     @Override
@@ -20,8 +25,4 @@ public class TripletaEstado extends Tripleta {
         return "";
     }
 
-    @Override
-    public int enumerarTripleta(int inicio) {
-        return -1;
-    }
 }

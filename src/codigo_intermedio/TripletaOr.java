@@ -8,10 +8,10 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaOr extends Tripleta {
+public class TripletaOr extends TripletaExpresion {
 
-    public TripletaOr() {
-        super("||");
+    public TripletaOr(Object op1, Object op2) {
+        super("||", op1, op2);
     }
 
     @Override

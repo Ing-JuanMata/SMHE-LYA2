@@ -8,10 +8,10 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaAnd extends Tripleta {
+public class TripletaAnd extends TripletaExpresion {
 
-    public TripletaAnd() {
-        super("&&");
+    public TripletaAnd(Object op1, Object op2) {
+        super("&&", op1, op2);
     }
 
     @Override

@@ -9,8 +9,8 @@ package codigo_intermedio;
  * @author jujemataso
  */
 public class TripletaEncender extends Tripleta {
-    
-    public TripletaEncender(){
+
+    public TripletaEncender() {
         super("encender");
         this.operando1 = "luces";
     }
@@ -19,7 +19,5 @@ public class TripletaEncender extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
-    
-    
-    
+
 }

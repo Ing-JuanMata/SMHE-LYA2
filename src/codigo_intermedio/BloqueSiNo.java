@@ -10,18 +10,31 @@ package codigo_intermedio;
  */
 public class BloqueSiNo extends BloqueCondicional {
 
-    private BloqueSiNo sino;
+    BloqueCondicion condicion;
 
-    public BloqueSiNo() {
-        super();
+    public BloqueSiNo(BloqueTripletas bloquePadre) {
+        super(bloquePadre);
+    }
+
+    public void setCondicion(BloqueCondicion condicion) {
+        super.setCondicion(condicion.condicion);
+        this.condicion = condicion;
+
     }
 
     @Override
-    protected int enumerarTripletas(int inicio) {
+    public int enumerarTripletas(int inicio) {
+        if (condicion != null) {
+            inicio = condicion.enumerarTripletas(inicio);
+        }
+        return super.enumerarTripletas(inicio);
         //si no tiene condicion realizar solo el cuerpo del sino
-        //Si tiene condicion enumerar la condicion y despues
-        //hacer el cuerpo del sino por ultimo verificar si tiene otro sino
-        return -1;
+        //Si tiene condicion enumerar la condicion.
+    }
+
+    @Override
+    public String toString() {
+        return this.condicion != null ? this.condicion.toString() : super.toString();
     }
 
 }

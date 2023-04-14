@@ -10,16 +10,29 @@ package codigo_intermedio;
  */
 public abstract class BloqueCondicional extends BloqueTripletas {
 
-    protected java.util.ArrayList<Tripleta> condicion;
+    public BloqueTripletas bloquePadre;
+    protected TripletaCondicion condicion;
 
-    public BloqueCondicional() {
+    public BloqueCondicional(BloqueTripletas bloquePadre) {
         super();
+        this.bloquePadre = bloquePadre;
     }
 
-    public void addExpresionCondicion(Tripleta tripleta) {
-        if (this.condicion == null) {
-            this.condicion = new java.util.ArrayList<>();
-        }
-        this.condicion.add(tripleta);
+    public void setCondicion(TripletaCondicion condicion) {
+        this.condicion = condicion;
     }
+
+    @Override
+    public Tripleta getInicio() {
+        return (Tripleta) (condicion != null
+                ? (condicion.condicion != null
+                        ? condicion.condicion.contenido.get(0) : condicion)
+                : super.getInicio());
+    }
+
+    @Override
+    public String toString() {
+        return (condicion != null ? condicion.toString() : "") + (!super.contenido.isEmpty() ? "\n" + super.toString() : "");
+    }
+
 }

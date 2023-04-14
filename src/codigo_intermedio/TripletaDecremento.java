@@ -8,11 +8,11 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaEstado extends Tripleta {
+public class TripletaDecremento extends Tripleta {
 
-    public TripletaEstado(String objeto) {
-        super("estado");
-        this.operando1 = objeto;
+    public TripletaDecremento(String id) {
+        super("--");
+        super.operando1 = id;
     }
 
     @Override

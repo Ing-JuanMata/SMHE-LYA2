@@ -8,10 +8,14 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaResta extends Tripleta {
+public class TripletaResta extends TripletaExpresion {
 
-    public TripletaResta() {
-        super("-");
+    public TripletaResta(Object op1) {
+        super("-", op1);
+    }
+
+    public TripletaResta(Object op1, Object op2) {
+        super("-", op1, op2);
     }
 
     @Override

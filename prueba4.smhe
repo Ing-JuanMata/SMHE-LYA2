@@ -1,0 +1,5 @@
+inicio prueba{
+comienzo (cada 2 min){
+	test declarar como logico = verdadero || falso;
+}
+}fin

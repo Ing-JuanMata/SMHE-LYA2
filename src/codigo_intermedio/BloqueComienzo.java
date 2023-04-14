@@ -18,9 +18,26 @@ public class BloqueComienzo extends BloqueTripletas {
     }
 
     @Override
-    protected int enumerarTripletas(int inicio) {
-        //Enumerar tripletas del cuerpo y al final agregar la tripleta del tiempo al cuerpo y enumerarla
-        return -1;
+    public int enumerarTripletas(int inicio) {
+        inicio = super.enumerarTripletas(inicio);
+        inicio = tiempo.enumerarTripleta(inicio);
+        return inicio;
+    }
+
+    @Override
+    public Tripleta getInicio() {
+        Tripleta inicio = super.getInicio();
+        return inicio == null ? this.tiempo : inicio;
+    }
+
+    @Override
+    public String toString() {
+        Object inicio = super.contenido.get(0);
+        while ((inicio instanceof BloqueTripletas)) {
+            inicio = ((BloqueTripletas) inicio).contenido.get(0);
+        }
+        tiempo.ref2 = inicio == null ? tiempo : (Tripleta) inicio;
+        return super.toString() + "\n" + tiempo.toString();
     }
 
 }

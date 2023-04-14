@@ -10,12 +10,12 @@ package codigo_intermedio;
  */
 public class BloqueMientras extends BloqueCondicional {
 
-    public BloqueMientras() {
-        super();
+    public BloqueMientras(BloqueTripletas bloquePadre) {
+        super(bloquePadre);
     }
 
     @Override
-    protected int enumerarTripletas(int inicio) {
+    public int enumerarTripletas(int inicio) {
         //Enumerar primero la condicion, luego el cuerpo, terminar con un lazo
         return -1;
     }

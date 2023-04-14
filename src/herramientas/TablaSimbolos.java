@@ -5,6 +5,7 @@
 package herramientas;
 
 import analisis.LlaveTabla;
+import java.util.HashMap;
 
 /**
  *
@@ -61,6 +62,10 @@ public class TablaSimbolos {
     public Object getValor(LlaveTabla identificador) {
         identificador.ambito = getAmbito(identificador);
         return tabla.get(identificador).valor;
+    }
+
+    public HashMap<LlaveTabla, ContenidoTabla> getTabla() {
+        return tabla;
     }
 
     public void verTabla(javax.swing.table.DefaultTableModel modelo) {

@@ -8,15 +8,10 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaTiempoCada extends Tripleta {
+public class TripletaTiempoCada extends TripletaTiempo {
 
-    public TripletaTiempoCada() {
-        super("cada");
-    }
-
-    @Override
-    public String codigoObjeto() {
-        return "";
+    public TripletaTiempoCada(Object expresion, String unidad) {
+        super("cada", expresion, unidad);
     }
 
 }

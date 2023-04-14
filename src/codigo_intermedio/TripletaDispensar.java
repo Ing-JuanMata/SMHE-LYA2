@@ -8,23 +8,18 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaAbrir extends Tripleta {
+public class TripletaDispensar extends Tripleta {
 
-    private TripletaTiempoPor tiempo;
+    TripletaTiempoPor tiempo;
 
-    public TripletaAbrir(String objeto, Object tiempo) {
-        super("abrir");
-        super.operando1 = objeto;
-        if (tiempo instanceof TripletaTiempoPor) {
-            TripletaTiempoPor t = (TripletaTiempoPor) tiempo;
-            this.ref2 = this.tiempo = t;
-        }
-
-        this.operando2 = tiempo;
+    public TripletaDispensar(TripletaTiempoPor tiempo) {
+        super("dispensar");
+        super.ref1 = this.tiempo = tiempo;
     }
 
     @Override
     public String codigoObjeto() {
+        //Configurar el tiempo y luego realizar la accion
         return "";
     }
 
@@ -38,5 +33,4 @@ public class TripletaAbrir extends Tripleta {
     public String toString() {
         return tiempo.toString() + "\n" + super.toString();
     }
-
 }

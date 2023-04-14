@@ -18,5 +18,4 @@ public class TripletaInicio extends Tripleta {
     public String codigoObjeto() {
         return "codigo de cabecera";
     }
-
 }

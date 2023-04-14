@@ -1,5 +1,8 @@
 inicio ventilacionYAcceso{
-comenzar(cada 30 min){
+comienzo(cada 30 min){
+a declarar como logico;
+condicion(verdadero){b declarar como entero;}
+sino {c declarar como logico;}
 salir;
 }
 }fin

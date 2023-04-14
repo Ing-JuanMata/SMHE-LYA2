@@ -21,26 +21,9 @@ public abstract class Tripleta {
 
     public abstract String codigoObjeto();
 
-    private String getOperando(int n) {
-        switch (n) {
-            case 1 -> {
-                return ref1 == null ? (operando1 == null ? "" : operando1.toString()) + "" : "(" + ref1.numero + ")";
-            }
-            case 2 -> {
-                return ref2 == null ? (operando2 == null ? "" : operando2.toString()) + "" : "(" + ref2.numero + ")";
-            }
-            default -> {
-                return "";
-            }
-        }
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public int enumerarTripleta(int inicio) {
+        this.numero = inicio++;
+        return inicio;
     }
 
     public String getOperador() {
@@ -86,5 +69,19 @@ public abstract class Tripleta {
     @Override
     public String toString() {
         return numero + ":(" + operador + ", " + getOperando(1) + ", " + getOperando(2) + ")";
+    }
+
+    private String getOperando(int n) {
+        switch (n) {
+            case 1 -> {
+                return ref1 == null ? (operando1 == null ? "" : operando1.toString()) + "" : "(" + ref1.numero + ")";
+            }
+            case 2 -> {
+                return ref2 == null ? (operando2 == null ? "" : operando2.toString()) + "" : "(" + ref2.numero + ")";
+            }
+            default -> {
+                return "";
+            }
+        }
     }
 }

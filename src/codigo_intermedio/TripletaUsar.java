@@ -10,19 +10,24 @@ package codigo_intermedio;
  */
 public class TripletaUsar extends Tripleta {
 
-    java.util.ArrayList<TripletaAsignacion> parametros;
+    java.util.ArrayList<Object> parametros;
 
     public TripletaUsar(String id) {
         super("usar");
         super.operando1 = id;
     }
 
-    public void addParametro(TripletaAsignacion parametro) {
+    public void addParametro(Object parametro) {
         this.parametros.add(parametro);
     }
 
     @Override
     public String codigoObjeto() {
         return "";
+    }
+    
+    @Override
+    public int enumerarTripleta(int inicio) {
+        return -1;
     }
 }

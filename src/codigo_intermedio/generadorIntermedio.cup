@@ -2,12 +2,75 @@ package codigo_intermedio;
 
 import java_cup.runtime.Symbol;
 import codigo.FrmPrincipal;
+import java.util.ArrayList;
 
 
 parser code
 {:
+    public BloquePrograma programa;
+    private BloqueTripletas bloqueActual, bloqueAux;
+    private ArrayList<Tripleta> expresion;
+    private ArrayList<Integer> anidamientos = new ArrayList<>();
+    private Tripleta actual;
+    private Object aux1, aux2, aux3, aux4, valorActual;
+    private String ambito = "";
+    private int anidamiento = 0;
+    public TablaSimbolos tabla = new TablaSimbolos();
+
     public generadorIntermedio(analisis.Lexer lexer){
         super(lexer);
+    }
+
+    private int agregarAnidamiento(){
+        if(anidamiento == 0 && anidamientos.size() == 0){
+            anidamientos.add(1);
+            anidamientos.add(0);
+            anidamiento++;
+            return 1;
+        }
+        anidamientos.set(anidamiento, anidamientos.get(anidamiento) + 1);
+        anidamientos.add(0);
+        return anidamientos.get(anidamiento++);
+    }
+    private void quitarAnidamiento(){
+        if(anidamiento == 0){
+            ambito = ambito.split(":")[0];
+            //anidamientos.clear();
+            return;
+        }
+        if(anidamiento == 1){
+            ambito = ambito.split(":")[0];
+            anidamiento--;
+            return;
+        }
+        anidamientos.remove(anidamiento--);
+        anidamientos.remove(anidamiento--);
+        String cadena = "";
+        for(int i: anidamientos) cadena += ":" + i;
+        ambito = ambito.split(":")[0] + cadena;
+    }
+
+    private void agregarTripletaBloque(Tripleta tripleta){
+        bloqueActual.addTripleta(tripleta);
+    }
+
+    private void guardarBloque(){
+        programa.addBloque(bloqueActual);
+    }
+
+    private void guardarBloqueCondicional(){
+        if(bloqueActual instanceof BloqueSiNo){
+            bloqueActual = ((BloqueSiNo) bloqueActual).bloquePadre;
+            return;
+        }
+        BloqueCondicional bc = (BloqueCondicion) bloqueActual;
+        bc.bloquePadre.addBloqueInterno(bc);
+        bloqueActual = bc.bloquePadre;
+        bloqueAux = bc;
+    }
+
+    private void agregarTripletaExpresion(Tripleta tripleta){
+        expresion.add(tripleta);
     }
 :};
 
@@ -26,73 +89,192 @@ terminal Integer NUMERO;
 terminal Boolean OP_BOOLEANO;
 terminal String IDENTIFICADOR;
 
-non terminal inicio, inicio1, inicio2, gramaticas, tiempo_cada, tiempo_por, unidad_tiempo, 
-            declaracion_valor, ventilar, admitir, estado, funcion, inicio_fin, 
-            parametros, asignacion, expresion, parametros_llamar, usar, valores,
+non terminal inicio, inicio1, inicio2, gramaticas, ventilar, admitir, funcion,
+            inicio_fin, parametros, expresion, parametros_llamar, usar, valores,
             op1, op2, op3, op4, op5, op6, op7, op8, tiempo_abrir_cerrar, 
-            usar_funcion, mientras, cabecera_condicional, cuerpo_estructura;
-non terminal String declaracion_tipo_dato, tipo_dato, declaracion_inicio;
-non terminal Boolean condicion, sino;
+            usar_funcion, mientras, cabecera_condicional, cuerpo_estructura,
+            condicion, sino;
+non terminal TripletaTiempoPor tiempo_por;
+non terminal TripletaTiempoCada tiempo_cada;
+non terminal String unidad_tiempo, estado, tipo_dato, declaracion_tipo_dato;
+non terminal TripletaDeclaracion declaracion_inicio;
+non terminal TripletaAsignacion declaracion_valor, asignacion;
 
 start with inicio;
 
-inicio ::= INICIO IDENTIFICADOR LLAVE_ABIERTA inicio1;
-inicio1 ::= COMIENZO PARENTESIS_ABIERTO tiempo_cada PARENTESIS_CERRADO inicio2;
+inicio ::= INICIO {:programa = new BloquePrograma();:} IDENTIFICADOR LLAVE_ABIERTA inicio1;
+inicio1 ::= COMIENZO {:bloqueActual = new BloqueTripletas();:} PARENTESIS_ABIERTO tiempo_cada:t
+        {:bloqueActual = new BloqueComienzo(t); ambito = "comienzo";guardarBloque();:}
+        PARENTESIS_CERRADO inicio2;
 inicio2 ::= LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin;
 inicio_fin ::= LLAVE_CERRADA FIN | FUNCION funcion inicio_fin;
 funcion ::= IDENTIFICADOR PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
 parametros ::= declaracion_inicio COMA parametros | declaracion_inicio | /**/;
-gramaticas ::= IDENTIFICADOR INC PUNTO_COMA gramaticas
-            | IDENTIFICADOR DEC PUNTO_COMA gramaticas
-            | INC IDENTIFICADOR PUNTO_COMA gramaticas
-            | DEC IDENTIFICADOR PUNTO_COMA gramaticas
-            | declaracion_inicio PUNTO_COMA gramaticas
-            | declaracion_inicio declaracion_valor PUNTO_COMA gramaticas
-            | asignacion PUNTO_COMA gramaticas
-            | CONDICION condicion gramaticas
-            | MIENTRAS mientras gramaticas
-            | APAGAR LUCES PUNTO_COMA gramaticas
-            | ENCENDER LUCES PUNTO_COMA gramaticas
-            | ABRIR PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
-            | CERRAR PUERTAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
-            | ABRIR VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas
-            | CERRAR VENTANAS tiempo_abrir_cerrar PUNTO_COMA gramaticas 
-            | SANITIZAR tiempo_por PUNTO_COMA gramaticas
-            | DISPENSAR tiempo_por PUNTO_COMA gramaticas
+gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA 
+            {:agregarTripletaBloque(new TripletaIncremento(tabla.getDireccion(i, ambito)));:} gramaticas
+            | IDENTIFICADOR:i DEC PUNTO_COMA 
+            {:agregarTripletaBloque(new TripletaDecremento(tabla.getDireccion(i, ambito)));:} gramaticas
+            | INC IDENTIFICADOR:i PUNTO_COMA
+            {:agregarTripletaBloque(new TripletaIncremento(tabla.getDireccion(i, ambito)));:} gramaticas
+            | DEC IDENTIFICADOR:i PUNTO_COMA
+            {:agregarTripletaBloque(new TripletaDecremento(tabla.getDireccion(i, ambito)));:} gramaticas
+            | declaracion_inicio:di {:agregarTripletaBloque(di);:} PUNTO_COMA gramaticas
+            | declaracion_inicio:di declaracion_valor:dv 
+            {:di.setInicializacion(dv); agregarTripletaBloque(di);:} PUNTO_COMA gramaticas
+            | asignacion:a {:agregarTripletaBloque(a);:} PUNTO_COMA gramaticas
+            | CONDICION {:bloqueActual = new BloqueCondicion(bloqueActual);:} condicion gramaticas
+            | MIENTRAS {::} mientras gramaticas
+            | APAGAR LUCES PUNTO_COMA {:agregarTripletaBloque(new TripletaApagar());:} gramaticas
+            | ENCENDER LUCES PUNTO_COMA {:agregarTripletaBloque(new TripletaEncender());:} gramaticas
+            | ABRIR PUERTAS tiempo_abrir_cerrar:tac 
+            {:agregarTripletaBloque(new TripletaAbrir("puertas", tac));:} PUNTO_COMA gramaticas
+            | CERRAR PUERTAS tiempo_abrir_cerrar:tac
+            {:agregarTripletaBloque(new TripletaCerrar("puertas", tac));:} PUNTO_COMA gramaticas
+            | ABRIR VENTANAS tiempo_abrir_cerrar:tac
+            {:agregarTripletaBloque(new TripletaAbrir("ventanas", tac));:} PUNTO_COMA gramaticas
+            | CERRAR VENTANAS tiempo_abrir_cerrar:tac
+            {:agregarTripletaBloque(new TripletaCerrar("ventanas", tac));:} PUNTO_COMA gramaticas 
+            | SANITIZAR tiempo_por:t PUNTO_COMA {:agregarTripletaBloque(new TripletaSanitizar(t));:} gramaticas
+            | DISPENSAR tiempo_por:t PUNTO_COMA {:agregarTripletaBloque(new TripletaDispensar(t));:} gramaticas
             | usar PUNTO_COMA gramaticas
-            | SALIR PUNTO_COMA
-            | {::};
-tiempo_abrir_cerrar ::= MANTENER | tiempo_por;
+            | SALIR PUNTO_COMA {:agregarTripletaBloque(new TripletaSalir());:}
+            | /**/;
+tiempo_abrir_cerrar ::= MANTENER {:RESULT = "mantener";:} | tiempo_por:t {:RESULT = t;:};
 usar ::= USAR usar_funcion | USAR admitir | USAR ventilar;
-usar_funcion ::= IDENTIFICADOR PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO;
-parametros_llamar ::= expresion COMA parametros_llamar | expresion | {::};
-tiempo_cada ::= CADA expresion unidad_tiempo;
-tiempo_por ::= POR expresion unidad_tiempo;
-unidad_tiempo ::= SEG | MIN | HR;
-estado ::= LUCES | PUERTAS | VENTANAS;
-asignacion ::= IDENTIFICADOR ASIGNACION expresion;
-declaracion_inicio ::= IDENTIFICADOR DECLARAR declaracion_tipo_dato;
-declaracion_valor ::= ASIGNACION expresion;
-declaracion_tipo_dato ::= COMO tipo_dato;
-tipo_dato ::= ENTERO | LOGICO;
-expresion ::= op2 op1;
-op1 ::= LOGICO_AND op2 op1 | LOGICO_OR op2 op1 | {::};
-op2 ::= op4 op3;
-op3 ::= REL_MENOR op4 | REL_MAYOR op4 | REL_MENOR_IGUAL op4
-        | REL_MAYOR_IGUAL op4 | REL_DIFERENTE op4 | REL_IGUAL op4 | {::};
-op4 ::= op6 op5;
-op5 ::= AR_SUMA op6 op5 | AR_RESTA op6 op5 | {::};
-op6 ::= op8 op7;
-op7 ::= AR_DIVISION op8 op7 | AR_MULTIPLICACION op8 op7 | {::};
-op8 ::= valores | AR_RESTA valores | NEGACION valores;
-valores ::= NUMERO | IDENTIFICADOR | OBTENER TEMPERATURA | OBTENER PERSONAS 
-            | OP_BOOLEANO | ESTADO estado 
-            | PARENTESIS_ABIERTO expresion PARENTESIS_CERRADO;
+usar_funcion ::= IDENTIFICADOR:i {:actual = new TripletaUsar(i);agregarTripletaBloque(actual);:}
+            PARENTESIS_ABIERTO parametros_llamar PARENTESIS_CERRADO;
+parametros_llamar ::= expresion:e {:((TripletaUsar)actual).addParametro(e);:} COMA parametros_llamar 
+                | expresion:e {:((TripletaUsar)actual).addParametro(e);:} | /**/;
+tiempo_cada ::= CADA expresion:e unidad_tiempo:ut {:RESULT = new TripletaTiempoCada((e instanceof Tripleta) ? bloqueActual : e, ut);:};
+tiempo_por ::= POR expresion unidad_tiempo:ut {:RESULT = new TripletaTiempoPor(expresion, ut);:};
+unidad_tiempo ::= SEG {:RESULT="seg";:} | MIN {:RESULT="min";:} | HR {:RESULT="hr";:};
+estado ::= LUCES {:RESULT="luces";:}| PUERTAS {:RESULT="puertas";:}| VENTANAS {:RESULT="ventanas";:};
+asignacion ::= IDENTIFICADOR:i ASIGNACION expresion:e {:RESULT = new TripletaAsignacion(tabla.getDireccion(i, ambito), e);:};
+declaracion_inicio ::= IDENTIFICADOR:i DECLARAR declaracion_tipo_dato:dtd
+                    {:RESULT = new TripletaDeclaracion(dtd, tabla.getDireccion(i, ambito));:};
+declaracion_valor ::= ASIGNACION expresion:e {:RESULT = new TripletaAsignacion(e);:};
+declaracion_tipo_dato ::= COMO tipo_dato:td {:RESULT=td;:};
+tipo_dato ::= ENTERO {:RESULT="entero";:}| LOGICO {:RESULT="logico";:};
+expresion ::= op2:v {:valorActual = v;:} op1:r {:RESULT = r;:};
+op1 ::= LOGICO_AND {:aux1 = valorActual;:} op2:v {:
+        TripletaAnd t = new TripletaAnd(aux1, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+    :} op1:r {:RESULT=r;:}
+    | LOGICO_OR {:aux1 = valorActual;:} op2:v {:
+        TripletaOr t = new TripletaOr(aux1, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+    :} op1:r {:RESULT=r;:} 
+    | {:RESULT=valorActual;:};
+op2 ::= op4:v {:valorActual = v;:} op3:r {:RESULT = r;:};
+op3 ::= REL_MENOR {:aux2 = valorActual;:} op4:v {:
+        TripletaMenor t = new TripletaMenor(aux2, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+        RESULT = t;
+    :}
+    | REL_MAYOR {:aux2 = valorActual;:}  op4:v {:
+        TripletaMayor t = new TripletaMayor(aux2, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+        RESULT = t;
+    :}
+    | REL_MENOR_IGUAL {:aux2 = valorActual;:}  op4:v {:
+        TripletaMenorIgual t = new TripletaMenorIgual(aux2, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+        RESULT = t;
+    :}
+    | REL_MAYOR_IGUAL {:aux2 = valorActual;:}  op4:v {:
+        TripletaMayorIgual t = new TripletaMayorIgual(aux2, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+        RESULT = t;
+    :}
+    | REL_DIFERENTE {:aux2 = valorActual;:}  op4:v {:
+        TripletaDiferente t = new TripletaDiferente(aux2, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+        RESULT = t;
+    :}
+    | REL_IGUAL {:aux2 = valorActual;:}  op4:v {:
+        TripletaIgual t = new TripletaIgual(aux2, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+        RESULT = t;
+    :}
+    | {:RESULT=valorActual;:};
+op4 ::= op6:v {:valorActual = v;:} op5:r {:RESULT = r;:};
+op5 ::= AR_SUMA {:aux3 = valorActual;:} op6:v {:
+        TripletaSuma t = new TripletaSuma(aux3, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+    :} op5:r {:RESULT=r;:} 
+    | AR_RESTA {:aux3 = valorActual;:} op6:v {:
+        TripletaResta t = new TripletaResta(aux3, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+    :} op5:r {:RESULT=r;:} 
+    | {:RESULT=valorActual;:};
+op6 ::= op8:v {:valorActual = v;:} op7:r {:RESULT = r;:};
+op7 ::= AR_DIVISION {:aux4 = valorActual;:} op8:v {:
+        TripletaDivision t = new TripletaDivision(aux4, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+    :} op7:r {:RESULT=r;:} 
+    | AR_MULTIPLICACION {:aux4 = valorActual;:} op8:v {:
+        TripletaMultiplicacion t = new TripletaMultiplicacion(aux4, v);
+        valorActual = t;
+        agregarTripletaBloque(t);
+    :} op7:r {:RESULT=r;:} 
+    | {:RESULT=valorActual;:};
+op8 ::= valores:v {:RESULT = v;:} 
+    | AR_RESTA valores:v {:
+        TripletaResta t = new TripletaResta(v);
+        RESULT = t;
+        agregarTripletaBloque(t);
+    :}
+    | NEGACION valores:v {:
+        TripletaNegacion t = new TripletaNegacion(v);
+        RESULT = t;
+        agregarTripletaBloque(t);
+    :};
+valores ::= NUMERO:n {:RESULT = n;:} 
+            | IDENTIFICADOR:i {:RESULT = tabla.getDireccion(i, ambito);:} 
+            | OBTENER TEMPERATURA {:
+                TripletaObtener t = new TripletaObtener("temperatura");
+                RESULT = t;
+                agregarTripletaBloque(t);
+            :} 
+            | OBTENER PERSONAS {:
+                TripletaObtener t = new TripletaObtener("personas");
+                RESULT = t;
+                agregarTripletaBloque(t);
+            :}
+            | OP_BOOLEANO:o {:RESULT = o ? "verdadero" : "falso";:} 
+            | ESTADO estado:e {:
+                TripletaEstado t = new TripletaEstado(e);
+                RESULT = t;
+                agregarTripletaBloque(t);
+            :}
+            | PARENTESIS_ABIERTO expresion:e PARENTESIS_CERRADO {:RESULT = e;:};
 condicion ::=  cabecera_condicional cuerpo_estructura
             | cabecera_condicional cuerpo_estructura sino;
-sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
-ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA expresion COMA expresion PARENTESIS_CERRADO;
-admitir ::= ADMITIR PARENTESIS_ABIERTO expresion COMA tiempo_por PARENTESIS_CERRADO;
+sino ::= SINO {: 
+            bloqueActual = new BloqueSiNo(bloqueActual);
+            ((BloqueCondicion) bloqueAux).setSiNo((BloqueSiNo) bloqueActual);
+        :} CONDICION {::} condicion 
+        | SINO {: 
+            bloqueActual = new BloqueSiNo(bloqueActual);
+            ((BloqueCondicion) bloqueAux).setSiNo((BloqueSiNo) bloqueActual);
+        :} cuerpo_estructura;
+ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por:t COMA expresion:e1 COMA expresion:e2 PARENTESIS_CERRADO
+        {:agregarTripletaBloque(new TripletaVentilar(t, e1, e2));:};
+admitir ::= ADMITIR PARENTESIS_ABIERTO expresion:e COMA tiempo_por:t PARENTESIS_CERRADO 
+        {:agregarTripletaBloque(new TripletaAdmitir(e, t));:};
 mientras ::= cabecera_condicional cuerpo_estructura;
-cabecera_condicional ::= PARENTESIS_ABIERTO expresion PARENTESIS_CERRADO;
-cuerpo_estructura ::= LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
+cabecera_condicional ::= PARENTESIS_ABIERTO {:bloqueAux = bloqueActual; bloqueActual = new BloqueTripletas();:}
+    expresion:e PARENTESIS_CERRADO 
+    {:((BloqueCondicional) bloqueAux).setCondicion(new TripletaCondicion(e instanceof Tripleta ? bloqueActual : e));bloqueActual=bloqueAux;:};
+cuerpo_estructura ::= {:ambito+=":"+(agregarAnidamiento());:} LLAVE_ABIERTA gramaticas {:quitarAnidamiento();guardarBloqueCondicional();:} LLAVE_CERRADA;

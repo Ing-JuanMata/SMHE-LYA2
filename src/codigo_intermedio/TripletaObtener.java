@@ -19,4 +19,9 @@ public class TripletaObtener extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
+
+    @Override
+    public int enumerarTripleta(int inicio) {
+        return -1;
+    }
 }

@@ -12,22 +12,30 @@ public class TripletaCerrar extends Tripleta {
 
     private TripletaTiempoPor tiempo;
 
-    public TripletaCerrar(String objeto) {
+    public TripletaCerrar(String objeto, Object tiempo) {
         super("cerrar");
         super.operando1 = objeto;
-    }
+        if (tiempo instanceof TripletaTiempoPor) {
+            TripletaTiempoPor t = (TripletaTiempoPor) tiempo;
+            this.ref2 = this.tiempo = t;
+        }
 
-    public void setTiempo(TripletaTiempoPor tiempo) {
-        this.tiempo = tiempo;
-        this.ref2 = tiempo;
-    }
-
-    public void setTiempo() {
-        this.operando2 = "mantener";
+        this.operando2 = tiempo;
     }
 
     @Override
     public String codigoObjeto() {
         return "";
+    }
+
+    @Override
+    public int enumerarTripleta(int inicio) {
+        inicio = tiempo.enumerarTripleta(inicio);
+        return super.enumerarTripleta(inicio);
+    }
+
+    @Override
+    public String toString() {
+        return tiempo.toString() + "\n" + super.toString();
     }
 }

@@ -8,14 +8,15 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaMayorIgual extends Tripleta {
+public class TripletaMayorIgual extends TripletaExpresion {
 
-    public TripletaMayorIgual() {
-        super(">=");
+    public TripletaMayorIgual(Object op1, Object op2) {
+        super(">=", op1, op2);
     }
 
     @Override
     public String codigoObjeto() {
         return "";
     }
+
 }

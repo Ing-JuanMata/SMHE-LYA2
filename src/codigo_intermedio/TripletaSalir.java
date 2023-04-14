@@ -4,15 +4,19 @@
  */
 package codigo_intermedio;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author jujemataso
  */
-public class TripletaTiempoPor extends TripletaTiempo {
+public class TripletaSalir extends Tripleta {
 
-    public TripletaTiempoPor(Object expresion, String unidad) {
-        super("por", expresion, unidad);
+    public TripletaSalir() {
+        super("salir");
+    }
+
+    @Override
+    public String codigoObjeto() {
+        //Configurar el tiempo y luego realizar la accion
+        return "";
     }
 }

@@ -8,15 +8,15 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaSuma extends Tripleta {
+public class TripletaSuma extends TripletaExpresion {
 
-    public TripletaSuma() {
-        super("+");
+    public TripletaSuma(Object op1, Object op2) {
+        super("+", op1, op2);
     }
 
     @Override
     public String codigoObjeto() {
         return "";
     }
-
+    
 }

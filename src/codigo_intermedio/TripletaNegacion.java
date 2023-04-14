@@ -8,20 +8,19 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaEstado extends Tripleta {
+public class TripletaNegacion extends Tripleta {
 
-    public TripletaEstado(String objeto) {
-        super("estado");
-        this.operando1 = objeto;
+    public TripletaNegacion(Object expresion) {
+        super("!");
+        if (expresion instanceof Tripleta) {
+            super.ref1 = (Tripleta) expresion;
+            return;
+        }
+        super.operando1 = expresion;
     }
 
     @Override
     public String codigoObjeto() {
         return "";
-    }
-
-    @Override
-    public int enumerarTripleta(int inicio) {
-        return -1;
     }
 }

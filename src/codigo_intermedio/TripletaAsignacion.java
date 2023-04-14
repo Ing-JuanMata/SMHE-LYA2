@@ -9,11 +9,26 @@ package codigo_intermedio;
  * @author jujemataso
  */
 public class TripletaAsignacion extends Tripleta {
-    
-    public TripletaAsignacion(){
+
+    public TripletaAsignacion(Object valor) {
         super("=");
+        if (valor instanceof Tripleta) {
+            this.ref2 = (Tripleta) valor;
+            return;
+        }
+        this.operando2 = valor;
     }
-    
+
+    public TripletaAsignacion(String id, Object valor) {
+        super("=");
+        this.operando1 = id;
+        if (valor instanceof Tripleta) {
+            this.ref2 = (Tripleta) valor;
+            return;
+        }
+        this.operando2 = valor;
+    }
+
     @Override
     public String codigoObjeto() {
         return "";

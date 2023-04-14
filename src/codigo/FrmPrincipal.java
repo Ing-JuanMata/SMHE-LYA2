@@ -2,6 +2,7 @@ package codigo;
 
 import analisis.Lexer;
 import analisis.SintaxPrueba;
+import codigo_intermedio.generadorIntermedio;
 import herramientas.TablaErrores;
 import herramientas.TablaFunciones;
 import herramientas.TablaSimbolos;
@@ -14,7 +15,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -26,7 +26,6 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.undo.UndoManager;
 import say.swing.JFontChooser;
 import java_cup.runtime.Symbol;
@@ -482,6 +481,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "No hay código fuente para realizar el análisis");
         } else {
             analisisSintactico();
+            generacionIntermedia();
         }
     }//GEN-LAST:event_btnCorrerActionPerformed
     private void analisisSintactico() {
@@ -508,6 +508,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
             txtError.setForeground(Color.red);
             for (String st : errores.getErrores()) {
                 txtError.setText(txtError.getText() + st + "\n");
+            }
+        }
+    }
+
+    private void generacionIntermedia() {
+        if (!errores.getErrores().isEmpty()) {
+            return;
+        }
+
+        generadorIntermedio ci = new generadorIntermedio(new Lexer(new java.io.StringReader(txtEntrada.getText())));
+        try {
+            ci.parse();
+            System.out.println(ci.programa);
+        } catch (Exception ex) {
+            System.out.println("Algo salio mal en codigo intermedio: " + ex.getMessage());
+            for (StackTraceElement ste : ex.getStackTrace()) {
+                System.out.println(ste);
             }
         }
     }
