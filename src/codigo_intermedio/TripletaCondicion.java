@@ -28,6 +28,11 @@ public class TripletaCondicion extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
+    
+    @Override
+    public Tripleta getInicio() {
+        return condicion == null ? super.getInicio() : condicion.getInicio();
+    }
 
     @Override
     public int enumerarTripleta(int inicio) {

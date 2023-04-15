@@ -23,6 +23,11 @@ public class BloqueSiNo extends BloqueCondicional {
     }
 
     @Override
+    public Tripleta getInicio() {
+        return this.condicion == null ? super.getInicio() : condicion.getInicio();
+    }
+
+    @Override
     public int enumerarTripletas(int inicio) {
         if (condicion != null) {
             inicio = condicion.enumerarTripletas(inicio);

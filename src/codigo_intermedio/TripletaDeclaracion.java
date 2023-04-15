@@ -26,6 +26,11 @@ public class TripletaDeclaracion extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
+    
+    @Override
+    public Tripleta getInicio() {
+        return inicializacion == null ? super.getInicio() : inicializacion.getInicio();
+    }
 
     @Override
     public int enumerarTripleta(int inicio) {

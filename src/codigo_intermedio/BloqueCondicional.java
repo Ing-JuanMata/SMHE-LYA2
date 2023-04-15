@@ -32,7 +32,7 @@ public abstract class BloqueCondicional extends BloqueTripletas {
 
     @Override
     public String toString() {
-        return (condicion != null ? condicion.toString() : "") + (!super.contenido.isEmpty() ? "\n" + super.toString() : "");
+        return (condicion != null ? condicion.toString() + "\n" : "") + (!super.contenido.isEmpty() ? super.toString() : "");
     }
 
 }

@@ -417,7 +417,7 @@ valores ::= NUMERO:n {:RESULT=n;:}
             | PARENTESIS_ABIERTO expresion:e PARENTESIS_CERRADO {:RESULT=e;:};
 condicion ::=  cabecera_condicional cuerpo_estructura
             | cabecera_condicional cuerpo_estructura sino;
-sino ::= SINO CONDICION condicion | SINO LLAVE_ABIERTA gramaticas LLAVE_CERRADA;
+sino ::= SINO CONDICION condicion | SINO cuerpo_estructura;
 ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por COMA expresion COMA expresion PARENTESIS_CERRADO;
 admitir ::= ADMITIR PARENTESIS_ABIERTO expresion COMA tiempo_por PARENTESIS_CERRADO;
 mientras ::= cabecera_condicional cuerpo_estructura;

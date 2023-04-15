@@ -41,27 +41,47 @@ public class BloqueTripletas {
 
     public int enumerarTripletas(int inicio) {
         BloqueCondicion aux = null;
+        BloqueMientras aux2 = null;
         for (Object o : contenido) {
             if (o instanceof Tripleta) {
                 if (aux != null) {
                     aux.refenciarSiguiente((Tripleta) o);
                     aux = null;
+                } else if (aux2 != null) {
+                    aux2.referenciarSiguiente((Tripleta) o);
+                    aux2 = null;
                 }
                 inicio = ((Tripleta) o).enumerarTripleta(inicio);
             } else if (o instanceof BloqueCondicion) {
                 BloqueCondicion bc = (BloqueCondicion) o;
                 if (aux != null) {
                     aux.refenciarSiguiente(bc.getInicio());
-                    aux = null;
+                } else if (aux2 != null) {
+                    aux2.referenciarSiguiente(bc.getInicio());
+                    aux2 = null;
                 }
 
                 inicio = bc.enumerarTripletas(inicio);
                 aux = bc;
+            } else if (o instanceof BloqueMientras) {
+                BloqueMientras bm = (BloqueMientras) o;
+                if (aux != null && !bm.contenido.isEmpty()) {
+                    aux.refenciarSiguiente(bm.getInicio());
+                    aux = null;
+                } else if (aux2 != null) {
+                    aux2.referenciarSiguiente(bm.getInicio());
+                }
+
+                inicio = bm.enumerarTripletas(inicio);
+                aux2 = bm;
             } else if (o instanceof BloqueTripletas) {
                 BloqueTripletas bt = (BloqueTripletas) o;
                 if (aux != null && !bt.contenido.isEmpty()) {
                     aux.refenciarSiguiente(bt.getInicio());
                     aux = null;
+                } else if (aux2 != null) {
+                    aux2.referenciarSiguiente(bt.getInicio());
+                    aux2 = null;
                 }
                 inicio = bt.enumerarTripletas(inicio);
             }

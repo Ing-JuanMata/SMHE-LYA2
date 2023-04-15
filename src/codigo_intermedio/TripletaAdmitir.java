@@ -4,39 +4,53 @@
  */
 package codigo_intermedio;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author jujemataso
  */
 public class TripletaAdmitir extends Tripleta {
 
+    private BloqueTripletas expresion;
     private TripletaTiempoPor tiempo;
-    private Object expresion;
+    private TripletaUsar usar;
 
-    public TripletaAdmitir(Object expresion, TripletaTiempoPor tiempo) {
-        super("usar");
-        super.operando1 = "admitir";
-        this.expresion = expresion;
+    public TripletaAdmitir(TripletaUsar usar, TripletaTiempoPor tiempo, Object expresion, TablaSimbolos tabla) {
+        super("admitir");
         this.tiempo = tiempo;
-    }
-
-    public void setTiempo(TripletaTiempoPor tiempo) {
-        this.tiempo = tiempo;
-    }
-
-    public void setExpresion(ArrayList<Tripleta> expresion) {
-        this.expresion = expresion;
+        this.usar = usar;
+        this.ref1 = this.tiempo;
+        String dirAdmision = tabla.getDireccion("0admision_admitir0", "programa");
+        if (expresion instanceof BloqueTripletas) {
+            this.expresion = (BloqueTripletas) expresion;
+            this.expresion.addTripleta(new TripletaAsignacion(dirAdmision, this.expresion.contenido.get(this.expresion.contenido.size() - 1)));
+        } else {
+            this.expresion = new BloqueTripletas();
+            this.expresion.addTripleta(new TripletaAsignacion(dirAdmision, expresion));
+        }
     }
 
     @Override
     public String codigoObjeto() {
         return "";
     }
+
+    @Override
+    public Tripleta getInicio() {
+        return expresion.getInicio();
+    }
+
     @Override
     public int enumerarTripleta(int inicio) {
-        return -1;
+        this.usar.ref1 = this;
+        inicio = expresion.enumerarTripletas(inicio);
+        inicio = tiempo.enumerarTripleta(inicio);
+        inicio = super.enumerarTripleta(inicio);
+        return usar.enumerarTripleta(inicio);
+    }
+
+    @Override
+    public String toString() {
+        return expresion.toString() + "\n" + tiempo.toString() + "\n" + super.toString() + "\n" + usar.toString();
     }
 
 }

@@ -14,6 +14,11 @@ public class TripletaGoto extends Tripleta {
         super("goto");
     }
 
+    public TripletaGoto(Tripleta ref) {
+        super("goto");
+        super.ref1 = ref;
+    }
+
     @Override
     public String codigoObjeto() {
         return "";

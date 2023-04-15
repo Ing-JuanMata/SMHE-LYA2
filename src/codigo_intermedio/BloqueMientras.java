@@ -14,9 +14,16 @@ public class BloqueMientras extends BloqueCondicional {
         super(bloquePadre);
     }
 
+    public void referenciarSiguiente(Tripleta t) {
+        super.condicion.ref2 = t.getInicio();
+    }
+
     @Override
     public int enumerarTripletas(int inicio) {
         //Enumerar primero la condicion, luego el cuerpo, terminar con un lazo
-        return -1;
+        inicio = super.condicion.enumerarTripleta(inicio);
+        super.addTripleta(new TripletaGoto(this.getInicio()));
+        return super.enumerarTripletas(inicio);
     }
+
 }

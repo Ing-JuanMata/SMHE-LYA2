@@ -26,6 +26,9 @@ public class TablaSimbolos {
         for (LlaveTabla llave : tablaAnalisis.getTabla().keySet()) {
             tabla.put(llave, Integer.toHexString(direccion++));
         }
+        tabla.put(new LlaveTabla("0puertas_ventilar0", "programa"), Integer.toHexString(direccion++));
+        tabla.put(new LlaveTabla("0ventanas_ventilar0", "programa"), Integer.toHexString(direccion++));
+        tabla.put(new LlaveTabla("0admision_admitir0", "programa"), Integer.toHexString(direccion++));
     }
 
     public void verTabla(javax.swing.table.DefaultTableModel modelo) {

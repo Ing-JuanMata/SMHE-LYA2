@@ -10,11 +10,23 @@ package codigo_intermedio;
  */
 public class TripletaUsar extends Tripleta {
 
-    java.util.ArrayList<Object> parametros;
+    private java.util.ArrayList<Object> parametros;
+    private TablaFunciones tabla;
+    private String nombre;
 
     public TripletaUsar(String id) {
+        this();
+        this.nombre = id;
+    }
+
+    public TripletaUsar(String id, TablaFunciones tabla) {
+        this(id);
+        this.tabla = tabla;
+    }
+
+    public TripletaUsar() {
         super("usar");
-        super.operando1 = id;
+        parametros = new java.util.ArrayList<>();
     }
 
     public void addParametro(Object parametro) {
@@ -25,9 +37,48 @@ public class TripletaUsar extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
-    
+
+    @Override
+    public Tripleta getInicio() {
+        return parametros.isEmpty()
+                ? super.getInicio()
+                : (parametros.get(0) instanceof BloqueTripletas
+                ? ((BloqueTripletas) parametros.get(0)).getInicio()
+                : ((Tripleta) parametros.get(0)).getInicio());
+    }
+
     @Override
     public int enumerarTripleta(int inicio) {
-        return -1;
+        int i = 0;
+        for (Object o : parametros) {
+            if (o instanceof BloqueTripletas) {
+                BloqueTripletas bt = (BloqueTripletas) o;
+                String id = tabla.getDireccionParametro(nombre, i++);
+                Object valor = bt.contenido.get(bt.contenido.size() - 1);
+                bt.addTripleta(new TripletaAsignacion(id, valor));
+                inicio = bt.enumerarTripletas(inicio);
+            } else {
+                String id = tabla.getDireccionParametro(nombre, i++);
+                TripletaAsignacion t = new TripletaAsignacion(id, o);
+                inicio = t.enumerarTripleta(inicio);
+                parametros.set(i - 1, t);
+            }
+        }
+        return super.enumerarTripleta(inicio);
     }
+
+    private String mostrarParametros() {
+        String cadena = "";
+        for (Object o : parametros) {
+            cadena += o.toString() + "\n";
+        }
+        return cadena;
+    }
+
+    @Override
+    public String toString() {
+        this.ref1 = this.ref1 == null ? tabla.getInicio(nombre) : this.ref1;
+        return parametros.isEmpty() ? super.toString() : mostrarParametros() + super.toString();
+    }
+
 }

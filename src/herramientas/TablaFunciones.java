@@ -5,6 +5,8 @@
 package herramientas;
 
 import analisis.LlaveTabla;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -63,6 +65,14 @@ public class TablaFunciones {
 
         tabla.get(id).forEach(llave -> tipos.add(codigo.FrmPrincipal.tablaSimbolos.getTipo(llave)));
         return tipos;
+    }
+
+    public HashMap<String, ArrayList<LlaveTabla>> getTabla() {
+        return tabla;
+    }
+
+    public java.util.ArrayList<LlaveTabla> getParametros(String id) {
+        return tabla.get(id);
     }
 
     @Override

@@ -26,6 +26,14 @@ public class TripletaTiempo extends Tripleta {
     }
 
     @Override
+    public Tripleta getInicio() {
+        if (expresion != null) {
+            return ((BloqueTripletas) expresion).getInicio();
+        }
+        return unidad;
+    }
+
+    @Override
     public String codigoObjeto() {
         //Colocar valores de temporizacion
         return "";

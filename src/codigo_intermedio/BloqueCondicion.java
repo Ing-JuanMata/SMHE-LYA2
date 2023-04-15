@@ -23,7 +23,7 @@ public class BloqueCondicion extends BloqueCondicional {
 
     public void refenciarSiguiente(Tripleta t) {
         if (this.sino != null) {
-            ((TripletaGoto) this.contenido.get(this.contenido.size() - 1)).ref1 = this.sino.getInicio();
+            ((TripletaGoto) this.contenido.get(this.contenido.size() - 1)).ref1 = t.getInicio();
             if (this.sino.condicion != null) {
                 this.sino.condicion.refenciarSiguiente(t);
             }
@@ -45,7 +45,7 @@ public class BloqueCondicion extends BloqueCondicional {
 
     @Override
     public String toString() {
-        return super.toString() + (sino != null ? sino.toString() : "");
+        return super.toString() + (sino != null ? "\n" + sino.toString() : "");
     }
 
 }

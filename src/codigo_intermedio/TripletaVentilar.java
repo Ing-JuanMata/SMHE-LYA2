@@ -4,35 +4,38 @@
  */
 package codigo_intermedio;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author jujemataso
  */
 public class TripletaVentilar extends Tripleta {
 
-    private Object puertasAbiertas, VentanasAbiertas;
+    BloqueTripletas puertas, ventanas;
     private TripletaTiempoPor tiempo;
+    private TripletaUsar usar;
 
-    public TripletaVentilar(TripletaTiempoPor tiempo, Object puertas, Object ventanas) {
-        super("usar");
-        super.operando1 = "ventilar";
+    public TripletaVentilar(TripletaUsar usar, TripletaTiempoPor tiempo, Object puertas, Object ventanas, TablaSimbolos tabla) {
+        super("ventilar");
+        this.ref1 = tiempo;
+        this.usar = usar;
         this.tiempo = tiempo;
-        this.puertasAbiertas = puertas;
-        this.VentanasAbiertas = ventanas;
-    }
+        String dirPuertas = tabla.getDireccion("0puertas_ventilacion0", "programa");
+        String dirVentanas = tabla.getDireccion("0ventanas_ventilacion0", "programa");
+        if (puertas instanceof BloqueTripletas) {
+            this.puertas = (BloqueTripletas) puertas;
+            this.puertas.addTripleta(new TripletaAsignacion(dirPuertas, this.puertas.contenido.get(this.puertas.contenido.size() - 1)));
+        } else {
+            this.puertas = new BloqueTripletas();
+            this.puertas.addTripleta(new TripletaAsignacion(dirPuertas, puertas));
+        }
 
-    public void setTiempo(TripletaTiempoPor tiempo) {
-        this.tiempo = tiempo;
-    }
-
-    public void setPuertasAbiertas(ArrayList<Tripleta> puertasAbiertas) {
-        this.puertasAbiertas = puertasAbiertas;
-    }
-
-    public void setVentanasAbiertas(ArrayList<Tripleta> VentanasAbiertas) {
-        this.VentanasAbiertas = VentanasAbiertas;
+        if (ventanas instanceof BloqueTripletas) {
+            this.ventanas = (BloqueTripletas) ventanas;
+            this.ventanas.addTripleta(new TripletaAsignacion(dirVentanas, this.ventanas.contenido.get(this.ventanas.contenido.size() - 1)));
+        } else {
+            this.ventanas = new BloqueTripletas();
+            this.ventanas.addTripleta(new TripletaAsignacion(dirVentanas, ventanas));
+        }
     }
 
     @Override
@@ -44,7 +47,23 @@ public class TripletaVentilar extends Tripleta {
     }
     
     @Override
-    public int enumerarTripleta(int inicio) {
-        return -1;
+    public Tripleta getInicio() {
+        return puertas.getInicio();
     }
+
+    @Override
+    public int enumerarTripleta(int inicio) {
+        this.usar.ref1 = this;
+        inicio = puertas.enumerarTripletas(inicio);
+        inicio = ventanas.enumerarTripletas(inicio);
+        inicio = tiempo.enumerarTripleta(inicio);
+        inicio = super.enumerarTripleta(inicio);
+        return usar.enumerarTripleta(inicio);
+    }
+
+    @Override
+    public String toString() {
+        return puertas.toString() + "\n" + ventanas.toString() + "\n" + tiempo.toString() + "\n" + super.toString() + "\n" + usar.toString();
+    }
+
 }

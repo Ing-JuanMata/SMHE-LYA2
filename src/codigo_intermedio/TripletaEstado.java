@@ -20,8 +20,4 @@ public class TripletaEstado extends Tripleta {
         return "";
     }
 
-    @Override
-    public int enumerarTripleta(int inicio) {
-        return -1;
-    }
 }

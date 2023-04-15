@@ -27,15 +27,20 @@ public class TripletaCerrar extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
+    
+    @Override
+    public Tripleta getInicio() {
+        return tiempo == null ? super.getInicio() : tiempo.getInicio();
+    }
 
     @Override
     public int enumerarTripleta(int inicio) {
-        inicio = tiempo.enumerarTripleta(inicio);
+        inicio = tiempo == null ? inicio : tiempo.enumerarTripleta(inicio);
         return super.enumerarTripleta(inicio);
     }
 
     @Override
     public String toString() {
-        return tiempo.toString() + "\n" + super.toString();
+        return (tiempo == null ? "" : tiempo.toString() + "\n") + super.toString();
     }
 }

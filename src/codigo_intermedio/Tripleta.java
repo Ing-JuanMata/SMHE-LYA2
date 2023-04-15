@@ -26,6 +26,10 @@ public abstract class Tripleta {
         return inicio;
     }
 
+    public Tripleta getInicio() {
+        return this;
+    }
+
     public String getOperador() {
         return operador;
     }

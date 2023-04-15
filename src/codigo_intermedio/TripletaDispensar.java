@@ -24,6 +24,11 @@ public class TripletaDispensar extends Tripleta {
     }
 
     @Override
+    public Tripleta getInicio() {
+        return tiempo.getInicio();
+    }
+
+    @Override
     public int enumerarTripleta(int inicio) {
         inicio = tiempo.enumerarTripleta(inicio);
         return super.enumerarTripleta(inicio);
