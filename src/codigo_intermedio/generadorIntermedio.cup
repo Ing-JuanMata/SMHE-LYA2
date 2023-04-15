@@ -117,10 +117,11 @@ inicio1 ::= COMIENZO {:bloqueActual = new BloqueTripletas();:} PARENTESIS_ABIERT
         PARENTESIS_CERRADO inicio2;
 inicio2 ::= LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin;
 inicio_fin ::= LLAVE_CERRADA FIN | FUNCION funcion inicio_fin;
-funcion ::= IDENTIFICADOR:i {:bloqueActual = new BloqueFuncion(i); guardarBloque();:} 
+funcion ::= IDENTIFICADOR:i {:bloqueActual = new BloqueFuncion(i); guardarBloque(); ambito = i;:} 
         PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas 
         LLAVE_CERRADA {:tblF.setInicio(i, bloqueActual.getInicio());:};
-parametros ::= declaracion_inicio COMA parametros | declaracion_inicio | /**/;
+parametros ::= declaracion_inicio:di {:agregarTripletaBloque(di);:} COMA parametros 
+            | declaracion_inicio:di {:agregarTripletaBloque(di);:} | /**/;
 gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA 
             {:agregarTripletaBloque(new TripletaIncremento(tabla.getDireccion(i, ambito)));:} gramaticas
             | IDENTIFICADOR:i DEC PUNTO_COMA 

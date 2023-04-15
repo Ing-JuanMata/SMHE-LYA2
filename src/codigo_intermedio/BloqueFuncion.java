@@ -4,6 +4,8 @@
  */
 package codigo_intermedio;
 
+import analisis.LlaveTabla;
+
 /**
  *
  * @author jujemataso
