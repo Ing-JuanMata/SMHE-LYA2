@@ -16,7 +16,7 @@ parser code
     private String ambito = "";
     private int anidamiento = 0;
     public TablaSimbolos tabla = new TablaSimbolos();
-    private TablaFunciones tblF = new TablaFunciones(tabla);
+    public TablaFunciones tblF = new TablaFunciones(tabla);
     private boolean inicial = false;
 
     public generadorIntermedio(analisis.Lexer lexer){
@@ -115,7 +115,8 @@ inicio ::= INICIO {:programa = new BloquePrograma();:} IDENTIFICADOR LLAVE_ABIER
 inicio1 ::= COMIENZO {:bloqueActual = new BloqueTripletas();:} PARENTESIS_ABIERTO tiempo_cada:t
         {:bloqueActual = new BloqueComienzo(t); ambito = "comienzo";guardarBloque();:}
         PARENTESIS_CERRADO inicio2;
-inicio2 ::= LLAVE_ABIERTA gramaticas LLAVE_CERRADA inicio_fin;
+inicio2 ::= LLAVE_ABIERTA gramaticas LLAVE_CERRADA 
+        {:tblF.setInicio("comienzo", bloqueActual.getInicio());:} inicio_fin;
 inicio_fin ::= LLAVE_CERRADA FIN | FUNCION funcion inicio_fin;
 funcion ::= IDENTIFICADOR:i {:bloqueActual = new BloqueFuncion(i); guardarBloque(); ambito = i;:} 
         PARENTESIS_ABIERTO parametros PARENTESIS_CERRADO LLAVE_ABIERTA gramaticas 

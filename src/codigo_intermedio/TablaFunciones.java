@@ -5,6 +5,7 @@
 package codigo_intermedio;
 
 import analisis.LlaveTabla;
+import java.util.ArrayList;
 
 /**
  *
@@ -47,17 +48,18 @@ public class TablaFunciones {
         modelo.setRowCount(0);
         modelo.setColumnCount(0);
         modelo.addColumn("ID");
+        modelo.addColumn("Tripleta Inicial");
         tabla.forEach((id, parametros) -> {
-            Object[] fila = new Object[5];
-            int i = 0;
-            fila[i++] = id;
-            while (modelo.getColumnCount() <= parametros.size()) {
-                modelo.addColumn("Parametro: " + (modelo.getColumnCount()));
+            ArrayList<Object> fila = new ArrayList();
+            fila.add(id);
+            fila.add(tripletasInicio.get(id));
+            while (modelo.getColumnCount() - 1 <= parametros.size()) {
+                modelo.addColumn("Parametro: " + (modelo.getColumnCount() - 1));
             }
             for (LlaveTabla llave : parametros) {
-                fila[i++] = llave.id + ": " + codigo.FrmPrincipal.tablaSimbolos.getTipo(llave);
+                fila.add(llave.id + ": " + codigo.FrmPrincipal.tablaSimbolos.getTipo(llave));
             }
-            modelo.addRow(fila);
+            modelo.addRow(fila.toArray());
         });
     }
 

@@ -24,10 +24,7 @@ public abstract class BloqueCondicional extends BloqueTripletas {
 
     @Override
     public Tripleta getInicio() {
-        return (Tripleta) (condicion != null
-                ? (condicion.condicion != null
-                        ? condicion.condicion.contenido.get(0) : condicion)
-                : super.getInicio());
+        return condicion != null ? condicion.getInicio() : super.getInicio();
     }
 
     @Override

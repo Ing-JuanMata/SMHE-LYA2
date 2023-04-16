@@ -38,8 +38,6 @@ public class BloquePrograma extends BloqueTripletas {
 
     @Override
     public String toString() {
-        //bloques.get(0).contenido.forEach(o -> System.out.println(o.getClass().getName()));
-        enumerarTripletas(0);
         String cadena = inicio.toString() + "\n";
         for (BloqueTripletas bt : bloques) {
             cadena += bt.toString() + "\n";

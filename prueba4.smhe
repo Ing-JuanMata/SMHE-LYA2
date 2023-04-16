@@ -1,5 +1,10 @@
-inicio prueba{
-comienzo (cada 2 min){
-	test declarar como logico = verdadero || falso;
+inicio ventilacionYAcceso{
+comienzo(cada 30 min){
+	condicion(verdadero){
+		a declarar como entero;
+		condicion(falso){
+			b declarar como logico;
+		}
+	}
 }
 }fin

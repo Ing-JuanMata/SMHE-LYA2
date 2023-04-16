@@ -28,9 +28,28 @@ public class BloqueCondicion extends BloqueCondicional {
                 this.sino.condicion.refenciarSiguiente(t);
             }
             super.condicion.ref2 = this.sino.getInicio();
-
         } else {
             super.condicion.ref2 = t;
+        }
+
+        siguienteInterno();
+    }
+
+    private void siguienteInterno() {
+        Object ultimo = super.contenido.get(super.contenido.size() - 1);
+        if (ultimo instanceof TripletaGoto) {
+            Object previo = super.contenido.get(super.contenido.size() - 2);
+            if (previo instanceof BloqueCondicion) {
+                ((BloqueCondicion) previo).refenciarSiguiente((Tripleta) ultimo);
+            } else if (previo instanceof BloqueMientras) {
+                ((BloqueMientras) previo).referenciarSiguiente((Tripleta) ultimo);
+            }
+        } else if (ultimo instanceof BloqueCondicion) {
+            BloqueCondicion bc = (BloqueCondicion) ultimo;
+            bc.refenciarSiguiente(super.condicion.ref2);
+        } else if (ultimo instanceof BloqueMientras) {
+            BloqueMientras bm = (BloqueMientras) ultimo;
+            bm.referenciarSiguiente(super.condicion.ref2);
         }
     }
 

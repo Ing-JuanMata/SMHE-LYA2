@@ -2,6 +2,13 @@ inicio ventilacionYAcceso{
 comienzo(cada 30 min){
 	condicion(verdadero){
 		a declarar como entero;
+		condicion(falso){
+			b declarar como logico;
+			condicion(verdadero){
+				c declarar como entero;
+				condicion(falso) {d declarar como logico;}
+			}
+		}
 	}sino condicion(falso){
 		a declarar como entero;
 	}sino {

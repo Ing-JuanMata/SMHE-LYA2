@@ -29,6 +29,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.UndoManager;
 import say.swing.JFontChooser;
 import java_cup.runtime.Symbol;
+import javax.swing.table.DefaultTableModel;
 
 public class FrmPrincipal extends javax.swing.JFrame {
 
@@ -38,6 +39,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static TablaSimbolos tablaSimbolos = new TablaSimbolos();
     public static TablaErrores errores = new TablaErrores();
     public static TablaFunciones funciones = new TablaFunciones();
+    private generadorIntermedio intermedio;
     //private ArrayList<TextColor> colores = new ArrayList<>();
 
     private final UndoManager administradorCambios;
@@ -103,6 +105,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
         menuFunciones = new javax.swing.JMenuItem();
         menuSimbolos = new javax.swing.JMenuItem();
         menuErrores = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        intermedioNoOptimo = new javax.swing.JMenuItem();
+        intermedioOptimo = new javax.swing.JMenuItem();
+        jMenu7 = new javax.swing.JMenu();
+        intermedioSimbolos = new javax.swing.JMenuItem();
+        intermedioFunciones = new javax.swing.JMenuItem();
 
         jMenu2.setText("jMenu2");
 
@@ -318,7 +326,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu1.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
         menuLexico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        menuLexico.setText("Analisis Léxico");
+        menuLexico.setText("Análisis Léxico");
         menuLexico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuLexicoActionPerformed(evt);
@@ -327,7 +335,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu1.add(menuLexico);
 
         menuSintactico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        menuSintactico.setText("Analisis Sintactico");
+        menuSintactico.setText("Análisis Sintáctico");
         menuSintactico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuSintacticoActionPerformed(evt);
@@ -362,6 +370,41 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu4.add(menuErrores);
 
         jMenu1.add(jMenu4);
+
+        jMenu6.setText("Código Intermedio");
+
+        intermedioNoOptimo.setText("Sin Optimizar");
+        intermedioNoOptimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intermedioNoOptimoActionPerformed(evt);
+            }
+        });
+        jMenu6.add(intermedioNoOptimo);
+
+        intermedioOptimo.setText("Optimizado");
+        jMenu6.add(intermedioOptimo);
+
+        jMenu7.setText("Tablas Intermedias");
+
+        intermedioSimbolos.setText("Tabla Simbolos");
+        intermedioSimbolos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intermedioSimbolosActionPerformed(evt);
+            }
+        });
+        jMenu7.add(intermedioSimbolos);
+
+        intermedioFunciones.setText("Tabla Funciones");
+        intermedioFunciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intermedioFuncionesActionPerformed(evt);
+            }
+        });
+        jMenu7.add(intermedioFunciones);
+
+        jMenu6.add(jMenu7);
+
+        jMenu1.add(jMenu6);
 
         jMenuBar2.add(jMenu1);
 
@@ -481,7 +524,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "No hay código fuente para realizar el análisis");
         } else {
             analisisSintactico();
-            generacionIntermedia();
         }
     }//GEN-LAST:event_btnCorrerActionPerformed
     private void analisisSintactico() {
@@ -504,6 +546,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         if (errores.getErrores().isEmpty()) {
             txtError.setText("Analisis realizado correctamente");
             txtError.setForeground(new Color(25, 111, 61));
+            generacionIntermedia();
         } else {
             txtError.setForeground(Color.red);
             for (String st : errores.getErrores()) {
@@ -517,10 +560,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
             return;
         }
 
-        generadorIntermedio ci = new generadorIntermedio(new Lexer(new java.io.StringReader(txtEntrada.getText())));
+        intermedio = new generadorIntermedio(new Lexer(new java.io.StringReader(txtEntrada.getText())));
         try {
-            ci.parse();
-            System.out.println(ci.programa);
+            intermedio.parse();
+            txtError.setText(txtError.getText() + "\n" + "Código Intermedio generado");
+            intermedio.programa.enumerarTripletas(0);
         } catch (Exception ex) {
             System.out.println("Algo salio mal en codigo intermedio: " + ex.getMessage());
             for (StackTraceElement ste : ex.getStackTrace()) {
@@ -691,21 +735,32 @@ public class FrmPrincipal extends javax.swing.JFrame {
         info.setVisible(true);
     }//GEN-LAST:event_menuErroresActionPerformed
 
-    // Funciones
-    //Pendiente
-    private void nuevoArchivo() {
-        if (txtEntrada.getText().equals("")) {
-            return;
+    private void intermedioFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioFuncionesActionPerformed
+        if (intermedio == null) {
+            this.analisisSintactico();
         }
-        int op = javax.swing.JOptionPane.showConfirmDialog(this, "Desea guardar?");
-        if (op == -1 || op == 2) {
-            return;
-        } else if (op == 0) {
-            guardarArchivo();
+        Tabla tabla = new Tabla("Tabla de simbolos con direcciones");
+        intermedio.tblF.mostrarTabla((DefaultTableModel) tabla.getModel());
+        tabla.setVisible(true);
+    }//GEN-LAST:event_intermedioFuncionesActionPerformed
+
+    private void intermedioSimbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioSimbolosActionPerformed
+        if (intermedio == null) {
+            this.analisisSintactico();
         }
-        txtEntrada.setText("");
-        archivo = "";
-    }
+        Tabla tabla = new Tabla("Tabla de simbolos con direcciones");
+        intermedio.tabla.verTabla((DefaultTableModel) tabla.getModel());
+        tabla.setVisible(true);
+    }//GEN-LAST:event_intermedioSimbolosActionPerformed
+
+    private void intermedioNoOptimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioNoOptimoActionPerformed
+        if (intermedio == null) {
+            this.analisisSintactico();
+        }
+        VistaCodigo vc = new VistaCodigo(intermedio.programa.toString());
+        vc.setVisible(true);
+    }//GEN-LAST:event_intermedioNoOptimoActionPerformed
+
 
     private void abrirArchivo() {
         JFileChooser fc = getJFileChooser();
@@ -860,11 +915,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnCortar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnPegar;
+    private javax.swing.JMenuItem intermedioFunciones;
+    private javax.swing.JMenuItem intermedioNoOptimo;
+    private javax.swing.JMenuItem intermedioOptimo;
+    private javax.swing.JMenuItem intermedioSimbolos;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu.Separator jSeparator1;

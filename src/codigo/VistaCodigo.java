@@ -8,21 +8,15 @@ package codigo;
  *
  * @author jujemataso
  */
-public class Tabla extends javax.swing.JFrame {
+public class VistaCodigo extends javax.swing.JFrame {
 
     /**
-     * Creates new form Tabla
-     * @param titulo
+     * Creates new form VistaCodigo
      */
-    public Tabla(String titulo) {
+    public VistaCodigo(String codigo) {
         initComponents();
+        txtCodigo.setText(codigo);
         this.setLocationRelativeTo(null);
-        this.setTitle(titulo);
-        
-    }
-
-    public javax.swing.table.TableModel getModel() {
-        return this.tblDatos.getModel();
     }
 
     /**
@@ -35,34 +29,24 @@ public class Tabla extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblDatos = new javax.swing.JTable();
+        txtCodigo = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(968, 500));
         setPreferredSize(new java.awt.Dimension(968, 500));
 
-        tblDatos.setFont(new java.awt.Font("Source Code Pro Semibold", 0, 16)); // NOI18N
-        tblDatos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        tblDatos.setRowHeight(25);
-        tblDatos.setRowSelectionAllowed(false);
-        tblDatos.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblDatos);
+        txtCodigo.setColumns(20);
+        txtCodigo.setFont(new java.awt.Font("Source Code Pro Semibold", 0, 16)); // NOI18N
+        txtCodigo.setRows(5);
+        jScrollPane1.setViewportView(txtCodigo);
 
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblDatos;
+    private javax.swing.JTextArea txtCodigo;
     // End of variables declaration//GEN-END:variables
 }

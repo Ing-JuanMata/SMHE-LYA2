@@ -133,7 +133,7 @@
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+Alt+A"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Analisis L&#xe9;xico"/>
+                <Property name="text" type="java.lang.String" value="An&#xe1;lisis L&#xe9;xico"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuLexicoActionPerformed"/>
@@ -144,7 +144,7 @@
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+Alt+S"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Analisis Sintactico"/>
+                <Property name="text" type="java.lang.String" value="An&#xe1;lisis Sint&#xe1;ctico"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuSintacticoActionPerformed"/>
@@ -179,6 +179,49 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuErroresActionPerformed"/>
                   </Events>
                 </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenu6">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="C&#xf3;digo Intermedio"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="intermedioNoOptimo">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Sin Optimizar"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="intermedioNoOptimoActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="intermedioOptimo">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Optimizado"/>
+                  </Properties>
+                </MenuItem>
+                <Menu class="javax.swing.JMenu" name="jMenu7">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Tablas Intermedias"/>
+                  </Properties>
+                  <SubComponents>
+                    <MenuItem class="javax.swing.JMenuItem" name="intermedioSimbolos">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Tabla Simbolos"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="intermedioSimbolosActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="intermedioFunciones">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Tabla Funciones"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="intermedioFuncionesActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                  </SubComponents>
+                </Menu>
               </SubComponents>
             </Menu>
           </SubComponents>
