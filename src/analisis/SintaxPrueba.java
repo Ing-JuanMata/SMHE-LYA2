@@ -3674,7 +3674,7 @@ valActual=aux4*getEntero(v);
 		int vleft = ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()).right;
 		Object v = (Object)((java_cup.runtime.Symbol) CUP$SintaxPrueba$stack.peek()).value;
-		RESULT=v;
+		RESULT=v;if(v instanceof Integer) if(Integer.parseInt(v.toString()) > 128) reportarErrorSemantico("ESM12", v.toString());
               CUP$SintaxPrueba$result = parser.getSymbolFactory().newSymbol("op8",26, ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()), RESULT);
             }
           return CUP$SintaxPrueba$result;
@@ -3686,7 +3686,7 @@ valActual=aux4*getEntero(v);
 		int vleft = ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()).right;
 		Object v = (Object)((java_cup.runtime.Symbol) CUP$SintaxPrueba$stack.peek()).value;
-		RESULT=-getEntero(v);
+		RESULT=-getEntero(v);if(Integer.parseInt(RESULT.toString()) < -127) reportarErrorSemantico("ESM12", RESULT.toString());
               CUP$SintaxPrueba$result = parser.getSymbolFactory().newSymbol("op8",26, ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.elementAt(CUP$SintaxPrueba$top-1)), ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()), RESULT);
             }
           return CUP$SintaxPrueba$result;
@@ -3707,7 +3707,7 @@ valActual=aux4*getEntero(v);
           case 213: // op8 ::= error 
             {
               Object RESULT =null;
-		s=cur_token;s=cur_token;reportarError("ES11", "No se ha encontrado un operador o un operando en la expresión ingresada");
+		s=cur_token;reportarError("ES11", "No se ha encontrado un operador o un operando en la expresión ingresada");
               CUP$SintaxPrueba$result = parser.getSymbolFactory().newSymbol("op8",26, ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()), RESULT);
             }
           return CUP$SintaxPrueba$result;
@@ -3719,7 +3719,7 @@ valActual=aux4*getEntero(v);
 		int nleft = ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()).right;
 		Integer n = (Integer)((java_cup.runtime.Symbol) CUP$SintaxPrueba$stack.peek()).value;
-		RESULT=n;
+		s=cur_token;RESULT=n;
               CUP$SintaxPrueba$result = parser.getSymbolFactory().newSymbol("valores",18, ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxPrueba$stack.peek()), RESULT);
             }
           return CUP$SintaxPrueba$result;

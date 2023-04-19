@@ -406,11 +406,11 @@ op6 ::= op8:v {:valActual=v;:} op7:r {:RESULT=r;:};
 op7 ::= AR_DIVISION {:aux4=getEntero(valActual);:} op8:v {:valActual=aux4/getEntero(v);:} op7:r {:RESULT=r;:} 
     | AR_MULTIPLICACION {:aux4=getEntero(valActual);:} op8:v {:valActual=aux4*getEntero(v);:} op7:r {:RESULT=r;:}
     | {:RESULT=valActual;:};
-op8 ::= valores:v {:RESULT=v;:} 
-    | AR_RESTA valores:v {:RESULT=-getEntero(v);:} 
+op8 ::= valores:v {:RESULT=v;if(v instanceof Integer) if(Integer.parseInt(v.toString()) > 128) reportarErrorSemantico("ESM12", v.toString());:} 
+    | AR_RESTA valores:v {:RESULT=-getEntero(v);if(Integer.parseInt(RESULT.toString()) < -127) reportarErrorSemantico("ESM12", RESULT.toString());:} 
     | NEGACION valores:v {:RESULT=!getLogico(v);:}
-    | error{:s=cur_token;s=cur_token;reportarError("ES11", "No se ha encontrado un operador o un operando en la expresión ingresada");:};
-valores ::= NUMERO:n {:RESULT=n;:}
+    | error{:s=cur_token;reportarError("ES11", "No se ha encontrado un operador o un operando en la expresión ingresada");:};
+valores ::= NUMERO:n {:s=cur_token;RESULT=n;:}
             | IDENTIFICADOR:i {:s=cur_token;verificarIdentificador(i, false);RESULT=getValor(i);:} 
             | OBTENER TEMPERATURA {:RESULT=0;:} | OBTENER PERSONAS {:RESULT=0;:}
             | OP_BOOLEANO:ob {:RESULT=ob;:} | ESTADO estado {:RESULT=false;:}
