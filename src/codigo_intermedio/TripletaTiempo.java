@@ -40,6 +40,14 @@ public class TripletaTiempo extends Tripleta {
     }
 
     @Override
+    public void optimizar(BloqueTripletas padre) {
+        if (this.expresion != null) {
+            ((BloqueTripletas) this.expresion).optimizar();
+            this.unidad.optimizar((BloqueTripletas) this.expresion);
+        }
+    }
+
+    @Override
     public int enumerarTripleta(int inicio) {
         if (expresion != null) {
             inicio = ((BloqueTripletas) expresion).enumerarTripletas(inicio);

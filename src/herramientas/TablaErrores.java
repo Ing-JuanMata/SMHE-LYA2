@@ -46,6 +46,7 @@ public class TablaErrores {
         tabla.put("ESM9", "Error semántico 9: En la línea %d se ha colocado un tipo erroneo en el parametro numero %s, en dicho lugar se esperaba un valor %s");
         tabla.put("ESM10", "Error semántico 10: En la línea %d el tipo definido de la expresión %s y el valor ingresado son incompatibles");
         tabla.put("ESM11", "Error semántico 11: En la línea %d se ha tratado de usar un valor %s en una operación %s");
+        tabla.put("ESM12", "Error semántico 12: En la línea %d el valor %s esta fuera de rango");
     }
 
     public ArrayList<String> getErrores() {
@@ -81,7 +82,7 @@ public class TablaErrores {
 
     public void agregarErrorSemantico(String error, int línea, String... valores) {
         switch (error) {
-            case "ESM1", "ESM3", "ESM4", "ESM6", "ESM7", "ESM10" ->
+            case "ESM1", "ESM3", "ESM4", "ESM6", "ESM7", "ESM10", "ESM12" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0]));
             case "ESM2", "ESM9", "ESM11" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0], valores[1]));

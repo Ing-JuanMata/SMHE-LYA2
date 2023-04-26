@@ -35,6 +35,13 @@ public class TripletaDispensar extends Tripleta {
     }
 
     @Override
+    public void optimizar(BloqueTripletas padre) {
+        if (this.tiempo != null) {
+            this.tiempo.optimizar(padre);
+        }
+    }
+
+    @Override
     public String toString() {
         return tiempo.toString() + "\n" + super.toString();
     }

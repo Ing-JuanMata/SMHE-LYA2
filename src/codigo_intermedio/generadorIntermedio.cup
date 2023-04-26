@@ -124,13 +124,13 @@ funcion ::= IDENTIFICADOR:i {:bloqueActual = new BloqueFuncion(i); guardarBloque
 parametros ::= declaracion_inicio:di {:agregarTripletaBloque(di);:} COMA parametros 
             | declaracion_inicio:di {:agregarTripletaBloque(di);:} | /**/;
 gramaticas ::= IDENTIFICADOR:i INC PUNTO_COMA 
-            {:agregarTripletaBloque(new TripletaIncremento(tabla.getDireccion(i, ambito)));:} gramaticas
+            {:agregarTripletaBloque(new TripletaIncremento(new analisis.LlaveTabla(i, ambito)));:} gramaticas
             | IDENTIFICADOR:i DEC PUNTO_COMA 
-            {:agregarTripletaBloque(new TripletaDecremento(tabla.getDireccion(i, ambito)));:} gramaticas
+            {:agregarTripletaBloque(new TripletaDecremento(new analisis.LlaveTabla(i, ambito)));:} gramaticas
             | INC IDENTIFICADOR:i PUNTO_COMA
-            {:agregarTripletaBloque(new TripletaIncremento(tabla.getDireccion(i, ambito)));:} gramaticas
+            {:agregarTripletaBloque(new TripletaIncremento(new analisis.LlaveTabla(i, ambito)));:} gramaticas
             | DEC IDENTIFICADOR:i PUNTO_COMA
-            {:agregarTripletaBloque(new TripletaDecremento(tabla.getDireccion(i, ambito)));:} gramaticas
+            {:agregarTripletaBloque(new TripletaDecremento(new analisis.LlaveTabla(i, ambito)));:} gramaticas
             | declaracion_inicio:di {:agregarTripletaBloque(di);:} PUNTO_COMA gramaticas
             | declaracion_inicio:di declaracion_valor:dv 
             {:di.setInicializacion(dv); agregarTripletaBloque(di);:} PUNTO_COMA gramaticas
@@ -175,9 +175,9 @@ tiempo_por ::= POR {:bloqueAux = bloqueActual; bloqueActual = new BloqueTripleta
             {:RESULT = new TripletaTiempoPor((e instanceof Tripleta) ? bloqueActual : e, ut); bloqueActual = bloqueAux;:};
 unidad_tiempo ::= SEG {:RESULT="seg";:} | MIN {:RESULT="min";:} | HR {:RESULT="hr";:};
 estado ::= LUCES {:RESULT="luces";:}| PUERTAS {:RESULT="puertas";:}| VENTANAS {:RESULT="ventanas";:};
-asignacion ::= IDENTIFICADOR:i ASIGNACION expresion:e {:RESULT = new TripletaAsignacion(tabla.getDireccion(i, ambito), e);:};
+asignacion ::= IDENTIFICADOR:i ASIGNACION expresion:e {:RESULT = new TripletaAsignacion(new analisis.LlaveTabla(i, ambito), e);:};
 declaracion_inicio ::= IDENTIFICADOR:i DECLARAR declaracion_tipo_dato:dtd
-                    {:RESULT = new TripletaDeclaracion(dtd, tabla.getDireccion(i, ambito));:};
+                    {:RESULT = new TripletaDeclaracion(dtd, new analisis.LlaveTabla(i, ambito));:};
 declaracion_valor ::= ASIGNACION expresion:e {:RESULT = new TripletaAsignacion(e);:};
 declaracion_tipo_dato ::= COMO tipo_dato:td {:RESULT=td;:};
 tipo_dato ::= ENTERO {:RESULT="entero";:}| LOGICO {:RESULT="logico";:};
@@ -267,7 +267,7 @@ op8 ::= valores:v {:RESULT = v;:}
         agregarTripletaBloque(t);
     :};
 valores ::= NUMERO:n {:RESULT = n;:} 
-            | IDENTIFICADOR:i {:RESULT = tabla.getDireccion(i, ambito);:} 
+            | IDENTIFICADOR:i {:RESULT = new analisis.LlaveTabla(i, ambito);:} 
             | OBTENER TEMPERATURA {:
                 TripletaObtener t = new TripletaObtener("temperatura");
                 RESULT = t;

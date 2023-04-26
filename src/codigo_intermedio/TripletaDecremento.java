@@ -10,7 +10,7 @@ package codigo_intermedio;
  */
 public class TripletaDecremento extends Tripleta {
 
-    public TripletaDecremento(String id) {
+    public TripletaDecremento(analisis.LlaveTabla id) {
         super("--");
         super.operando1 = id;
     }
@@ -21,7 +21,8 @@ public class TripletaDecremento extends Tripleta {
     }
 
     @Override
-    public int enumerarTripleta(int inicio) {
-        return -1;
+    public void optimizar(BloqueTripletas padre) {
+
     }
+
 }

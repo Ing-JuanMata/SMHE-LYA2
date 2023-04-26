@@ -900,7 +900,7 @@ agregarTripletaBloque(di);
 		int ileft = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-2)).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-2)).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-2)).value;
-agregarTripletaBloque(new TripletaIncremento(tabla.getDireccion(i, ambito)));
+agregarTripletaBloque(new TripletaIncremento(new analisis.LlaveTabla(i, ambito)));
               CUP$generadorIntermedio$result = parser.getSymbolFactory().newSymbol("NT$6",43, ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()), RESULT);
             }
           return CUP$generadorIntermedio$result;
@@ -926,7 +926,7 @@ agregarTripletaBloque(new TripletaIncremento(tabla.getDireccion(i, ambito)));
 		int ileft = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-2)).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-2)).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-2)).value;
-agregarTripletaBloque(new TripletaDecremento(tabla.getDireccion(i, ambito)));
+agregarTripletaBloque(new TripletaDecremento(new analisis.LlaveTabla(i, ambito)));
               CUP$generadorIntermedio$result = parser.getSymbolFactory().newSymbol("NT$7",44, ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()), RESULT);
             }
           return CUP$generadorIntermedio$result;
@@ -952,7 +952,7 @@ agregarTripletaBloque(new TripletaDecremento(tabla.getDireccion(i, ambito)));
 		int ileft = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-1)).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-1)).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-1)).value;
-agregarTripletaBloque(new TripletaIncremento(tabla.getDireccion(i, ambito)));
+agregarTripletaBloque(new TripletaIncremento(new analisis.LlaveTabla(i, ambito)));
               CUP$generadorIntermedio$result = parser.getSymbolFactory().newSymbol("NT$8",45, ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()), RESULT);
             }
           return CUP$generadorIntermedio$result;
@@ -978,7 +978,7 @@ agregarTripletaBloque(new TripletaIncremento(tabla.getDireccion(i, ambito)));
 		int ileft = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-1)).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-1)).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-1)).value;
-agregarTripletaBloque(new TripletaDecremento(tabla.getDireccion(i, ambito)));
+agregarTripletaBloque(new TripletaDecremento(new analisis.LlaveTabla(i, ambito)));
               CUP$generadorIntermedio$result = parser.getSymbolFactory().newSymbol("NT$9",46, ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()), RESULT);
             }
           return CUP$generadorIntermedio$result;
@@ -1580,7 +1580,7 @@ bloqueAux = bloqueActual; bloqueActual = new BloqueTripletas();
 		int eleft = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$generadorIntermedio$stack.peek()).value;
-		RESULT = new TripletaAsignacion(tabla.getDireccion(i, ambito), e);
+		RESULT = new TripletaAsignacion(new analisis.LlaveTabla(i, ambito), e);
               CUP$generadorIntermedio$result = parser.getSymbolFactory().newSymbol("asignacion",36, ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-2)), ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()), RESULT);
             }
           return CUP$generadorIntermedio$result;
@@ -1595,7 +1595,7 @@ bloqueAux = bloqueActual; bloqueActual = new BloqueTripletas();
 		int dtdleft = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()).left;
 		int dtdright = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()).right;
 		String dtd = (String)((java_cup.runtime.Symbol) CUP$generadorIntermedio$stack.peek()).value;
-		RESULT = new TripletaDeclaracion(dtd, tabla.getDireccion(i, ambito));
+		RESULT = new TripletaDeclaracion(dtd, new analisis.LlaveTabla(i, ambito));
               CUP$generadorIntermedio$result = parser.getSymbolFactory().newSymbol("declaracion_inicio",34, ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.elementAt(CUP$generadorIntermedio$top-2)), ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()), RESULT);
             }
           return CUP$generadorIntermedio$result;
@@ -2277,7 +2277,7 @@ aux4 = valorActual;
 		int ileft = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$generadorIntermedio$stack.peek()).value;
-		RESULT = tabla.getDireccion(i, ambito);
+		RESULT = new analisis.LlaveTabla(i, ambito);
               CUP$generadorIntermedio$result = parser.getSymbolFactory().newSymbol("valores",12, ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()), ((java_cup.runtime.Symbol)CUP$generadorIntermedio$stack.peek()), RESULT);
             }
           return CUP$generadorIntermedio$result;

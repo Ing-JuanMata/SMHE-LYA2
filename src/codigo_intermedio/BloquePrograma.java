@@ -15,6 +15,7 @@ public class BloquePrograma extends BloqueTripletas {
     private TripletaInicio inicio;
     private TripletaFin fin;
     private ArrayList<BloqueTripletas> bloques;
+    public boolean optimizar = false;
 
     public BloquePrograma() {
         super();
@@ -33,7 +34,17 @@ public class BloquePrograma extends BloqueTripletas {
         for (BloqueTripletas bt : bloques) {
             inicio = bt.enumerarTripletas(inicio);
         }
+        if (optimizar) {
+            optimizar();
+            optimizar = false;
+            inicio = this.enumerarTripletas(0);
+        }
         return fin.enumerarTripleta(inicio);
+    }
+
+    @Override
+    protected void optimizar() {
+        bloques.forEach(bloque -> bloque.optimizar());
     }
 
     @Override

@@ -19,4 +19,10 @@ public class TripletaApagar extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+
+    }
+
 }

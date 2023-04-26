@@ -12,9 +12,9 @@ public class TripletaDeclaracion extends Tripleta {
 
     private TripletaAsignacion inicializacion;
 
-    public TripletaDeclaracion(String tipo, String id) {
+    public TripletaDeclaracion(String tipo, analisis.LlaveTabla id) {
         super(tipo);
-        super.operando1 = id;
+        super.operando1 = id.id;
     }
 
     public void setInicializacion(TripletaAsignacion inicializacion) {
@@ -26,11 +26,6 @@ public class TripletaDeclaracion extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
-    
-    @Override
-    public Tripleta getInicio() {
-        return inicializacion == null ? super.getInicio() : inicializacion.getInicio();
-    }
 
     @Override
     public int enumerarTripleta(int inicio) {
@@ -39,6 +34,13 @@ public class TripletaDeclaracion extends Tripleta {
         }
         inicio = super.enumerarTripleta(inicio);
         return inicializacion.enumerarTripleta(inicio);
+    }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+        if (this.inicializacion != null) {
+            this.inicializacion.optimizar(padre);
+        }
     }
 
     @Override

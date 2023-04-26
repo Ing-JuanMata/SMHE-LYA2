@@ -198,6 +198,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Optimizado"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="intermedioOptimoActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <Menu class="javax.swing.JMenu" name="jMenu7">
                   <Properties>
@@ -224,6 +227,11 @@
                 </Menu>
               </SubComponents>
             </Menu>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="C&#xf3;digo final"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>

@@ -27,7 +27,7 @@ public class TripletaCerrar extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
-    
+
     @Override
     public Tripleta getInicio() {
         return tiempo == null ? super.getInicio() : tiempo.getInicio();
@@ -37,6 +37,13 @@ public class TripletaCerrar extends Tripleta {
     public int enumerarTripleta(int inicio) {
         inicio = tiempo == null ? inicio : tiempo.enumerarTripleta(inicio);
         return super.enumerarTripleta(inicio);
+    }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+        if (this.tiempo != null) {
+            this.tiempo.optimizar(padre);
+        }
     }
 
     @Override

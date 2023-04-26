@@ -19,7 +19,7 @@ public class TripletaAdmitir extends Tripleta {
         this.tiempo = tiempo;
         this.usar = usar;
         this.ref1 = this.tiempo;
-        String dirAdmision = tabla.getDireccion("0admision_admitir0", "programa");
+        analisis.LlaveTabla dirAdmision = new analisis.LlaveTabla("0admision_admitir0", "programa");
         if (expresion instanceof BloqueTripletas) {
             this.expresion = (BloqueTripletas) expresion;
             this.expresion.addTripleta(new TripletaAsignacion(dirAdmision, this.expresion.contenido.get(this.expresion.contenido.size() - 1)));
@@ -46,6 +46,19 @@ public class TripletaAdmitir extends Tripleta {
         inicio = tiempo.enumerarTripleta(inicio);
         inicio = super.enumerarTripleta(inicio);
         return usar.enumerarTripleta(inicio);
+    }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+        if (expresion != null) {
+            this.expresion.optimizar();
+        }
+        if (tiempo != null) {
+            this.tiempo.optimizar(padre);
+        }
+        if (this.usar != null) {
+            this.usar.optimizar(padre);
+        }
     }
 
     @Override

@@ -24,4 +24,9 @@ public class TripletaGoto extends Tripleta {
         return "";
     }
 
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+
+    }
+
 }

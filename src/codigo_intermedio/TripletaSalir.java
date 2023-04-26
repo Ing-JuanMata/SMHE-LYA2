@@ -19,4 +19,9 @@ public class TripletaSalir extends Tripleta {
         //Configurar el tiempo y luego realizar la accion
         return "";
     }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+
+    }
 }

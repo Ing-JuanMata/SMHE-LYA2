@@ -20,4 +20,9 @@ public class TripletaEstado extends Tripleta {
         return "";
     }
 
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+
+    }
+
 }

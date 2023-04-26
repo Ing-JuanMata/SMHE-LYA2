@@ -14,10 +14,13 @@ public abstract class Tripleta {
     protected String operador;
     protected Tripleta ref1, ref2;
     protected Object operando1, operando2;
+    protected boolean calculada = false;
 
     public Tripleta(String operador) {
         this.operador = operador;
     }
+
+    public abstract void optimizar(BloqueTripletas padre);
 
     public abstract String codigoObjeto();
 
@@ -86,6 +89,25 @@ public abstract class Tripleta {
             default -> {
                 return "";
             }
+        }
+    }
+
+    protected void resolverReferencias(BloqueTripletas padre) {
+        if (this.ref1 == null && this.ref2 == null) {
+            return;
+        }
+        //Vemos si la ref1 fue calculada, de ser asi removemos la referencia
+        //Y movemos el valor a la tripleta actual
+        if (this.ref1 != null && this.ref1.calculada) {
+            this.operando1 = this.ref1.operando1;
+            padre.contenido.remove(this.ref1);
+            this.ref1 = null;
+        }
+        //Probamos y hacemos lo mismo con la ref2
+        if (this.ref2 != null && this.ref2.calculada) {
+            this.operando2 = this.ref2.operando1;
+            padre.contenido.remove(this.ref2);
+            this.ref2 = null;
         }
     }
 }

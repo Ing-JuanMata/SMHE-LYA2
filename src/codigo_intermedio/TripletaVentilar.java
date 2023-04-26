@@ -19,8 +19,8 @@ public class TripletaVentilar extends Tripleta {
         this.ref1 = tiempo;
         this.usar = usar;
         this.tiempo = tiempo;
-        String dirPuertas = tabla.getDireccion("0puertas_ventilacion0", "programa");
-        String dirVentanas = tabla.getDireccion("0ventanas_ventilacion0", "programa");
+        analisis.LlaveTabla dirPuertas = new analisis.LlaveTabla("0puertas_ventilacion0", "programa");
+        analisis.LlaveTabla dirVentanas = new analisis.LlaveTabla("0ventanas_ventilacion0", "programa");
         if (puertas instanceof BloqueTripletas) {
             this.puertas = (BloqueTripletas) puertas;
             this.puertas.addTripleta(new TripletaAsignacion(dirPuertas, this.puertas.contenido.get(this.puertas.contenido.size() - 1)));
@@ -45,7 +45,7 @@ public class TripletaVentilar extends Tripleta {
         //Enumerar tripleta de tiempo
         return "";
     }
-    
+
     @Override
     public Tripleta getInicio() {
         return puertas.getInicio();
@@ -59,6 +59,18 @@ public class TripletaVentilar extends Tripleta {
         inicio = tiempo.enumerarTripleta(inicio);
         inicio = super.enumerarTripleta(inicio);
         return usar.enumerarTripleta(inicio);
+    }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+        if (this.puertas != null) {
+            this.puertas.optimizar();
+        }
+        if (this.ventanas != null) {
+            this.ventanas.optimizar();
+        }
+        this.tiempo.optimizar(padre);
+        this.usar.optimizar(padre);
     }
 
     @Override

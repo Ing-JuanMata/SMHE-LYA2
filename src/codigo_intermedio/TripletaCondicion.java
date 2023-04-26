@@ -28,7 +28,7 @@ public class TripletaCondicion extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
-    
+
     @Override
     public Tripleta getInicio() {
         return condicion == null ? super.getInicio() : condicion.getInicio();
@@ -40,6 +40,14 @@ public class TripletaCondicion extends Tripleta {
             inicio = condicion.enumerarTripletas(inicio);
         }
         return super.enumerarTripleta(inicio);
+    }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+        if (this.condicion != null) {
+            this.condicion.optimizar();
+            super.resolverReferencias(this.condicion);
+        }
     }
 
     @Override

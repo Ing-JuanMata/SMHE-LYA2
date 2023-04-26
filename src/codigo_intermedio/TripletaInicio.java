@@ -18,4 +18,10 @@ public class TripletaInicio extends Tripleta {
     public String codigoObjeto() {
         return "codigo de cabecera";
     }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+
+    }
+
 }

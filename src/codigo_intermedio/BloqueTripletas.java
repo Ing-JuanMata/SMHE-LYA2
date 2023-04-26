@@ -4,7 +4,7 @@
  */
 package codigo_intermedio;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -12,22 +12,22 @@ import java.util.ArrayList;
  */
 public class BloqueTripletas {
 
-    protected ArrayList<Object> contenido;
+    protected CopyOnWriteArrayList<Object> contenido;
 
     public BloqueTripletas() {
-        contenido = new ArrayList<>();
+        contenido = new CopyOnWriteArrayList<>();
     }
 
     public void addTripleta(Tripleta tripleta) {
         if (this.contenido == null) {
-            this.contenido = new java.util.ArrayList<>();
+            this.contenido = new CopyOnWriteArrayList<>();
         }
         this.contenido.add(tripleta);
     }
 
     public void addBloqueInterno(BloqueCondicional bloqueInterno) {
         if (this.contenido == null) {
-            this.contenido = new java.util.ArrayList<>();
+            this.contenido = new CopyOnWriteArrayList<>();
         }
         this.contenido.add(bloqueInterno);
     }
@@ -87,6 +87,21 @@ public class BloqueTripletas {
             }
         }
         return inicio;
+    }
+
+    protected void optimizar() {
+        for (Object o : contenido) {
+            if (o instanceof BloqueTripletas) {
+                ((BloqueTripletas) o).optimizar();
+                continue;
+            }
+
+            //si llego hasta aqui es porque es una tripleta cualquiera
+            if (o instanceof Tripleta) {
+                ((Tripleta) o).optimizar(this);
+            }
+
+        }
     }
 
     @Override

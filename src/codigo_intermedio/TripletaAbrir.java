@@ -40,6 +40,13 @@ public class TripletaAbrir extends Tripleta {
     }
 
     @Override
+    public void optimizar(BloqueTripletas padre) {
+        if (this.tiempo != null) {
+            tiempo.optimizar(padre);
+        }
+    }
+
+    @Override
     public String toString() {
         return (tiempo == null ? "" : tiempo.toString() + "\n") + super.toString();
     }

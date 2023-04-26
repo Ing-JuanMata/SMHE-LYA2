@@ -43,6 +43,10 @@ public class TablaFunciones {
         LlaveTabla llave = this.tabla.get(id).get(pos);
         return simbolos.getDireccion(llave.id, llave.ambito);
     }
+    
+    public LlaveTabla getParametro(String id, int pos){
+        return tabla.get(id).get(pos);
+    }
 
     public void mostrarTabla(javax.swing.table.DefaultTableModel modelo) {
         modelo.setRowCount(0);

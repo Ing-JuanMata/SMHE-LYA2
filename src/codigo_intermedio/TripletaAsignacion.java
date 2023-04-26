@@ -19,18 +19,19 @@ public class TripletaAsignacion extends Tripleta {
         this.operando2 = valor;
     }
 
-    public TripletaAsignacion(String id, Object valor) {
-        super("=");
-        this.operando1 = id;
-        if (valor instanceof Tripleta) {
-            this.ref2 = (Tripleta) valor;
-            return;
-        }
-        this.operando2 = valor;
+    public TripletaAsignacion(analisis.LlaveTabla id, Object valor) {
+        this(valor);
+        this.operando1 = id.id;
     }
 
     @Override
     public String codigoObjeto() {
         return "";
     }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+        super.resolverReferencias(padre);
+    }
+
 }

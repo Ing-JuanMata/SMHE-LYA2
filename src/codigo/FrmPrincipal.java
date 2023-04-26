@@ -111,6 +111,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu7 = new javax.swing.JMenu();
         intermedioSimbolos = new javax.swing.JMenuItem();
         intermedioFunciones = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         jMenu2.setText("jMenu2");
 
@@ -382,6 +383,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu6.add(intermedioNoOptimo);
 
         intermedioOptimo.setText("Optimizado");
+        intermedioOptimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intermedioOptimoActionPerformed(evt);
+            }
+        });
         jMenu6.add(intermedioOptimo);
 
         jMenu7.setText("Tablas Intermedias");
@@ -405,6 +411,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu6.add(jMenu7);
 
         jMenu1.add(jMenu6);
+
+        jMenuItem2.setText("Código final");
+        jMenu1.add(jMenuItem2);
 
         jMenuBar2.add(jMenu1);
 
@@ -523,10 +532,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         if (txtEntrada.getText().isBlank()) {
             javax.swing.JOptionPane.showMessageDialog(this, "No hay código fuente para realizar el análisis");
         } else {
-            analisisSintactico();
+            analisisSintactico(true);
         }
     }//GEN-LAST:event_btnCorrerActionPerformed
-    private void analisisSintactico() {
+    private void analisisSintactico(boolean optimizar) {
         errores = new TablaErrores();
         tablaSimbolos = new TablaSimbolos();
         funciones = new TablaFunciones();
@@ -546,7 +555,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         if (errores.getErrores().isEmpty()) {
             txtError.setText("Analisis realizado correctamente");
             txtError.setForeground(new Color(25, 111, 61));
-            generacionIntermedia();
+            generacionIntermedia(optimizar);
         } else {
             txtError.setForeground(Color.red);
             for (String st : errores.getErrores()) {
@@ -555,7 +564,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }
 
-    private void generacionIntermedia() {
+    private void generacionIntermedia(boolean optimizar) {
         if (!errores.getErrores().isEmpty()) {
             return;
         }
@@ -564,6 +573,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         try {
             intermedio.parse();
             txtError.setText(txtError.getText() + "\n" + "Código Intermedio generado");
+            intermedio.programa.optimizar = optimizar;
             intermedio.programa.enumerarTripletas(0);
         } catch (Exception ex) {
             System.out.println("Algo salio mal en codigo intermedio: " + ex.getMessage());
@@ -592,7 +602,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         if (txtEntrada.getText().isBlank()) {
             javax.swing.JOptionPane.showMessageDialog(this, "No hay código fuente para realizar el análisis");
         } else {
-            analisisSintactico();
+            analisisSintactico(false);
         }
     }//GEN-LAST:event_menuSintacticoActionPerformed
 
@@ -737,7 +747,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void intermedioFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioFuncionesActionPerformed
         if (intermedio == null) {
-            this.analisisSintactico();
+            this.analisisSintactico(false);
         }
         Tabla tabla = new Tabla("Tabla de simbolos con direcciones");
         intermedio.tblF.mostrarTabla((DefaultTableModel) tabla.getModel());
@@ -746,7 +756,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void intermedioSimbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioSimbolosActionPerformed
         if (intermedio == null) {
-            this.analisisSintactico();
+            this.analisisSintactico(false);
         }
         Tabla tabla = new Tabla("Tabla de simbolos con direcciones");
         intermedio.tabla.verTabla((DefaultTableModel) tabla.getModel());
@@ -754,13 +764,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_intermedioSimbolosActionPerformed
 
     private void intermedioNoOptimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioNoOptimoActionPerformed
-        if (intermedio == null) {
-            this.analisisSintactico();
-        }
+        this.analisisSintactico(false);
         VistaCodigo vc = new VistaCodigo(intermedio.programa.toString());
         vc.setVisible(true);
     }//GEN-LAST:event_intermedioNoOptimoActionPerformed
 
+    private void intermedioOptimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioOptimoActionPerformed
+        this.analisisSintactico(true);
+        VistaCodigo vc = new VistaCodigo(intermedio.programa.toString());
+        vc.setVisible(true);
+    }//GEN-LAST:event_intermedioOptimoActionPerformed
 
     private void abrirArchivo() {
         JFileChooser fc = getJFileChooser();
@@ -928,6 +941,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JSeparator jSeparator3;

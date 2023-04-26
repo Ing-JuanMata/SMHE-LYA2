@@ -8,15 +8,10 @@ package codigo_intermedio;
  *
  * @author jujemataso
  */
-public class TripletaNegacion extends Tripleta {
+public class TripletaNegacion extends TripletaExpresion{
 
-    public TripletaNegacion(Object expresion) {
-        super("!");
-        if (expresion instanceof Tripleta) {
-            super.ref1 = (Tripleta) expresion;
-            return;
-        }
-        super.operando1 = expresion;
+    public TripletaNegacion(Object op1) {
+        super("!",op1);
     }
 
     @Override

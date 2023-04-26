@@ -20,7 +20,7 @@ public class TripletaTipoDato extends Tripleta {
     }
 
     @Override
-    public int enumerarTripleta(int inicio) {
-        return -1;
+    public void optimizar(BloqueTripletas padre) {
     }
+
 }

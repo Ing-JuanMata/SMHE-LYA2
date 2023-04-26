@@ -39,6 +39,15 @@ public class TripletaUsar extends Tripleta {
     }
 
     @Override
+    public void optimizar(BloqueTripletas padre) {
+        for (Object o : parametros) {
+            if (o instanceof BloqueTripletas) {
+                ((BloqueTripletas) o).optimizar();
+            }
+        }
+    }
+
+    @Override
     public Tripleta getInicio() {
         return parametros.isEmpty()
                 ? super.getInicio()
@@ -53,12 +62,12 @@ public class TripletaUsar extends Tripleta {
         for (Object o : parametros) {
             if (o instanceof BloqueTripletas) {
                 BloqueTripletas bt = (BloqueTripletas) o;
-                String id = tabla.getDireccionParametro(nombre, i++);
+                analisis.LlaveTabla id = tabla.getParametro(nombre, i++);
                 Object valor = bt.contenido.get(bt.contenido.size() - 1);
                 bt.addTripleta(new TripletaAsignacion(id, valor));
                 inicio = bt.enumerarTripletas(inicio);
             } else {
-                String id = tabla.getDireccionParametro(nombre, i++);
+                analisis.LlaveTabla id = tabla.getParametro(nombre, i++);
                 TripletaAsignacion t = new TripletaAsignacion(id, o);
                 inicio = t.enumerarTripleta(inicio);
                 parametros.set(i - 1, t);

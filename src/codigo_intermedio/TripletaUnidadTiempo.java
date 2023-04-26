@@ -15,6 +15,9 @@ public class TripletaUnidadTiempo extends Tripleta {
         if (expresion instanceof Tripleta) {
             super.ref1 = (Tripleta) expresion;
             return;
+        } else if (expresion instanceof analisis.LlaveTabla) {
+            super.operando1 = ((analisis.LlaveTabla) expresion).id;
+            return;
         }
 
         super.operando1 = expresion;
@@ -24,5 +27,12 @@ public class TripletaUnidadTiempo extends Tripleta {
     public String codigoObjeto() {
         return "";
     }
+
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+        super.resolverReferencias(padre);
+    }
+    
+    
 
 }

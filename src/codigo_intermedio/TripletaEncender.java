@@ -20,4 +20,9 @@ public class TripletaEncender extends Tripleta {
         return "";
     }
 
+    @Override
+    public void optimizar(BloqueTripletas padre) {
+
+    }
+
 }
