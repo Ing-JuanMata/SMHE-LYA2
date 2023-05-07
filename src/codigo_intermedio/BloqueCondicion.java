@@ -22,13 +22,13 @@ public class BloqueCondicion extends BloqueCondicional {
     }
 
     public void refenciarSiguiente(Tripleta t) {
-        if (this.sino != null) {
+        if (this.sino != null && super.condicion.ref2 == null) {
             ((TripletaGoto) this.contenido.get(this.contenido.size() - 1)).ref1 = t.getInicio();
             if (this.sino.condicion != null) {
                 this.sino.condicion.refenciarSiguiente(t);
             }
             super.condicion.ref2 = this.sino.getInicio();
-        } else {
+        } else if (super.condicion.ref2 == null) {
             super.condicion.ref2 = t;
         }
 

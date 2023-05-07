@@ -5,6 +5,7 @@
 package analisis;
 
 import java.io.StringReader;
+import java.util.Stack;
 import java_cup.runtime.Symbol;
 
 /**
@@ -14,8 +15,8 @@ import java_cup.runtime.Symbol;
 public class PruebaAnalizadores {
 
     public static void main(String[] args) throws Exception {
-        Lexer lex = new Lexer(new StringReader("AA1"));
-        Object a = 10, b = true;
-        System.out.println(Integer.toHexString(95));
+        Lexer lex = new Lexer(new StringReader(""));
+        System.out.println(lex.next_token());
+        System.out.println(lex.next_token());
     }
 }

@@ -65,7 +65,7 @@ public class BloqueTripletas {
                 aux = bc;
             } else if (o instanceof BloqueMientras) {
                 BloqueMientras bm = (BloqueMientras) o;
-                if (aux != null && !bm.contenido.isEmpty()) {
+                if (aux != null) {
                     aux.refenciarSiguiente(bm.getInicio());
                     aux = null;
                 } else if (aux2 != null) {

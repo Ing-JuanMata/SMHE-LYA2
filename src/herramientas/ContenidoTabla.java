@@ -11,11 +11,12 @@ package herramientas;
 public class ContenidoTabla {
 
     public String tipo;
-    public Object valor;
+    public boolean valor;
     public int linea;
 
     public ContenidoTabla(int linea) {
         this.linea = linea;
+        valor = false;
     }
 
     @Override

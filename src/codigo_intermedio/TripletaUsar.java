@@ -62,10 +62,14 @@ public class TripletaUsar extends Tripleta {
         for (Object o : parametros) {
             if (o instanceof BloqueTripletas) {
                 BloqueTripletas bt = (BloqueTripletas) o;
-                analisis.LlaveTabla id = tabla.getParametro(nombre, i++);
-                Object valor = bt.contenido.get(bt.contenido.size() - 1);
-                bt.addTripleta(new TripletaAsignacion(id, valor));
-                inicio = bt.enumerarTripletas(inicio);
+                if (bt.contenido.get(bt.contenido.size() - 1) instanceof TripletaAsignacion) {
+                    inicio = bt.enumerarTripletas(inicio);
+                } else {
+                    analisis.LlaveTabla id = tabla.getParametro(nombre, i++);
+                    Object valor = bt.contenido.get(bt.contenido.size() - 1);
+                    bt.addTripleta(new TripletaAsignacion(id, valor));
+                    inicio = bt.enumerarTripletas(inicio);
+                }
             } else {
                 analisis.LlaveTabla id = tabla.getParametro(nombre, i++);
                 TripletaAsignacion t = new TripletaAsignacion(id, o);

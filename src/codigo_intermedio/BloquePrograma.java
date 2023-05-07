@@ -37,7 +37,7 @@ public class BloquePrograma extends BloqueTripletas {
         if (optimizar) {
             optimizar();
             optimizar = false;
-            inicio = this.enumerarTripletas(0);
+            return this.enumerarTripletas(0);
         }
         return fin.enumerarTripleta(inicio);
     }

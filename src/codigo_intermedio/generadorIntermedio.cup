@@ -310,7 +310,8 @@ ventilar ::= VENTILAR PARENTESIS_ABIERTO tiempo_por:t COMA
             agregarTripletaBloque(tv);
         :};
 admitir ::= ADMITIR PARENTESIS_ABIERTO {:bloqueAux = bloqueActual; bloqueActual = new BloqueTripletas();:}
-        expresion:e {:expr1 = (e instanceof Tripleta) ? bloqueActual : e; bloqueActual = bloqueAux;:} COMA tiempo_por:t PARENTESIS_CERRADO 
+        expresion:e {:expr1 = (e instanceof Tripleta) ? bloqueActual : e; bloqueActual = bloqueAux;:} 
+        COMA tiempo_por:t PARENTESIS_CERRADO 
         {:agregarTripletaBloque(new TripletaAdmitir(new TripletaUsar(), t, expr1, tabla));:};
 mientras ::= cabecera_condicional cuerpo_estructura;
 cabecera_condicional ::= PARENTESIS_ABIERTO {:bloqueAux = bloqueActual; bloqueActual = new BloqueTripletas();:}

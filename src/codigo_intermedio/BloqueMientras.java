@@ -22,8 +22,21 @@ public class BloqueMientras extends BloqueCondicional {
     public int enumerarTripletas(int inicio) {
         //Enumerar primero la condicion, luego el cuerpo, terminar con un lazo
         inicio = super.condicion.enumerarTripleta(inicio);
-        super.addTripleta(new TripletaGoto(this.getInicio()));
+        if (super.condicion.ref2 != null) {
+            super.addTripleta(new TripletaGoto(this.getInicio()));
+        }
         return super.enumerarTripletas(inicio);
+    }
+
+    @Override
+    protected void optimizar() {
+        super.condicion.optimizar(this);
+        if (super.condicion.operando1 != null
+                && !super.condicion.operando1.equals("verdadero")) {
+            super.bloquePadre.contenido.remove(this);
+            return;
+        }
+        super.optimizar();
     }
 
 }

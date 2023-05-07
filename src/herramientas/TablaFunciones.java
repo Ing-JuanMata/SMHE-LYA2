@@ -15,22 +15,29 @@ import java.util.HashMap;
 public class TablaFunciones {
 
     java.util.HashMap<String, java.util.ArrayList<LlaveTabla>> tabla;
+    TablaSimbolos tablaSimbolos;
 
     public TablaFunciones() {
         tabla = new java.util.HashMap<>();
     }
 
+    public TablaFunciones(TablaSimbolos tablaSimbolos) {
+        this();
+        this.tablaSimbolos = tablaSimbolos;
+    }
+
     public void agregarFuncion(String id) {
+        System.out.println("Agregando: " + id);
         tabla.put(id, new java.util.ArrayList<>());
     }
 
     public void agregarParametro(String id, LlaveTabla parametro) {
         tabla.get(id).add(parametro);
-        switch (codigo.FrmPrincipal.tablaSimbolos.getTipo(parametro)) {
+        switch (this.tablaSimbolos.getTipo(parametro)) {
             case "entero" ->
-                codigo.FrmPrincipal.tablaSimbolos.agregarValor(parametro, 0);
+                this.tablaSimbolos.agregarValor(parametro, false);
             case "logico" ->
-                codigo.FrmPrincipal.tablaSimbolos.agregarValor(parametro, false);
+                this.tablaSimbolos.agregarValor(parametro, false);
         }
     }
 

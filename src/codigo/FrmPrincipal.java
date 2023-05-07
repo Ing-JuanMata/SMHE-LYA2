@@ -1,12 +1,10 @@
 package codigo;
 
 import analisis.Lexer;
-import analisis.SintaxPrueba;
 import codigo_intermedio.generadorIntermedio;
 import herramientas.TablaErrores;
 import herramientas.TablaFunciones;
 import herramientas.TablaSimbolos;
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +28,7 @@ import javax.swing.undo.UndoManager;
 import say.swing.JFontChooser;
 import java_cup.runtime.Symbol;
 import javax.swing.table.DefaultTableModel;
+import sintactico.MainParser;
 
 public class FrmPrincipal extends javax.swing.JFrame {
 
@@ -40,6 +39,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static TablaErrores errores = new TablaErrores();
     public static TablaFunciones funciones = new TablaFunciones();
     private generadorIntermedio intermedio;
+    private MainParser parser = new MainParser();
     //private ArrayList<TextColor> colores = new ArrayList<>();
 
     private final UndoManager administradorCambios;
@@ -542,7 +542,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         tokens.clear();
         txtError.setText("");
 
-        String ST = txtEntrada.getText();
+        String st = txtEntrada.getText();
+        parser.parse(st);
+        /*String ST = txtEntrada.getText();
         Lexer lex = new Lexer(new java.io.StringReader(ST));
         SintaxPrueba sintax = new SintaxPrueba(lex);
         try {
@@ -561,7 +563,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             for (String st : errores.getErrores()) {
                 txtError.setText(txtError.getText() + st + "\n");
             }
-        }
+        }*/
     }
 
     private void generacionIntermedia(boolean optimizar) {

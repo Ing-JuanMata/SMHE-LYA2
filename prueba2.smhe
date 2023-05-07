@@ -1,42 +1,42 @@
 inicio controlYLimpieza{
 comienzo(cada 1 min){
-	tiempoClase declarar como entero = a 60;
-	tiempoAdmision declarar como entero = a 25;
-	tiempoVentilacion declarar como entero = a 5;
+	tiempoClase declarar como entero = 60;
+	tiempoAdmision declarar como entero = 25;
+	tiempoVentilacion declarar como entero = 5;
 
-	usar admitir(b verdadero, por tiempoAdmision min);
+	usar admitir(verdadero, por tiempoAdmision min);
 
-	condicion(b [obtener personas == 0]){
-		usar ventilar(por tiempoVentilacion min, b falso, b verdadero);
-		usar admitir(b falso, por tiempoClase - tiempoAdmision - tiempoVentilacion - 1 min); //29min tiempo restante de clase
+	condicion(obtener personas == 0){
+		usar ventilar(por tiempoVentilacion min, falso, verdadero);
+		usar admitir(falso, por tiempoClase - tiempoAdmision - tiempoVentilacion - 1 min); //29min tiempo restante de clase
 		salir;
 	}sino{
-		usar controlPuertasYVentanas(a tiempoClase - tiempoAdmision - tiempoVentilacion - 1); 
-		usar ventilar(por tiempoVentilacion min, b falso, b verdadero);
+		usar controlPuertasYVentanas(tiempoClase - tiempoAdmision - tiempoVentilacion - 1); 
+		usar ventilar(por tiempoVentilacion min, falso, verdadero);
 		salir;
 	}
 salir;
 }
 
 funcion controlPuertasYVentanas(tiempoClase declarar como entero){
-	edoPuertas declarar como logico = b estado puertas;
-	edoVentanas declarar como logico = b estado ventanas;
+	edoPuertas declarar como logico = estado puertas;
+	edoVentanas declarar como logico = estado ventanas;
 
-	condicion(b edoPuertas && !edoVentanas){
+	condicion(edoPuertas && !edoVentanas){
 	cerrar puertas mantener;
 	abrir ventanas mantener;
 	salir;
 
-	}sino condicion(b edoPuertas){
+	}sino condicion(edoPuertas){
 		cerrar puertas mantener;
 		salir;
 
-	}sino condicion(b !edoVentanas){
+	}sino condicion(!edoVentanas){
 		abrir ventanas mantener;
 		salir;
 	}
 
-	usar admitir(b falso, por tiempoClase min);
+	usar admitir(falso, por tiempoClase min);
 	//Se acabo la clase y dejamos salir a las personas
 	abrir puertas por 5 min; //Tiempo para dejar salir a las personas
 	cerrar ventanas mantener;

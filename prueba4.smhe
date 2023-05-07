@@ -1,8 +1,6 @@
-inicio ventilacionYAcceso{
+inicio test{
+     declarar a como entero;
 comienzo(cada 30 min){
-	a declarar como entero = 10 + 5*20/5 - 10/5;
-	condicion(verdadero){salir;}
-	condicion(falso){salir;}
-salir;
 }
+
 }fin

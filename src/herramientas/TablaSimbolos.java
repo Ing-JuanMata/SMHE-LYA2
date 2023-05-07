@@ -13,10 +13,10 @@ import java.util.HashMap;
  */
 public class TablaSimbolos {
 
-    private java.util.HashMap<LlaveTabla, ContenidoTabla> tabla;
+    private HashMap<LlaveTabla, ContenidoTabla> tabla;
 
     public TablaSimbolos() {
-        tabla = new java.util.HashMap<>();
+        tabla = new HashMap<>();
     }
 
     public void agregarSimbolo(LlaveTabla id, int linea) {
@@ -32,6 +32,7 @@ public class TablaSimbolos {
     }
 
     public void agregarTipo(LlaveTabla id, String tipo) {
+        System.out.println(id);
         id.ambito = getAmbito(id);
         if (tabla.get(id).tipo != null) {
             return;
@@ -43,25 +44,24 @@ public class TablaSimbolos {
         id.ambito = ambito;
     }
 
-    public void agregarValor(LlaveTabla id, Object valor) {
+    public void agregarValor(LlaveTabla id, boolean valor) {
         id.ambito = getAmbito(id);
         tabla.get(id).valor = valor;
     }
 
     public String getTipo(LlaveTabla id) {
         id.ambito = getAmbito(id);
-        if (tabla.get(id) == null) {
-            return "";
-        }
-        if (tabla.get(id).tipo == null) {
-            return "";
-        }
         return tabla.get(id).tipo;
     }
 
-    public Object getValor(LlaveTabla identificador) {
+    public boolean getValor(LlaveTabla identificador) {
         identificador.ambito = getAmbito(identificador);
         return tabla.get(identificador).valor;
+    }
+
+    public int getLinea(LlaveTabla id) {
+        id.ambito = getAmbito(id);
+        return tabla.get(id).linea;
     }
 
     public HashMap<LlaveTabla, ContenidoTabla> getTabla() {
@@ -89,6 +89,7 @@ public class TablaSimbolos {
 
     public boolean existe(LlaveTabla llave) {
         ContenidoTabla val = tabla.get(new LlaveTabla(llave.id, getAmbito(llave)));
+        val = val == null && !llave.ambito.equals("programa") ? tabla.get(new LlaveTabla(llave.id, "programa")) : val;
         return val == null ? false : val.linea >= 0;
     }
 

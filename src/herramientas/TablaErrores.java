@@ -5,6 +5,7 @@
 package herramientas;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -12,12 +13,12 @@ import java.util.ArrayList;
  */
 public class TablaErrores {
 
-    private java.util.HashMap<String, String> tabla;
-    private java.util.ArrayList<String> errores;
+    private HashMap<String, String> tabla;
+    private HashMap<Integer, ArrayList<String>> errores;
 
     public TablaErrores() {
-        tabla = new java.util.HashMap<>();
-        errores = new java.util.ArrayList<>();
+        tabla = new HashMap<>();
+        errores = new HashMap<>();
         llenarTabla();
     }
 
@@ -36,20 +37,18 @@ public class TablaErrores {
         tabla.put("ES10", "Error sintáctico 10: antes de la línea %d se esperaba \"salir;\"");
         tabla.put("ES11", "Error sintáctico 11: En la línea %d %s");
         tabla.put("ESM1", "Error semántico 1: en la línea %d el identificador %s no ha sido declarado");
-        tabla.put("ESM2", "Error semántico 2: en la línea %d el tipo de dato del identificador %s no debería ser %s");
-        tabla.put("ESM3", "Error semántico 3: en la línea %d el identificador %s no tiene ningún valor");
-        tabla.put("ESM4", "Error semántico 4: en la línea %d el identificador %s ya ha sido declarado");
-        tabla.put("ESM5", "Error semántico 5: En la línea %d el valor %s de la expresión no se puede guardar en el identificador \"%s\" de tipo %s");
-        tabla.put("ESM6", "Error semántico 6: En la línea %d el identificador %s no tiene ningún tipo asociado");
-        tabla.put("ESM7", "Error semántico 7: En la línea %d se ha llamado a la función %s, dicha función no ha sido declarada");
-        tabla.put("ESM8", "Error semántico 8: En la línea %d se han colocado %s parámetros para la función %s y se esperaban %s parámetros");
-        tabla.put("ESM9", "Error semántico 9: En la línea %d se ha colocado un tipo erroneo en el parametro numero %s, en dicho lugar se esperaba un valor %s");
-        tabla.put("ESM10", "Error semántico 10: En la línea %d el tipo definido de la expresión %s y el valor ingresado son incompatibles");
-        tabla.put("ESM11", "Error semántico 11: En la línea %d se ha tratado de usar un valor %s en una operación %s");
-        tabla.put("ESM12", "Error semántico 12: En la línea %d el valor %s esta fuera de rango");
+        tabla.put("ESM2", "Error semántico 2: en la línea %d el identificador %s no tiene ningún valor");
+        tabla.put("ESM3", "Error semántico 3: en la línea %d el identificador %s ya ha sido declarado");
+        tabla.put("ESM4", "Error semántico 4: En la línea %d el valor %s de la expresión no se puede guardar en el identificador \"%s\" de tipo %s");
+        tabla.put("ESM5", "Error semántico 5: En la línea %d el identificador %s no tiene ningún tipo asociado");
+        tabla.put("ESM6", "Error semántico 6: En la línea %d se ha llamado a la función %s, dicha función no ha sido declarada");
+        tabla.put("ESM7", "Error semántico 7: En la línea %d se han colocado %s parámetros para la función %s y se esperaban %s parámetros");
+        tabla.put("ESM8", "Error semántico 8: En la línea %d se ha colocado un tipo erroneo en el parametro numero %s, en dicho lugar se esperaba un valor %s");
+        tabla.put("ESM9", "Error semántico 9: En la línea %d se ha tratado de usar un valor %s en una operación %s");
+        tabla.put("ESM10", "Error semántico 10: En la línea %d el valor %s esta fuera de rango");
     }
 
-    public ArrayList<String> getErrores() {
+    public HashMap<Integer, ArrayList<String>> getErrores() {
         return errores;
     }
 
@@ -62,10 +61,20 @@ public class TablaErrores {
     }
 
     public void agregarErrorLexico(String error, int línea, String cuerpo) {
+        ArrayList<String> errores = this.errores.get(línea);
+        if (errores == null) {
+            errores = new ArrayList<>();
+            this.errores.put(línea, errores);
+        }
         errores.add(String.format(tabla.get(error), línea, cuerpo));
     }
 
     public void agregarErrorSintactico(String error, int línea, String... valores) {
+        ArrayList<String> errores = this.errores.get(línea);
+        if (errores == null) {
+            errores = new ArrayList<>();
+            this.errores.put(línea, errores);
+        }
         switch (error) {
             case "ES1", "ES3", "ES4", "ES5", "ES6", "ES9", "ES10" ->
                 errores.add(String.format(tabla.get(error), línea));
@@ -81,12 +90,17 @@ public class TablaErrores {
     }
 
     public void agregarErrorSemantico(String error, int línea, String... valores) {
+        ArrayList<String> errores = this.errores.get(línea);
+        if (errores == null) {
+            errores = new ArrayList<>();
+            this.errores.put(línea, errores);
+        }
         switch (error) {
-            case "ESM1", "ESM3", "ESM4", "ESM6", "ESM7", "ESM10", "ESM12" ->
+            case "ESM1", "ESM2", "ESM3", "ESM5", "ESM6", "ESM10" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0]));
-            case "ESM2", "ESM9", "ESM11" ->
+            case "ESM8", "ESM9" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0], valores[1]));
-            case "ESM5", "ESM8" ->
+            case "ESM4", "ESM7" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0], valores[1], valores[2]));
             default ->
                 System.out.println("No se ha encontrado el error semántico introducido: " + error);
