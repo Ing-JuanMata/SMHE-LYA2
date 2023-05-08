@@ -41,7 +41,7 @@ public class smheFunctionsRegister extends smheBaseListener {
 
     @Override
     public void exitLblInicio(smheParser.LblInicioContext ctx) {
-        
+
     }
 
     @Override
@@ -111,8 +111,12 @@ public class smheFunctionsRegister extends smheBaseListener {
         String id = ctx.ID().getText().length() > 16
                 ? ctx.ID().getText().substring(0, 16)
                 : ctx.ID().getText();
-        String tipo = ctx.tipo().getText();
-        int linea = ctx.ID().getSymbol().getLine();
+        int linea = ctx.start.getLine();
+        boolean bTipo = ctx.tipo() == null;
+        if (bTipo) {
+            this.errores.agregarErrorSintactico("ES3", linea);
+        }
+        String tipo = !bTipo ? ctx.tipo().getText() : "Sin Tipo";
         if (this.tabla.existe(new LlaveTabla(id, ambito))) {
             errores.agregarErrorSemantico("ESM4", linea, id);
             return;
@@ -133,8 +137,12 @@ public class smheFunctionsRegister extends smheBaseListener {
         String id = ctx.ID().getText().length() > 16
                 ? ctx.ID().getText().substring(0, 16)
                 : ctx.ID().getText();
-        String tipo = ctx.tipo().getText();
-        int linea = ctx.ID().getSymbol().getLine();
+        int linea = ctx.start.getLine();
+        boolean bTipo = ctx.tipo() == null;
+        if (bTipo) {
+            this.errores.agregarErrorSintactico("ES3", linea);
+        }
+        String tipo = !bTipo ? ctx.tipo().getText() : "Sin Tipo";
         if (this.tabla.existe(new LlaveTabla(id, ambito))) {
             errores.agregarErrorSemantico("ESM4", linea, id);
             return;

@@ -4,6 +4,9 @@
  */
 package herramientas;
 
+import java.util.ArrayList;
+import sintactico.MainParser;
+
 /**
  *
  * @author jujemataso
@@ -12,7 +15,7 @@ public class Funcion {
 
     String id;
     int linea;
-    java.util.ArrayList<Object> parametros;
+    ArrayList<String> parametros;
 
     public Funcion(String id, int linea) {
         this.id = id;
@@ -20,32 +23,29 @@ public class Funcion {
         parametros = new java.util.ArrayList<>();
     }
 
-    public void agregarParametro(Object parametro) {
+    public void agregarParametro(String parametro) {
         parametros.add(parametro);
     }
 
     public void comprobarParametros() {
-        if (!codigo.FrmPrincipal.funciones.existe(id)) {
-            codigo.FrmPrincipal.errores.agregarErrorSemantico("ESM7", linea, id);
-            return;
-        }
-        java.util.ArrayList<String> parametrosOriginales = codigo.FrmPrincipal.funciones.getTipos(id);
+        ArrayList<String> parametrosOriginales = MainParser.funciones.getTipos(id);
         if (parametrosOriginales.size() != parametros.size()) {
-            codigo.FrmPrincipal.errores.agregarErrorSemantico("ESM8", linea, String.valueOf(parametros.size()), id, String.valueOf(parametrosOriginales.size()));
+            MainParser.errores.agregarErrorSemantico("ESM7", linea, String.valueOf(parametros.size()), id, String.valueOf(parametrosOriginales.size()));
             return;
         }
         int pos = 0;
+        System.out.println(parametrosOriginales);
         for (Object parametro : parametros) {
             String tipo = parametrosOriginales.get(pos);
             pos++;
-            if (tipo.equals("entero") && !(parametro instanceof Integer)) {
-                codigo.FrmPrincipal.errores.agregarErrorSemantico("ESM9", linea, String.valueOf(pos), "entero");
-                return;
+            if (tipo.equals("entero") && !parametro.equals("entero")) {
+                MainParser.errores.agregarErrorSemantico("ESM8", linea, String.valueOf(pos), "entero");
+                continue;
             }
 
-            if (tipo.equals("logico") && !(parametro instanceof Boolean)) {
-                codigo.FrmPrincipal.errores.agregarErrorSemantico("ESM9", linea, String.valueOf(pos), "logico");
-                return;
+            if (tipo.equals("logico") && !parametro.equals("logico")) {
+                MainParser.errores.agregarErrorSemantico("ESM8", linea, String.valueOf(pos), "logico");
+
             }
         }
     }

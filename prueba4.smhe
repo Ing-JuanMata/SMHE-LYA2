@@ -1,6 +1,7 @@
 inicio test{
-     declarar a como entero;
+     declarar a como entero = 1;
 comienzo(cada 30 min){
+	usar b(10, falso);
 }
-
+funcion b(declarar c como logico, declarar d como entero){}
 }fin

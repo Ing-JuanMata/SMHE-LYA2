@@ -308,29 +308,17 @@ public interface smheListener extends ParseTreeListener {
 	 */
 	void exitLblObtener(smheParser.LblObtenerContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lblVerdadero}
+	 * Enter a parse tree produced by the {@code lblBooleano}
 	 * labeled alternative in {@link smheParser#op8}.
 	 * @param ctx the parse tree
 	 */
-	void enterLblVerdadero(smheParser.LblVerdaderoContext ctx);
+	void enterLblBooleano(smheParser.LblBooleanoContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code lblVerdadero}
+	 * Exit a parse tree produced by the {@code lblBooleano}
 	 * labeled alternative in {@link smheParser#op8}.
 	 * @param ctx the parse tree
 	 */
-	void exitLblVerdadero(smheParser.LblVerdaderoContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code lblFalso}
-	 * labeled alternative in {@link smheParser#op8}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblFalso(smheParser.LblFalsoContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblFalso}
-	 * labeled alternative in {@link smheParser#op8}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblFalso(smheParser.LblFalsoContext ctx);
+	void exitLblBooleano(smheParser.LblBooleanoContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code lblEstado}
 	 * labeled alternative in {@link smheParser#op8}.

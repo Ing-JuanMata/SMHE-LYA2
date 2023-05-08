@@ -186,19 +186,12 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblObtener(smheParser.LblObtenerContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lblVerdadero}
+	 * Visit a parse tree produced by the {@code lblBooleano}
 	 * labeled alternative in {@link smheParser#op8}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLblVerdadero(smheParser.LblVerdaderoContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code lblFalso}
-	 * labeled alternative in {@link smheParser#op8}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblFalso(smheParser.LblFalsoContext ctx);
+	T visitLblBooleano(smheParser.LblBooleanoContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lblEstado}
 	 * labeled alternative in {@link smheParser#op8}.

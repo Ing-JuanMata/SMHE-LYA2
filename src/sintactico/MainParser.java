@@ -18,25 +18,27 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
  */
 public class MainParser {
 
-    private TablaSimbolos tabla;
-    private TablaFunciones funciones;
-    private TablaErrores errores;
+    public static TablaSimbolos tabla;
+    public static TablaFunciones funciones;
+    public static TablaErrores errores;
 
     public MainParser() {
     }
 
     public void parse(String codigo) {
-        this.tabla = new TablaSimbolos();
-        this.funciones = new TablaFunciones(this.tabla);
-        this.errores = new TablaErrores();
+        MainParser.tabla = new TablaSimbolos();
+        MainParser.funciones = new TablaFunciones(MainParser.tabla);
+        MainParser.errores = new TablaErrores();
         smheLexer lexer = new smheLexer(CharStreams.fromString(codigo));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         smheParser parser = new smheParser(tokens);
         ParseTree tree = parser.inicio();
         ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(new smheFunctionsRegister(this.tabla, this.funciones, this.errores), tree);
+        walker.walk(new smheFunctionsRegister(MainParser.tabla, MainParser.funciones, MainParser.errores), tree);
         smheSintaxVisitor visitor = new smheSintaxVisitor(tabla, funciones, errores);
         visitor.visit(tree);
     }
+    
+    
 
 }

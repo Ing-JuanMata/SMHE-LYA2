@@ -317,25 +317,13 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLblVerdadero(smheParser.LblVerdaderoContext ctx) { }
+	@Override public void enterLblBooleano(smheParser.LblBooleanoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLblVerdadero(smheParser.LblVerdaderoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLblFalso(smheParser.LblFalsoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblFalso(smheParser.LblFalsoContext ctx) { }
+	@Override public void exitLblBooleano(smheParser.LblBooleanoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -32,7 +32,6 @@ public class TablaSimbolos {
     }
 
     public void agregarTipo(LlaveTabla id, String tipo) {
-        System.out.println(id);
         id.ambito = getAmbito(id);
         if (tabla.get(id).tipo != null) {
             return;
@@ -105,7 +104,7 @@ public class TablaSimbolos {
                 ambito = ambito.substring(0, ambito.lastIndexOf(":"));
             }
         }
-        return llave.ambito.split(":")[0];
+        return tabla.get(new LlaveTabla(llave.id, ambito)) != null ? llave.ambito.split(":")[0] : "programa";
     }
 
     @Override
