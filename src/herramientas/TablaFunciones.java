@@ -27,18 +27,13 @@ public class TablaFunciones {
     }
 
     public void agregarFuncion(String id) {
-        System.out.println("Agregando: " + id);
         tabla.put(id, new java.util.ArrayList<>());
     }
 
     public void agregarParametro(String id, LlaveTabla parametro) {
         tabla.get(id).add(parametro);
-        switch (this.tablaSimbolos.getTipo(parametro)) {
-            case "entero" ->
-                this.tablaSimbolos.agregarValor(parametro, false);
-            case "logico" ->
-                this.tablaSimbolos.agregarValor(parametro, false);
-        }
+        this.tablaSimbolos.agregarValor(parametro, true);
+
     }
 
     public boolean tieneDatos() {

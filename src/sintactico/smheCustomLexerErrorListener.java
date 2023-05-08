@@ -8,7 +8,6 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 
 /**
@@ -22,9 +21,9 @@ public class smheCustomLexerErrorListener extends BaseErrorListener {
         if (e != null) {
             LexerNoViableAltException lnvae = (LexerNoViableAltException) e;
             if (lnvae.getInputStream() != null) {
-                String error = "El caracter '" + lnvae.getInputStream().getText(new Interval(charPositionInLine, charPositionInLine)) + "' no se reconoce";
-                System.out.println(error);
-                
+                String error = lnvae.getInputStream().getText(new Interval(lnvae.getStartIndex(), lnvae.getStartIndex()));
+                MainParser.errores.agregarErrorLexico("EL1", line, error);
+
             }
         }
     }

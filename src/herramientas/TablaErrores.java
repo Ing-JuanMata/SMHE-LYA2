@@ -28,7 +28,7 @@ public class TablaErrores {
         tabla.put("ES1", "Error sintáctico 1: en la línea %d la expresión escrita tiene un error en su estructura en la cadena %s se esperaba %s");
         tabla.put("ES2", "Error sintáctico 2: en la línea %d la unidad de tiempo \"%s\" no es la correcta, debe ser [\"seg\", \"min\", \"hr\"]");
         tabla.put("ES3", "Error sintáctico 3: en la línea %d no se ha recibido un tipo de dato valido");
-        tabla.put("ES4", "Error sintáctico 4: en la línea %d no se ha encontrado el punto y coma para la instrucción ingresada");
+        tabla.put("ES4", "Error sintáctico 4: en la línea %d no se ha encontrado el caracter \";\" para la instrucción ingresada");
         tabla.put("ES5", "Error sintáctico 5: antes de la línea %d se esperaba \"salir;\"");
         tabla.put("ES6", "Error sintáctico 6: En la línea %d %s");
         tabla.put("ES7", "Error sintáctico 7: En la línea %d no se ha encontrado \"%s\"");

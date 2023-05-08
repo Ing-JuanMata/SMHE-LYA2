@@ -5,12 +5,10 @@
 package sintactico;
 
 import analisis.LlaveTabla;
-import herramientas.Funcion;
 import herramientas.TablaErrores;
 import herramientas.TablaFunciones;
 import herramientas.TablaSimbolos;
 import java.util.ArrayList;
-import org.antlr.v4.runtime.Token;
 
 /**
  *

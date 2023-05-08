@@ -74,11 +74,13 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
             visit(ctx.decGlobales());
         }
         visit(ctx.comienzo());
-        errores.getErrores().forEach((linea, error) -> System.out.println(error));
+        /*
+            errores.getErrores().forEach((linea, error) -> System.out.println(error));
         this.tabla.getTabla().forEach((llave, contenido) -> {
             String simbolo = String.format("L%d %s:%s valor?: %s ambito: %s", contenido.linea, llave.id, contenido.tipo, contenido.valor, llave.ambito);
             System.out.println(simbolo);
         });
+         */
         return null;
     }
 
@@ -439,6 +441,9 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     @Override
     public Object visitLblGramas(smheParser.LblGramasContext ctx) {
         String salida = (String) visit(ctx.stmt());
+        if (ctx.PUNTOYCOMA() == null) {
+            errores.agregarErrorSintactico("ES4", ctx.start.getLine());
+        }
         String salidaSig = ctx.gramas() != null ? (String) visit(ctx.gramas()) : null;
         return salidaSig == null ? salida : salidaSig;
     }
@@ -586,7 +591,9 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
             return null;
         }
 
-        String id = ctx.ID().getText();
+        String id = ctx.ID().getText().length() > 16
+                ? ctx.ID().getText().substring(0, 16)
+                : ctx.ID().getText();
         if (!funciones.existe(id)) {
             errores.agregarErrorSemantico("ESM6", inicio, id);
             return null;
@@ -619,18 +626,18 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     @Override
     public Object visitLblUsarAdmitir(smheParser.LblUsarAdmitirContext ctx) {
         if (ctx.expresion() == null) {
-            errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 0 + "", "logico");
+            errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 1 + "", "logico");
         } else {
             String tipo = (String) visit(ctx.expresion());
             if (tipo == null || !tipo.equals("logico")) {
-                errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 0 + "", "logico");
+                errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 1 + "", "logico");
             }
         }
 
         if (ctx.tp() != null) {
             visit(ctx.tp());
         } else {
-            errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 1 + "", "tiempo por");
+            errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 2 + "", "tiempo por");
         }
         return null;
     }
@@ -640,14 +647,14 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
         if (ctx.tp() != null) {
             visit(ctx.tp());
         } else {
-            errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 0 + "", "tiempo por");
+            errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 1 + "", "tiempo por");
         }
 
         if (ctx.expresion().size() != 2) {
             errores.agregarErrorSemantico("ESM7", ctx.start.getLine(), (ctx.expresion().size() + 1) + "", 3 + "");
         }
 
-        int i = 1;
+        int i = 2;
         for (smheParser.ExpresionContext expresion : ctx.expresion()) {
             if (expresion == null) {
                 errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), i++ + "", "logico");
@@ -658,6 +665,36 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
                     errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), i++ + "", "logico");
                 }
             }
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitLblSalirGramas(smheParser.LblSalirGramasContext ctx) {
+        return "Saliendo";
+    }
+
+    @Override
+    public Object visitLblDecFuncion(smheParser.LblDecFuncionContext ctx) {
+        ambito = ctx.ID().getText().length() > 16
+                ? ctx.ID().getText().substring(0, 16)
+                : ctx.ID().getText();
+        int ultima = ctx.decFuncion() == null
+                ? ctx.stop.getLine()
+                : (ctx.LLAVEDERECHA() != null
+                ? ctx.LLAVEDERECHA().getSymbol().getLine()
+                : ctx.decFuncion().start.getLine());
+        if (ctx.gramas() != null) {
+            String salida = (String) visit(ctx.gramas());
+            if (salida == null) {
+                errores.agregarErrorSintactico("ES5", ultima);
+            }
+        } else {
+            errores.agregarErrorSintactico("ES5", ultima);
+        }
+        ambito = "programa";
+        if (ctx.decFuncion() != null) {
+            visit(ctx.decFuncion());
         }
         return null;
     }
