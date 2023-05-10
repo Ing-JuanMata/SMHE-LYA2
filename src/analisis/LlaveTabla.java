@@ -38,6 +38,6 @@ public class LlaveTabla {
 
     @Override
     public String toString() {
-        return String.format("[id=%s,ambito=%s]", id, ambito);
+        return id;
     }
 }

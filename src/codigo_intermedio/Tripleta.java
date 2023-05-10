@@ -81,10 +81,17 @@ public abstract class Tripleta {
     private String getOperando(int n) {
         switch (n) {
             case 1 -> {
-                return ref1 == null ? (operando1 == null ? "" : operando1.toString()) + "" : "(" + ref1.numero + ")";
+                return ref1 == null ? (operando1 == null
+                        ? ""
+                        : operando1.toString()) + ""
+                        : "(" + ref1.numero + ")";
             }
             case 2 -> {
-                return ref2 == null ? (operando2 == null ? "" : operando2.toString()) + "" : "(" + ref2.numero + ")";
+                return ref2 == null
+                        ? (operando2 == null
+                                ? ""
+                                : operando2.toString()) + ""
+                        : "(" + ref2.numero + ")";
             }
             default -> {
                 return "";

@@ -33,6 +33,17 @@ public class smheFunctionsRegister extends smheBaseListener {
 
     @Override
     public void enterLblInicio(smheParser.LblInicioContext ctx) {
+        int inicio = ctx.start.getLine();
+        int fin = ctx.comienzo().stop.getLine();
+        if (ctx.LLAVEIZQUIERDA() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, "{");
+        }
+        if (ctx.LLAVEDERECHA() == null) {
+            errores.agregarErrorSintactico("ES7", fin, "}");
+        }
+        if (ctx.FIN() == null) {
+            errores.agregarErrorSintactico("ES7", fin, "fin");
+        }
         this.ambito = "programa";
         this.ambitos.add(ambito);
     }
@@ -44,6 +55,20 @@ public class smheFunctionsRegister extends smheBaseListener {
 
     @Override
     public void enterLblComienzo(smheParser.LblComienzoContext ctx) {
+        int inicio = ctx.start.getLine();
+        int fin = ctx.gramas() != null ? ctx.gramas().stop.getLine() : ctx.start.getLine();
+        if (ctx.PARENTESISIZQUIERDO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, "(");
+        }
+        if (ctx.PARENTESISDERECHO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, ")");
+        }
+        if (ctx.LLAVEIZQUIERDA() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, "{");
+        }
+        if (ctx.LLAVEDERECHA() == null) {
+            errores.agregarErrorSintactico("ES7", fin, "}");
+        }
         this.funciones.agregarFuncion(ctx.COMIENZO().getText());
     }
 
@@ -59,6 +84,20 @@ public class smheFunctionsRegister extends smheBaseListener {
 
     @Override
     public void enterLblDecFuncion(smheParser.LblDecFuncionContext ctx) {
+        int inicio = ctx.start.getLine();
+        int fin = ctx.gramas() != null ? ctx.gramas().stop.getLine() : ctx.start.getLine();
+        if (ctx.PARENTESISIZQUIERDO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, "(");
+        }
+        if (ctx.PARENTESISDERECHO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, ")");
+        }
+        if (ctx.LLAVEIZQUIERDA() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, "{");
+        }
+        if (ctx.LLAVEDERECHA() == null) {
+            errores.agregarErrorSintactico("ES7", fin, "}");
+        }
         String id = ctx.ID().getText().length() > 16
                 ? ctx.ID().getText().substring(0, 16)
                 : ctx.ID().getText();
@@ -93,6 +132,9 @@ public class smheFunctionsRegister extends smheBaseListener {
 
     @Override
     public void enterLblParametros(smheParser.LblParametrosContext ctx) {
+        if (ctx.COMA() == null && ctx.dp() != null) {
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), ",");
+        }
         parametro = true;
     }
 
@@ -104,6 +146,10 @@ public class smheFunctionsRegister extends smheBaseListener {
     @Override
     public void enterLblDeclaraciones(smheParser.LblDeclaracionesContext ctx) {
         if (!parametro && !varGlobal) {
+            return;
+        }
+        if (ctx.ID() == null) {
+            errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "No se ha encontrado el ID de la declaración");
             return;
         }
         String id = ctx.ID().getText().length() > 16
@@ -130,6 +176,10 @@ public class smheFunctionsRegister extends smheBaseListener {
     @Override
     public void enterLblDeclaraciones1(smheParser.LblDeclaraciones1Context ctx) {
         if (!parametro) {
+            return;
+        }
+        if (ctx.ID() == null) {
+            errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "No se ha encontrado el ID de la declaración");
             return;
         }
         String id = ctx.ID().getText().length() > 16

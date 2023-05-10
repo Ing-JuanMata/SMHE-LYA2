@@ -34,7 +34,6 @@ public class Funcion {
             return;
         }
         int pos = 0;
-        System.out.println(parametrosOriginales);
         for (Object parametro : parametros) {
             String tipo = parametrosOriginales.get(pos);
             pos++;

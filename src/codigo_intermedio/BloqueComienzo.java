@@ -20,6 +20,9 @@ public class BloqueComienzo extends BloqueTripletas {
     @Override
     public int enumerarTripletas(int inicio) {
         inicio = super.enumerarTripletas(inicio);
+        if(super.contenido.isEmpty()){
+            return tiempo.enumerarTripleta(inicio);
+        }
         Object ultimo = super.contenido.get(super.contenido.size() - 1);
         if (ultimo instanceof BloqueCondicion) {
             BloqueCondicion bc = (BloqueCondicion) ultimo;
@@ -40,6 +43,10 @@ public class BloqueComienzo extends BloqueTripletas {
 
     @Override
     public String toString() {
+        if(super.contenido.isEmpty()){
+            tiempo.ref2 = tiempo;
+            return super.toString() + "\n" + tiempo.toString();
+        }
         Object inicio = super.contenido.get(0);
         while ((inicio instanceof BloqueTripletas)) {
             inicio = ((BloqueTripletas) inicio).contenido.get(0);

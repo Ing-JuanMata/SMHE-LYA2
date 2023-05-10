@@ -608,18 +608,6 @@ public interface smheListener extends ParseTreeListener {
 	 */
 	void exitLblMientras(smheParser.LblMientrasContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lblSino}
-	 * labeled alternative in {@link smheParser#sino}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblSino(smheParser.LblSinoContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblSino}
-	 * labeled alternative in {@link smheParser#sino}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblSino(smheParser.LblSinoContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code lblSinoCondicionales}
 	 * labeled alternative in {@link smheParser#sino}.
 	 * @param ctx the parse tree
@@ -631,4 +619,16 @@ public interface smheListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLblSinoCondicionales(smheParser.LblSinoCondicionalesContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblSino}
+	 * labeled alternative in {@link smheParser#sino}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblSino(smheParser.LblSinoContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblSino}
+	 * labeled alternative in {@link smheParser#sino}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblSino(smheParser.LblSinoContext ctx);
 }

@@ -617,18 +617,6 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLblSino(smheParser.LblSinoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblSino(smheParser.LblSinoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLblSinoCondicionales(smheParser.LblSinoCondicionalesContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -636,6 +624,18 @@ public class smheBaseListener implements smheListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLblSinoCondicionales(smheParser.LblSinoCondicionalesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblSino(smheParser.LblSinoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblSino(smheParser.LblSinoContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

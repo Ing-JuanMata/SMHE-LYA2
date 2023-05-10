@@ -25,8 +25,8 @@ public class TablaErrores {
     private void llenarTabla() {
         tabla.put("EL1", "Error léxico 1: en la línea %d el carácter \"%s\" no es valido");
         tabla.put("EL2", "Error léxico 2: en la línea %d la cadena \"%s\" no es valida");
-        tabla.put("ES1", "Error sintáctico 1: en la línea %d la expresión escrita tiene un error en su estructura en la cadena %s se esperaba %s");
-        tabla.put("ES2", "Error sintáctico 2: en la línea %d la unidad de tiempo \"%s\" no es la correcta, debe ser [\"seg\", \"min\", \"hr\"]");
+        tabla.put("ES1", "Error sintáctico 1: en la línea %d la expresión escrita tiene un error en su estructura en la cadena \"%s\" se esperaba %s");
+        tabla.put("ES2", "Error sintáctico 2: en la línea %d no se colocó una unidad de tiempo, se debe colocar : [\"seg\", \"min\", \"hr\"]");
         tabla.put("ES3", "Error sintáctico 3: en la línea %d no se ha recibido un tipo de dato valido");
         tabla.put("ES4", "Error sintáctico 4: en la línea %d no se ha encontrado el caracter \";\" para la instrucción ingresada");
         tabla.put("ES5", "Error sintáctico 5: antes de la línea %d se esperaba \"salir;\"");
@@ -72,9 +72,9 @@ public class TablaErrores {
             this.errores.put(línea, errores);
         }
         switch (error) {
-            case "ES3", "ES4", "ES5" ->
+            case "ES3", "ES2", "ES4", "ES5" ->
                 errores.add(String.format(tabla.get(error), línea));
-            case "ES2", "ES6", "ES7" ->
+            case "ES6", "ES7" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0]));
             case "ES1" ->
                 errores.add(String.format(tabla.get(error), línea, valores[0], valores[1]));

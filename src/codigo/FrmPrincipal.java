@@ -1,10 +1,10 @@
 package codigo;
 
 import analisis.Lexer;
-import codigo_intermedio.generadorIntermedio;
 import herramientas.TablaErrores;
 import herramientas.TablaFunciones;
 import herramientas.TablaSimbolos;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -28,6 +29,8 @@ import javax.swing.undo.UndoManager;
 import say.swing.JFontChooser;
 import java_cup.runtime.Symbol;
 import javax.swing.table.DefaultTableModel;
+import sintactico.CIVisitor;
+import sintactico.CodigoIntermedio;
 import sintactico.MainParser;
 
 public class FrmPrincipal extends javax.swing.JFrame {
@@ -38,7 +41,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static TablaSimbolos tablaSimbolos = new TablaSimbolos();
     public static TablaErrores errores = new TablaErrores();
     public static TablaFunciones funciones = new TablaFunciones();
-    private generadorIntermedio intermedio;
+    private CodigoIntermedio intermedio;
     private MainParser parser = new MainParser();
     //private ArrayList<TextColor> colores = new ArrayList<>();
 
@@ -544,6 +547,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         String st = txtEntrada.getText();
         parser.parse(st);
+        errores = sintactico.MainParser.errores;
         /*String ST = txtEntrada.getText();
         Lexer lex = new Lexer(new java.io.StringReader(ST));
         SintaxPrueba sintax = new SintaxPrueba(lex);
@@ -552,7 +556,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         } catch (Exception ex) {
             System.out.println("Algo salio mal: " + ex.getMessage());
             System.out.println(ex.getStackTrace()[0].getClassName() + ex.getStackTrace()[0].getLineNumber());
-        }
+        } */
 
         if (errores.getErrores().isEmpty()) {
             txtError.setText("Analisis realizado correctamente");
@@ -560,10 +564,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
             generacionIntermedia(optimizar);
         } else {
             txtError.setForeground(Color.red);
-            for (String st : errores.getErrores()) {
-                txtError.setText(txtError.getText() + st + "\n");
+            String msg = "";
+            ArrayList<Integer> lineas = new ArrayList<>(errores.getErrores().keySet());
+            Collections.sort(lineas);
+            for (int linea : lineas) {
+                msg += "Linea " + linea + "\n";
+                for (String error : errores.getErrores().get(linea)) {
+                    msg += error + "\n";
+                }
             }
-        }*/
+            txtError.setText(msg.substring(0, msg.length() - 1));
+        }
     }
 
     private void generacionIntermedia(boolean optimizar) {
@@ -571,12 +582,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
             return;
         }
 
-        intermedio = new generadorIntermedio(new Lexer(new java.io.StringReader(txtEntrada.getText())));
+        intermedio = new CodigoIntermedio();
         try {
-            intermedio.parse();
+            intermedio.generarCI();
             txtError.setText(txtError.getText() + "\n" + "Código Intermedio generado");
-            intermedio.programa.optimizar = optimizar;
-            intermedio.programa.enumerarTripletas(0);
         } catch (Exception ex) {
             System.out.println("Algo salio mal en codigo intermedio: " + ex.getMessage());
             for (StackTraceElement ste : ex.getStackTrace()) {
@@ -752,7 +761,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             this.analisisSintactico(false);
         }
         Tabla tabla = new Tabla("Tabla de simbolos con direcciones");
-        intermedio.tblF.mostrarTabla((DefaultTableModel) tabla.getModel());
+        intermedio.funciones.mostrarTabla((DefaultTableModel) tabla.getModel());
         tabla.setVisible(true);
     }//GEN-LAST:event_intermedioFuncionesActionPerformed
 
@@ -761,19 +770,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
             this.analisisSintactico(false);
         }
         Tabla tabla = new Tabla("Tabla de simbolos con direcciones");
-        intermedio.tabla.verTabla((DefaultTableModel) tabla.getModel());
+        intermedio.simbolos.verTabla((DefaultTableModel) tabla.getModel());
         tabla.setVisible(true);
     }//GEN-LAST:event_intermedioSimbolosActionPerformed
 
     private void intermedioNoOptimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioNoOptimoActionPerformed
         this.analisisSintactico(false);
-        VistaCodigo vc = new VistaCodigo(intermedio.programa.toString());
+        VistaCodigo vc = new VistaCodigo(CIVisitor.programa.toString());
         vc.setVisible(true);
     }//GEN-LAST:event_intermedioNoOptimoActionPerformed
 
     private void intermedioOptimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioOptimoActionPerformed
         this.analisisSintactico(true);
-        VistaCodigo vc = new VistaCodigo(intermedio.programa.toString());
+        VistaCodigo vc = new VistaCodigo(CIVisitor.programa.toString());
         vc.setVisible(true);
     }//GEN-LAST:event_intermedioOptimoActionPerformed
 

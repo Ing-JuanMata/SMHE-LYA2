@@ -21,7 +21,7 @@ public class TablaSimbolos {
     }
 
     private void iniciarTabla() {
-        herramientas.TablaSimbolos tablaAnalisis = codigo.FrmPrincipal.tablaSimbolos;
+        herramientas.TablaSimbolos tablaAnalisis = sintactico.MainParser.tabla;
         int direccion = 0x0c;
         for (LlaveTabla llave : tablaAnalisis.getTabla().keySet()) {
             tabla.put(llave, Integer.toHexString(direccion++));

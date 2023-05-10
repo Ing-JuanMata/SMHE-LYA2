@@ -21,6 +21,7 @@ public class MainParser {
     public static TablaSimbolos tabla;
     public static TablaFunciones funciones;
     public static TablaErrores errores;
+    public static ParseTree tree;
 
     public MainParser() {
     }
@@ -30,10 +31,13 @@ public class MainParser {
         MainParser.funciones = new TablaFunciones(MainParser.tabla);
         MainParser.errores = new TablaErrores();
         smheLexer lexer = new smheLexer(CharStreams.fromString(codigo));
+        lexer.removeErrorListeners();
         lexer.addErrorListener(new smheCustomLexerErrorListener());
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         smheParser parser = new smheParser(tokens);
-        ParseTree tree = parser.inicio();
+        parser.removeErrorListeners();
+        parser.addErrorListener(new smheCustomParserErrorListener());
+        tree = parser.inicio();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(new smheFunctionsRegister(MainParser.tabla, MainParser.funciones, MainParser.errores), tree);
         smheSintaxVisitor visitor = new smheSintaxVisitor(tabla, funciones, errores);

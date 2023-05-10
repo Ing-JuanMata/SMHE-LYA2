@@ -368,12 +368,12 @@ public class smheBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements s
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLblSino(smheParser.LblSinoContext ctx) { return visitChildren(ctx); }
+	@Override public T visitLblSinoCondicionales(smheParser.LblSinoCondicionalesContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLblSinoCondicionales(smheParser.LblSinoCondicionalesContext ctx) { return visitChildren(ctx); }
+	@Override public T visitLblSino(smheParser.LblSinoContext ctx) { return visitChildren(ctx); }
 }

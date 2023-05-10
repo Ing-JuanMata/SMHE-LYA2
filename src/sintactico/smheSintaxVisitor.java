@@ -88,6 +88,9 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     public Object visitLblDeclaracionesGlobales(smheParser.LblDeclaracionesGlobalesContext ctx) {
         varGlobal = true;
         LlaveTabla llave = (LlaveTabla) visit(ctx.declaracion());
+        if (llave == null) {
+            return null;
+        }
         int inicioDec = ctx.declaracion().start.getLine();
         String tipo = this.tabla.getTipo(llave);
         String tipoRes = ctx.expresion() != null ? (String) visit(ctx.expresion()) : null;
@@ -125,6 +128,9 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     @Override
     public Object visitLblDeclaracionesGramas(smheParser.LblDeclaracionesGramasContext ctx) {
         LlaveTabla llave = (LlaveTabla) visit(ctx.declaracion());
+        if (llave == null) {
+            return null;
+        }
         int inicioDec = ctx.declaracion().start.getLine();
         String tipo = this.tabla.getTipo(llave);
         String tipoRes = ctx.expresion() != null ? (String) visit(ctx.expresion()) : null;
@@ -154,6 +160,10 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     // <editor-fold defaultstate="collapsed" desc="Visitas a declaraciones">
     @Override
     public Object visitLblDeclaraciones(smheParser.LblDeclaracionesContext ctx) {
+        if (ctx.ID() == null) {
+            errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "No se ha encontrado el ID de la declaración");
+            return null;
+        }
         LlaveTabla id = new LlaveTabla(ctx.ID().getText(), ambito);
         if (varGlobal || parametro) {
             return id;
@@ -177,6 +187,10 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
 
     @Override
     public Object visitLblDeclaraciones1(smheParser.LblDeclaraciones1Context ctx) {
+        if (ctx.ID() == null) {
+            errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "No se ha encontrado el ID de la declaración");
+            return null;
+        }
         LlaveTabla id = new LlaveTabla(ctx.ID().getText(), ambito);
         if (varGlobal || parametro) {
             return id;
@@ -282,7 +296,7 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     @Override
     public Object visitLblOp6(smheParser.LblOp6Context ctx) {
         tipoActual = (String) visit(ctx.op8());
-        return ctx.op7() != null ? (String) visit(ctx.op7()) : tipoActual;
+        return ctx.op7() != null ? (String) visit(ctx.op7()) : tipoActual == null ? "Sin Tipo" : tipoActual;
     }
 
     @Override
@@ -379,6 +393,16 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitLblValorObtener(smheParser.LblValorObtenerContext ctx) {
+        return "logico";
+    }
+
+    @Override
+    public Object visitLblValorObtener1(smheParser.LblValorObtener1Context ctx) {
+        return "logico";
+    }
+
+    @Override
     public Object visitLblBooleano(smheParser.LblBooleanoContext ctx) {
         return "logico";
     }
@@ -389,18 +413,20 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitLblEstadoValor(smheParser.LblEstadoValorContext ctx) {
+        return "logico";
+    }
+
+    @Override
+    public Object visitLblEstadoValor1(smheParser.LblEstadoValor1Context ctx) {
+        return "logico";
+    }
+
+    @Override
     public Object visitLblParentesis(smheParser.LblParentesisContext ctx) {
         return ctx.expresion() != null ? ((String) visit(ctx.expresion())) : "Sin Tipo";
     }
     // </editor-fold>
-
-    @Override
-    public Object visitLblParametros(smheParser.LblParametrosContext ctx) {
-        this.parametro = true;
-        visit(ctx.declaracion());
-        this.parametro = false;
-        return null;
-    }
 
     @Override
     public Object visitLblTiempoCada(smheParser.LblTiempoCadaContext ctx) {
@@ -456,6 +482,25 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
 
     @Override
     public Object visitLblCondicion(smheParser.LblCondicionContext ctx) {
+        int inicio = ctx.start.getLine();
+        int fin = ctx.gramas() != null
+                ? ctx.gramas().start.getLine()
+                : ctx.sino() != null
+                ? ctx.sino().start.getLine()
+                : ctx.start.getLine();
+        if (ctx.PARENTESISIZQUIERDO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, "(");
+        }
+        if (ctx.PARENTESISDERECHO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, ")");
+        }
+        if (ctx.LLAVEIZQUIERDA() == null) {
+
+            errores.agregarErrorSintactico("ES7", inicio, "{");
+        }
+        if (ctx.LLAVEDERECHA() == null) {
+            errores.agregarErrorSintactico("ES7", fin, "}");
+        }
         String tipoExpr = (String) visit(ctx.expresion());
         if (tipoExpr == null) {
             this.errores.agregarErrorSemantico("ESM9", ctx.start.getLine(), "Sin Valor", "logica");
@@ -477,6 +522,16 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
 
     @Override
     public Object visitLblSino(smheParser.LblSinoContext ctx) {
+
+        int inicio = ctx.start.getLine();
+        int fin = ctx.stop.getLine();
+        if (ctx.LLAVEIZQUIERDA() == null) {
+
+            errores.agregarErrorSintactico("ES7", inicio, "{");
+        }
+        if (ctx.LLAVEDERECHA() == null) {
+            errores.agregarErrorSintactico("ES7", fin, "}");
+        }
         if (ctx.gramas() != null) {
             ambito += ":" + agregarAnidamiento();
             visit(ctx.gramas());
@@ -493,11 +548,25 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
 
     @Override
     public Object visitLblMientras(smheParser.LblMientrasContext ctx) {
+        int inicio = ctx.start.getLine();
+        int fin = ctx.stop.getLine();
+        if (ctx.PARENTESISIZQUIERDO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, "(");
+        }
+        if (ctx.PARENTESISDERECHO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, ")");
+        }
+        if (ctx.LLAVEIZQUIERDA() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, "{");
+        }
+        if (ctx.LLAVEDERECHA() == null) {
+            errores.agregarErrorSintactico("ES7", fin, "}");
+        }
         String tipoExpr = (String) visit(ctx.expresion());
         if (tipoExpr == null) {
-            this.errores.agregarErrorSemantico("ESM9", ctx.start.getLine(), "Sin Valor", "logica");
+            this.errores.agregarErrorSemantico("ESM9", inicio, "Sin Valor", "logica");
         } else if (!tipoExpr.equals("logico")) {
-            this.errores.agregarErrorSemantico("ESM9", ctx.start.getLine(), tipoExpr, "logica");
+            this.errores.agregarErrorSemantico("ESM9", inicio, tipoExpr, "logica");
         }
         if (ctx.gramas() != null) {
             ambito += ":" + agregarAnidamiento();
@@ -586,9 +655,14 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     @Override
     public Object visitLblUsarFuncion(smheParser.LblUsarFuncionContext ctx) {
         int inicio = ctx.start.getLine();
-        if (ctx.ID() == null) {
-            errores.agregarErrorSintactico("ES7", inicio, "ID");
-            return null;
+        if (ctx.USAR()== null) {
+            errores.agregarErrorSintactico("ES7", inicio, "usar");
+        }
+        if (ctx.PARENTESISIZQUIERDO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, "(");
+        }
+        if (ctx.PARENTESISDERECHO() == null) {
+            errores.agregarErrorSintactico("ES7", inicio, ")");
         }
 
         String id = ctx.ID().getText().length() > 16
@@ -610,6 +684,9 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
 
     @Override
     public Object visitLblParametrosFuncion(smheParser.LblParametrosFuncionContext ctx) {
+        if (ctx.COMA() == null && ctx.parametro() != null) {
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), ",");
+        }
         String tipoExpr = (String) visit(ctx.expresion());
         if (tipoExpr == null) {
             funcionActual.agregarParametro("Sin Valor");
@@ -625,6 +702,10 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
 
     @Override
     public Object visitLblUsarAdmitir(smheParser.LblUsarAdmitirContext ctx) {
+        if (ctx.PARENTESISIZQUIERDO() == null) {
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), "(");
+        }
+
         if (ctx.expresion() == null) {
             errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 1 + "", "logico");
         } else {
@@ -634,20 +715,35 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
             }
         }
 
+        if (ctx.COMA() == null) {
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), ",");
+        }
+
         if (ctx.tp() != null) {
             visit(ctx.tp());
         } else {
             errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 2 + "", "tiempo por");
+        }
+
+        if (ctx.PARENTESISDERECHO() == null) {
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), ")");
         }
         return null;
     }
 
     @Override
     public Object visitLblUsarVentilar(smheParser.LblUsarVentilarContext ctx) {
+        if (ctx.PARENTESISIZQUIERDO() == null) {
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), "(");
+        }
         if (ctx.tp() != null) {
             visit(ctx.tp());
         } else {
             errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), 1 + "", "tiempo por");
+        }
+
+        if (ctx.COMA(0) == null) {
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), ",");
         }
 
         if (ctx.expresion().size() != 2) {
@@ -665,6 +761,13 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
                     errores.agregarErrorSemantico("ESM8", ctx.start.getLine(), i++ + "", "logico");
                 }
             }
+            if (ctx.COMA(1) == null) {
+                errores.agregarErrorSintactico("ES7", ctx.start.getLine(), ",");
+            }
+        }
+
+        if (ctx.PARENTESISDERECHO() == null) {
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), ")");
         }
         return null;
     }
@@ -699,4 +802,27 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
         return null;
     }
 
+    @Override
+    public Object visitLblLucesGramas(smheParser.LblLucesGramasContext ctx) {
+        if (ctx.accion == null) {
+            errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "Se esperaba \"apagar\" ó \"encender\"");
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object visitLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx) {
+
+        if (ctx.accion == null) {
+            errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "Se esperaba \"abrir\" ó \"cerrar\"");
+        }
+
+        if (ctx.MANTENER() == null && ctx.tp() == null) {
+            errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "Se esperaba \"mantener\" ó una estructura \"tiempo por\"");
+        }
+
+        return null;
+
+    }
 }

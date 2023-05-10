@@ -10,9 +10,12 @@ package codigo_intermedio;
  */
 public class TripletaIncremento extends Tripleta {
 
-    public TripletaIncremento(analisis.LlaveTabla id) {
+    public boolean pre;
+
+    public TripletaIncremento(analisis.LlaveTabla id, boolean pre) {
         super("++");
         super.operando1 = id;
+        this.pre = pre;
     }
 
     @Override

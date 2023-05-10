@@ -361,17 +361,17 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblMientras(smheParser.LblMientrasContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lblSino}
-	 * labeled alternative in {@link smheParser#sino}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblSino(smheParser.LblSinoContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code lblSinoCondicionales}
 	 * labeled alternative in {@link smheParser#sino}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLblSinoCondicionales(smheParser.LblSinoCondicionalesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblSino}
+	 * labeled alternative in {@link smheParser#sino}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblSino(smheParser.LblSinoContext ctx);
 }

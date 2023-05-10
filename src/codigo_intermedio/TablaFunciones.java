@@ -25,7 +25,7 @@ public class TablaFunciones {
     }
 
     private void iniciarTabla() {
-        herramientas.TablaFunciones tablaAnalisis = codigo.FrmPrincipal.funciones;
+        herramientas.TablaFunciones tablaAnalisis = sintactico.MainParser.funciones;
         for (String funcion : tablaAnalisis.getTabla().keySet()) {
             tabla.put(funcion, tablaAnalisis.getParametros(funcion));
         }
@@ -61,7 +61,7 @@ public class TablaFunciones {
                 modelo.addColumn("Parametro: " + (modelo.getColumnCount() - 1));
             }
             for (LlaveTabla llave : parametros) {
-                fila.add(llave.id + ": " + codigo.FrmPrincipal.tablaSimbolos.getTipo(llave));
+                fila.add(llave.id + ": " + sintactico.MainParser.tabla.getTipo(llave));
             }
             modelo.addRow(fila.toArray());
         });
