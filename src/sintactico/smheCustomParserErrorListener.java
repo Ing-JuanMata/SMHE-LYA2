@@ -4,8 +4,6 @@
  */
 package sintactico;
 
-import java.util.Iterator;
-import java.util.ListIterator;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
@@ -19,6 +17,12 @@ import org.antlr.v4.runtime.misc.Interval;
  * @author jujemataso
  */
 public class smheCustomParserErrorListener extends BaseErrorListener {
+
+    private herramientas.TablaErrores errores;
+
+    public smheCustomParserErrorListener(herramientas.TablaErrores errores) {
+        this.errores = errores;
+    }
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
@@ -40,7 +44,7 @@ public class smheCustomParserErrorListener extends BaseErrorListener {
          */
         Token sym = null;
         if (e != null) {
-            MainParser.errores.agregarErrorSintactico("ES7", line, "[\"ID\", \"admitir\", \"ventilar\"]");
+            errores.agregarErrorSintactico("ES7", line, "[\"ID\", \"admitir\", \"ventilar\"]");
             return;
         }
         if (offendingSymbol != null) {
@@ -50,41 +54,41 @@ public class smheCustomParserErrorListener extends BaseErrorListener {
         Parser p = (Parser) recognizer;
         Vocabulary v = p.getVocabulary();
         if (p.getContext() instanceof smheParser.InicioContext) {
-            MainParser.errores.agregarErrorSintactico("ES7", 1, getEsperados(p, v));
+            errores.agregarErrorSintactico("ES7", 1, getEsperados(p, v));
             return;
         }
         if (p.getContext() instanceof smheParser.UtContext) {
-            MainParser.errores.agregarErrorSintactico("ES2", line);
+            errores.agregarErrorSintactico("ES2", line);
             return;
         }
         if (p.getContext() instanceof smheParser.DeclaracionContext) {
-            MainParser.errores.agregarErrorSintactico("ES7", line, "declarar");
+            errores.agregarErrorSintactico("ES7", line, "declarar");
             System.out.println(sym.getText());
             return;
         }
         if (p.getContext() instanceof smheParser.EstadoContext) {
-            MainParser.errores.agregarErrorSintactico("ES7", line, "[\"puertas\", \"ventanas\", \"luces\"]");
+            errores.agregarErrorSintactico("ES7", line, "[\"puertas\", \"ventanas\", \"luces\"]");
             return;
         }
         if (p.getContext() instanceof smheParser.ObtenerContext) {
-            MainParser.errores.agregarErrorSintactico("ES7", line, "[\"temperatura\", \"personas\"]");
+            errores.agregarErrorSintactico("ES7", line, "[\"temperatura\", \"personas\"]");
             return;
         }
         if (p.getContext() instanceof smheParser.Op1Context) {
             String operadores = "[\"+\", \"-\", \"*\", \"/\", \"||\", \"&&\", \"<\", \"<=\", \">\", \">=\", \"==\", \"!=\"]";
-            MainParser.errores.agregarErrorSintactico("ES1", line, (String) (sym != null ? sym.getText() : ""), operadores);
+            errores.agregarErrorSintactico("ES1", line, (String) (sym != null ? sym.getText() : ""), operadores);
             return;
         }
         if (p.getContext() instanceof smheParser.LblLucesGramasContext) {
-            MainParser.errores.agregarErrorSintactico("ES1", line, (String) (sym != null ? sym.getText() : ""), "\"luces\"");
+            errores.agregarErrorSintactico("ES1", line, (String) (sym != null ? sym.getText() : ""), "\"luces\"");
             return;
         }
         if (p.getContext() instanceof smheParser.LblVentanasPuertasGramasContext) {
-            MainParser.errores.agregarErrorSintactico("ES1", line, (String) (sym != null ? sym.getText() : ""), "[\"ventanas\", \"puertas\"]");
+            errores.agregarErrorSintactico("ES1", line, (String) (sym != null ? sym.getText() : ""), "[\"ventanas\", \"puertas\"]");
             return;
         }
         if (p.getContext() instanceof smheParser.LblTiempoPorContext || p.getContext() instanceof smheParser.LblTiempoCadaContext) {
-            MainParser.errores.agregarErrorSintactico("ES7", line, getEsperados(p, v));
+            errores.agregarErrorSintactico("ES7", line, getEsperados(p, v));
         }
         System.out.println(getEsperados(p, v));
         System.out.println("Contexto: " + p.getRuleNames()[p.getContext().getRuleIndex()] + " id contexto: " + p.getContext().getRuleIndex());

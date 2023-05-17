@@ -15,6 +15,10 @@ import org.antlr.v4.runtime.misc.Interval;
  * @author jujemataso
  */
 public class smheCustomLexerErrorListener extends BaseErrorListener {
+    private herramientas.TablaErrores errores;
+    public smheCustomLexerErrorListener(herramientas.TablaErrores errores){
+        this.errores = errores;
+    }
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
@@ -22,7 +26,7 @@ public class smheCustomLexerErrorListener extends BaseErrorListener {
             LexerNoViableAltException lnvae = (LexerNoViableAltException) e;
             if (lnvae.getInputStream() != null) {
                 String error = lnvae.getInputStream().getText(new Interval(lnvae.getStartIndex(), lnvae.getStartIndex()));
-                MainParser.errores.agregarErrorLexico("EL1", line, error);
+                errores.agregarErrorLexico("EL1", line, error);
 
             }
         }

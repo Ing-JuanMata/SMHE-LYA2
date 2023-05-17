@@ -86,6 +86,9 @@ public class smheFunctionsRegister extends smheBaseListener {
     public void enterLblDecFuncion(smheParser.LblDecFuncionContext ctx) {
         int inicio = ctx.start.getLine();
         int fin = ctx.gramas() != null ? ctx.gramas().stop.getLine() : ctx.start.getLine();
+        if(ctx.FUNCION() == null){
+            errores.agregarErrorSintactico("ES7", inicio, "funcion");
+        }
         if (ctx.PARENTESISIZQUIERDO() == null) {
             errores.agregarErrorSintactico("ES7", inicio, "(");
         }
@@ -148,35 +151,8 @@ public class smheFunctionsRegister extends smheBaseListener {
         if (!parametro && !varGlobal) {
             return;
         }
-        if (ctx.ID() == null) {
-            errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "No se ha encontrado el ID de la declaración");
-            return;
-        }
-        String id = ctx.ID().getText().length() > 16
-                ? ctx.ID().getText().substring(0, 16)
-                : ctx.ID().getText();
-        int linea = ctx.start.getLine();
-        boolean bTipo = ctx.tipo() == null;
-        if (bTipo) {
-            this.errores.agregarErrorSintactico("ES3", linea);
-        }
-        String tipo = !bTipo ? ctx.tipo().getText() : "Sin Tipo";
-        if (this.tabla.existe(new LlaveTabla(id, ambito))) {
-            errores.agregarErrorSemantico("ESM4", linea, id);
-            return;
-        }
-        LlaveTabla parametro = new LlaveTabla(id, ambito);
-        this.tabla.agregarSimbolo(parametro, linea);
-        this.tabla.agregarTipo(parametro, tipo);
-        if (this.parametro) {
-            this.funciones.agregarParametro(ambito, parametro);
-        }
-    }
-
-    @Override
-    public void enterLblDeclaraciones1(smheParser.LblDeclaraciones1Context ctx) {
-        if (!parametro) {
-            return;
+        if(ctx.DECLARAR() == null){
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), "declarar");
         }
         if (ctx.ID() == null) {
             errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "No se ha encontrado el ID de la declaración");

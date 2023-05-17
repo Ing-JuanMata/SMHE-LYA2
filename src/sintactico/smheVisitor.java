@@ -53,13 +53,6 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblDeclaraciones(smheParser.LblDeclaracionesContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lblDeclaraciones1}
-	 * labeled alternative in {@link smheParser#declaracion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblDeclaraciones1(smheParser.LblDeclaraciones1Context ctx);
-	/**
 	 * Visit a parse tree produced by the {@code lblTipo}
 	 * labeled alternative in {@link smheParser#tipo}.
 	 * @param ctx the parse tree
@@ -179,13 +172,6 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblNumero(smheParser.LblNumeroContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lblObtener}
-	 * labeled alternative in {@link smheParser#op8}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblObtener(smheParser.LblObtenerContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code lblBooleano}
 	 * labeled alternative in {@link smheParser#op8}.
 	 * @param ctx the parse tree
@@ -193,12 +179,33 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblBooleano(smheParser.LblBooleanoContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code lblObtener}
+	 * labeled alternative in {@link smheParser#op8}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblObtener(smheParser.LblObtenerContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblObtener1}
+	 * labeled alternative in {@link smheParser#op8}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblObtener1(smheParser.LblObtener1Context ctx);
+	/**
 	 * Visit a parse tree produced by the {@code lblEstado}
 	 * labeled alternative in {@link smheParser#op8}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLblEstado(smheParser.LblEstadoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblEstado1}
+	 * labeled alternative in {@link smheParser#op8}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblEstado1(smheParser.LblEstado1Context ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lblParentesis}
 	 * labeled alternative in {@link smheParser#op8}.
@@ -214,26 +221,12 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblEstadoValor(smheParser.LblEstadoValorContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lblEstadoValor1}
-	 * labeled alternative in {@link smheParser#estado}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblEstadoValor1(smheParser.LblEstadoValor1Context ctx);
-	/**
 	 * Visit a parse tree produced by the {@code lblValorObtener}
 	 * labeled alternative in {@link smheParser#obtener}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLblValorObtener(smheParser.LblValorObtenerContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code lblValorObtener1}
-	 * labeled alternative in {@link smheParser#obtener}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblValorObtener1(smheParser.LblValorObtener1Context ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lblGramas}
 	 * labeled alternative in {@link smheParser#gramas}.
@@ -248,6 +241,55 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLblCondicionalesGramas(smheParser.LblCondicionalesGramasContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblSalirGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblSalirGramas(smheParser.LblSalirGramasContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblLucesGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblLucesGramas(smheParser.LblLucesGramasContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblLucesGramas1}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblLucesGramas1(smheParser.LblLucesGramas1Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblVentanasPuertasGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblSanitizarDispensarGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblSanitizarDispensarGramas1}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblSanitizarDispensarGramas1(smheParser.LblSanitizarDispensarGramas1Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblUsarGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblUsarGramas(smheParser.LblUsarGramasContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lblIncDecPosGramas}
 	 * labeled alternative in {@link smheParser#stmt}.
@@ -277,47 +319,19 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblAsignacionGramas(smheParser.LblAsignacionGramasContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lblLucesGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblLucesGramas(smheParser.LblLucesGramasContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code lblVentanasPuertasGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code lblSanitizarDispensarGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code lblUsarGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblUsarGramas(smheParser.LblUsarGramasContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code lblSalirGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblSalirGramas(smheParser.LblSalirGramasContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code lblUsarFuncion}
 	 * labeled alternative in {@link smheParser#usar}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLblUsarFuncion(smheParser.LblUsarFuncionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblUsarFuncion1}
+	 * labeled alternative in {@link smheParser#usar}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lblUsarAdmitir}
 	 * labeled alternative in {@link smheParser#usar}.

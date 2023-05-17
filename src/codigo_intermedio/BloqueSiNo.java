@@ -30,7 +30,7 @@ public class BloqueSiNo extends BloqueCondicional {
     @Override
     public int enumerarTripletas(int inicio) {
         if (condicion != null) {
-            inicio = condicion.enumerarTripletas(inicio);
+                inicio = condicion.enumerarTripletas(inicio);
         }
         return super.enumerarTripletas(inicio);
         //si no tiene condicion realizar solo el cuerpo del sino

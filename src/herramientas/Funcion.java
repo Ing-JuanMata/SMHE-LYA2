@@ -27,10 +27,10 @@ public class Funcion {
         parametros.add(parametro);
     }
 
-    public void comprobarParametros() {
-        ArrayList<String> parametrosOriginales = MainParser.funciones.getTipos(id);
+    public void comprobarParametros(herramientas.TablaFunciones funciones, herramientas.TablaErrores errores) {
+        ArrayList<String> parametrosOriginales = funciones.getTipos(id);
         if (parametrosOriginales.size() != parametros.size()) {
-            MainParser.errores.agregarErrorSemantico("ESM7", linea, String.valueOf(parametros.size()), id, String.valueOf(parametrosOriginales.size()));
+            errores.agregarErrorSemantico("ESM7", linea, String.valueOf(parametros.size()), id, String.valueOf(parametrosOriginales.size()));
             return;
         }
         int pos = 0;
@@ -38,12 +38,12 @@ public class Funcion {
             String tipo = parametrosOriginales.get(pos);
             pos++;
             if (tipo.equals("entero") && !parametro.equals("entero")) {
-                MainParser.errores.agregarErrorSemantico("ESM8", linea, String.valueOf(pos), "entero");
+                errores.agregarErrorSemantico("ESM8", linea, String.valueOf(pos), "entero");
                 continue;
             }
 
             if (tipo.equals("logico") && !parametro.equals("logico")) {
-                MainParser.errores.agregarErrorSemantico("ESM8", linea, String.valueOf(pos), "logico");
+                errores.agregarErrorSemantico("ESM8", linea, String.valueOf(pos), "logico");
 
             }
         }

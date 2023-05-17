@@ -16,15 +16,15 @@ public class CodigoIntermedio {
     public TablaSimbolos simbolos;
     public TablaFunciones funciones;
 
-    public CodigoIntermedio() {
-        this.simbolos = new TablaSimbolos();
-        this.funciones = new TablaFunciones(simbolos);
+    public CodigoIntermedio(herramientas.TablaSimbolos simbolos, herramientas.TablaFunciones funciones) {
+        this.simbolos = new TablaSimbolos(simbolos);
+        this.funciones = new TablaFunciones(this.simbolos, funciones, simbolos);
     }
 
-    public void generarCI() {
+    public void generarCI(boolean optimizar, MainParser parser) {
         CIVisitor ci = new CIVisitor(simbolos, funciones);
-        ci.visit(MainParser.tree);
+        ci.visit(parser.tree);
+        CIVisitor.programa.optimizar = optimizar;
         CIVisitor.programa.enumerarTripletas(0);
-        System.out.println(CIVisitor.programa);
     }
 }

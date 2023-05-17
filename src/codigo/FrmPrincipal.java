@@ -547,7 +547,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         String st = txtEntrada.getText();
         parser.parse(st);
-        errores = sintactico.MainParser.errores;
+        errores = parser.errores;
         /*String ST = txtEntrada.getText();
         Lexer lex = new Lexer(new java.io.StringReader(ST));
         SintaxPrueba sintax = new SintaxPrueba(lex);
@@ -582,9 +582,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
             return;
         }
 
-        intermedio = new CodigoIntermedio();
+        intermedio = new CodigoIntermedio(parser.tabla, parser.funciones);
         try {
-            intermedio.generarCI();
+            intermedio.generarCI(optimizar, parser);
             txtError.setText(txtError.getText() + "\n" + "Código Intermedio generado");
         } catch (Exception ex) {
             System.out.println("Algo salio mal en codigo intermedio: " + ex.getMessage());
@@ -730,44 +730,38 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuLexicoActionPerformed
 
     private void menuFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFuncionesActionPerformed
-        if (funciones.tieneDatos()) {
-            Tabla tabla = new Tabla("tabla de funciones");
-            funciones.mostrarTabla((javax.swing.table.DefaultTableModel) tabla.getModel());
-            tabla.setVisible(true);
-            return;
-        }
 
-        javax.swing.JOptionPane.showMessageDialog(this, "Es posible que no se haya hecho un intento de compilacion, favor de tratar de compilar para crear las tablas", "tabla de funciones vacia", javax.swing.JOptionPane.PLAIN_MESSAGE);
+        if (!parser.mostrarFunciones()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Es posible que no se haya hecho un intento de compilacion, favor de tratar de compilar para crear las tablas", "tabla de funciones vacia", javax.swing.JOptionPane.PLAIN_MESSAGE);
+        }
     }//GEN-LAST:event_menuFuncionesActionPerformed
 
     private void menuSimbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSimbolosActionPerformed
-        if (tablaSimbolos.tieneDatos()) {
-            Tabla tabla = new Tabla("tabla de simbolos");
-            tablaSimbolos.verTabla((javax.swing.table.DefaultTableModel) tabla.getModel());
-            tabla.setVisible(true);
-            return;
-        }
-
-        javax.swing.JOptionPane.showMessageDialog(this, "Es posible que no se haya hecho un intento de compilacion, favor de tratar de compilar para crear las tablas", "tabla de simbolos vacia", javax.swing.JOptionPane.PLAIN_MESSAGE);
+        if (!parser.mostrarSimbolos())
+            javax.swing.JOptionPane.showMessageDialog(this, "Es posible que no se haya hecho un intento de compilacion, favor de tratar de compilar para crear las tablas", "tabla de simbolos vacia", javax.swing.JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_menuSimbolosActionPerformed
 
     private void menuErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuErroresActionPerformed
-        InfoErrores info = new InfoErrores(errores.infoErrores());
+        if (parser.errores.infoErrores() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Es posible que no se haya hecho un intento de compilacion, favor de tratar de compilar para crear las tablas", "tabla de simbolos vacia", javax.swing.JOptionPane.PLAIN_MESSAGE);
+            return;
+        }
+        InfoErrores info = new InfoErrores(parser.errores.infoErrores());
         info.setVisible(true);
     }//GEN-LAST:event_menuErroresActionPerformed
 
     private void intermedioFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioFuncionesActionPerformed
         if (intermedio == null) {
-            this.analisisSintactico(false);
+            this.analisisSintactico(true);
         }
-        Tabla tabla = new Tabla("Tabla de simbolos con direcciones");
+        Tabla tabla = new Tabla("Tabla de funciones con direcciones");
         intermedio.funciones.mostrarTabla((DefaultTableModel) tabla.getModel());
         tabla.setVisible(true);
     }//GEN-LAST:event_intermedioFuncionesActionPerformed
 
     private void intermedioSimbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intermedioSimbolosActionPerformed
         if (intermedio == null) {
-            this.analisisSintactico(false);
+            this.analisisSintactico(true);
         }
         Tabla tabla = new Tabla("Tabla de simbolos con direcciones");
         intermedio.simbolos.verTabla((DefaultTableModel) tabla.getModel());

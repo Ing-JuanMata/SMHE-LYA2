@@ -4,6 +4,8 @@
  */
 package sintactico;
 
+import static codigo.FrmPrincipal.tablaSimbolos;
+import codigo.Tabla;
 import herramientas.TablaErrores;
 import herramientas.TablaSimbolos;
 import herramientas.TablaFunciones;
@@ -18,31 +20,51 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
  */
 public class MainParser {
 
-    public static TablaSimbolos tabla;
-    public static TablaFunciones funciones;
-    public static TablaErrores errores;
-    public static ParseTree tree;
+    public TablaSimbolos tabla;
+    public TablaFunciones funciones;
+    public TablaErrores errores;
+    public ParseTree tree;
 
     public MainParser() {
     }
 
     public void parse(String codigo) {
-        MainParser.tabla = new TablaSimbolos();
-        MainParser.funciones = new TablaFunciones(MainParser.tabla);
-        MainParser.errores = new TablaErrores();
+        tabla = new TablaSimbolos();
+        funciones = new TablaFunciones(tabla);
+        errores = new TablaErrores();
         smheLexer lexer = new smheLexer(CharStreams.fromString(codigo));
         lexer.removeErrorListeners();
-        lexer.addErrorListener(new smheCustomLexerErrorListener());
+        lexer.addErrorListener(new smheCustomLexerErrorListener(errores));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         smheParser parser = new smheParser(tokens);
         parser.removeErrorListeners();
-        parser.addErrorListener(new smheCustomParserErrorListener());
+        parser.addErrorListener(new smheCustomParserErrorListener(errores));
         tree = parser.inicio();
         ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(new smheFunctionsRegister(MainParser.tabla, MainParser.funciones, MainParser.errores), tree);
+        walker.walk(new smheFunctionsRegister(tabla, funciones, errores), tree);
         smheSintaxVisitor visitor = new smheSintaxVisitor(tabla, funciones, errores);
         visitor.visit(tree);
-        errores.getErrores().forEach((linea, error) -> System.out.println(error));
+    }
+
+    public boolean mostrarFunciones() {
+        if (!funciones.tieneDatos()) {
+            return false;
+        }
+        Tabla tabla = new Tabla("tabla de funciones");
+        funciones.mostrarTabla((javax.swing.table.DefaultTableModel) tabla.getModel());
+        tabla.setVisible(true);
+        return true;
+    }
+
+    public boolean mostrarSimbolos() {
+        if (!tabla.tieneDatos()) {
+            return false;
+        }
+
+        Tabla tabla = new Tabla("tabla de simbolos");
+        this.tabla.verTabla((javax.swing.table.DefaultTableModel) tabla.getModel());
+        tabla.setVisible(true);
+        return true;
     }
 
 }

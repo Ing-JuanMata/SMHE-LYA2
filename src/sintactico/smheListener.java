@@ -80,18 +80,6 @@ public interface smheListener extends ParseTreeListener {
 	 */
 	void exitLblDeclaraciones(smheParser.LblDeclaracionesContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lblDeclaraciones1}
-	 * labeled alternative in {@link smheParser#declaracion}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblDeclaraciones1(smheParser.LblDeclaraciones1Context ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblDeclaraciones1}
-	 * labeled alternative in {@link smheParser#declaracion}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblDeclaraciones1(smheParser.LblDeclaraciones1Context ctx);
-	/**
 	 * Enter a parse tree produced by the {@code lblTipo}
 	 * labeled alternative in {@link smheParser#tipo}.
 	 * @param ctx the parse tree
@@ -296,18 +284,6 @@ public interface smheListener extends ParseTreeListener {
 	 */
 	void exitLblNumero(smheParser.LblNumeroContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lblObtener}
-	 * labeled alternative in {@link smheParser#op8}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblObtener(smheParser.LblObtenerContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblObtener}
-	 * labeled alternative in {@link smheParser#op8}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblObtener(smheParser.LblObtenerContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code lblBooleano}
 	 * labeled alternative in {@link smheParser#op8}.
 	 * @param ctx the parse tree
@@ -320,6 +296,30 @@ public interface smheListener extends ParseTreeListener {
 	 */
 	void exitLblBooleano(smheParser.LblBooleanoContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code lblObtener}
+	 * labeled alternative in {@link smheParser#op8}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblObtener(smheParser.LblObtenerContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblObtener}
+	 * labeled alternative in {@link smheParser#op8}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblObtener(smheParser.LblObtenerContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblObtener1}
+	 * labeled alternative in {@link smheParser#op8}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblObtener1(smheParser.LblObtener1Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblObtener1}
+	 * labeled alternative in {@link smheParser#op8}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblObtener1(smheParser.LblObtener1Context ctx);
+	/**
 	 * Enter a parse tree produced by the {@code lblEstado}
 	 * labeled alternative in {@link smheParser#op8}.
 	 * @param ctx the parse tree
@@ -331,6 +331,18 @@ public interface smheListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLblEstado(smheParser.LblEstadoContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblEstado1}
+	 * labeled alternative in {@link smheParser#op8}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblEstado1(smheParser.LblEstado1Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblEstado1}
+	 * labeled alternative in {@link smheParser#op8}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblEstado1(smheParser.LblEstado1Context ctx);
 	/**
 	 * Enter a parse tree produced by the {@code lblParentesis}
 	 * labeled alternative in {@link smheParser#op8}.
@@ -356,18 +368,6 @@ public interface smheListener extends ParseTreeListener {
 	 */
 	void exitLblEstadoValor(smheParser.LblEstadoValorContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lblEstadoValor1}
-	 * labeled alternative in {@link smheParser#estado}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblEstadoValor1(smheParser.LblEstadoValor1Context ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblEstadoValor1}
-	 * labeled alternative in {@link smheParser#estado}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblEstadoValor1(smheParser.LblEstadoValor1Context ctx);
-	/**
 	 * Enter a parse tree produced by the {@code lblValorObtener}
 	 * labeled alternative in {@link smheParser#obtener}.
 	 * @param ctx the parse tree
@@ -379,18 +379,6 @@ public interface smheListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLblValorObtener(smheParser.LblValorObtenerContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code lblValorObtener1}
-	 * labeled alternative in {@link smheParser#obtener}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblValorObtener1(smheParser.LblValorObtener1Context ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblValorObtener1}
-	 * labeled alternative in {@link smheParser#obtener}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblValorObtener1(smheParser.LblValorObtener1Context ctx);
 	/**
 	 * Enter a parse tree produced by the {@code lblGramas}
 	 * labeled alternative in {@link smheParser#gramas}.
@@ -415,6 +403,90 @@ public interface smheListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLblCondicionalesGramas(smheParser.LblCondicionalesGramasContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblSalirGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblSalirGramas(smheParser.LblSalirGramasContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblSalirGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblSalirGramas(smheParser.LblSalirGramasContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblLucesGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblLucesGramas(smheParser.LblLucesGramasContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblLucesGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblLucesGramas(smheParser.LblLucesGramasContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblLucesGramas1}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblLucesGramas1(smheParser.LblLucesGramas1Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblLucesGramas1}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblLucesGramas1(smheParser.LblLucesGramas1Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblVentanasPuertasGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblVentanasPuertasGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblSanitizarDispensarGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblSanitizarDispensarGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblSanitizarDispensarGramas1}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblSanitizarDispensarGramas1(smheParser.LblSanitizarDispensarGramas1Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblSanitizarDispensarGramas1}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblSanitizarDispensarGramas1(smheParser.LblSanitizarDispensarGramas1Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblUsarGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblUsarGramas(smheParser.LblUsarGramasContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblUsarGramas}
+	 * labeled alternative in {@link smheParser#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblUsarGramas(smheParser.LblUsarGramasContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code lblIncDecPosGramas}
 	 * labeled alternative in {@link smheParser#stmt}.
@@ -464,66 +536,6 @@ public interface smheListener extends ParseTreeListener {
 	 */
 	void exitLblAsignacionGramas(smheParser.LblAsignacionGramasContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lblLucesGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblLucesGramas(smheParser.LblLucesGramasContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblLucesGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblLucesGramas(smheParser.LblLucesGramasContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code lblVentanasPuertasGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblVentanasPuertasGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code lblSanitizarDispensarGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblSanitizarDispensarGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code lblUsarGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblUsarGramas(smheParser.LblUsarGramasContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblUsarGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblUsarGramas(smheParser.LblUsarGramasContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code lblSalirGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterLblSalirGramas(smheParser.LblSalirGramasContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lblSalirGramas}
-	 * labeled alternative in {@link smheParser#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitLblSalirGramas(smheParser.LblSalirGramasContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code lblUsarFuncion}
 	 * labeled alternative in {@link smheParser#usar}.
 	 * @param ctx the parse tree
@@ -535,6 +547,18 @@ public interface smheListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLblUsarFuncion(smheParser.LblUsarFuncionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lblUsarFuncion1}
+	 * labeled alternative in {@link smheParser#usar}.
+	 * @param ctx the parse tree
+	 */
+	void enterLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lblUsarFuncion1}
+	 * labeled alternative in {@link smheParser#usar}.
+	 * @param ctx the parse tree
+	 */
+	void exitLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx);
 	/**
 	 * Enter a parse tree produced by the {@code lblUsarAdmitir}
 	 * labeled alternative in {@link smheParser#usar}.

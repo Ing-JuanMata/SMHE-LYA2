@@ -1,8 +1,8 @@
 inicio controlYLimpieza{
 comienzo(cada 1 min){
-	tiempoClase declarar como entero = 60;
-	tiempoAdmision declarar como entero = 25;
-	tiempoVentilacion declarar como entero = 5;
+	declarar tiempoClase como entero = 60;
+	 declarar tiempoAdmision como entero = 25;
+	declarar tiempoVentilacion como entero = 5;
 
 	usar admitir(verdadero, por tiempoAdmision min);
 
@@ -18,9 +18,9 @@ comienzo(cada 1 min){
 salir;
 }
 
-funcion controlPuertasYVentanas(tiempoClase declarar como entero){
-	edoPuertas declarar como logico = estado puertas;
-	edoVentanas declarar como logico = estado ventanas;
+funcion controlPuertasYVentanas(declarar tiempoClase como entero){
+	declarar edoPuertas como logico = estado puertas;
+	declarar edoVentanas como logico = estado ventanas;
 
 	condicion(edoPuertas && !edoVentanas){
 	cerrar puertas mantener;

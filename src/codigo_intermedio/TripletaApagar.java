@@ -10,9 +10,9 @@ package codigo_intermedio;
  */
 public class TripletaApagar extends Tripleta {
 
-    public TripletaApagar() {
+    public TripletaApagar(String actor) {
         super("apagar");
-        this.operando1 = "luces";
+        this.operando1 = actor;
     }
 
     @Override

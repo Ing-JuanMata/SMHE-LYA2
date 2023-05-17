@@ -1,6 +1,7 @@
 inicio prueba{
 comienzo (cada 2 min){
 	declarar aulaAbierta como logico =  estado puertas && estado ventanas;
+	usar ventilar(por 10 min,);
 	condicion(!aulaAbierta){
 		usar abrirPuertasYVentanas();
 	}sino condicion(!estado puertas){

@@ -89,18 +89,6 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLblDeclaraciones1(smheParser.LblDeclaraciones1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblDeclaraciones1(smheParser.LblDeclaraciones1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLblTipo(smheParser.LblTipoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -305,18 +293,6 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLblObtener(smheParser.LblObtenerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblObtener(smheParser.LblObtenerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLblBooleano(smheParser.LblBooleanoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -329,6 +305,30 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLblObtener(smheParser.LblObtenerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblObtener(smheParser.LblObtenerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblObtener1(smheParser.LblObtener1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblObtener1(smheParser.LblObtener1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLblEstado(smheParser.LblEstadoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -336,6 +336,18 @@ public class smheBaseListener implements smheListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLblEstado(smheParser.LblEstadoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblEstado1(smheParser.LblEstado1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblEstado1(smheParser.LblEstado1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -365,18 +377,6 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLblEstadoValor1(smheParser.LblEstadoValor1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblEstadoValor1(smheParser.LblEstadoValor1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLblValorObtener(smheParser.LblValorObtenerContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -384,18 +384,6 @@ public class smheBaseListener implements smheListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLblValorObtener(smheParser.LblValorObtenerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLblValorObtener1(smheParser.LblValorObtener1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblValorObtener1(smheParser.LblValorObtener1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -420,6 +408,90 @@ public class smheBaseListener implements smheListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLblCondicionalesGramas(smheParser.LblCondicionalesGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblSalirGramas(smheParser.LblSalirGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblSalirGramas(smheParser.LblSalirGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblLucesGramas(smheParser.LblLucesGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblLucesGramas(smheParser.LblLucesGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblLucesGramas1(smheParser.LblLucesGramas1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblLucesGramas1(smheParser.LblLucesGramas1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblSanitizarDispensarGramas1(smheParser.LblSanitizarDispensarGramas1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblSanitizarDispensarGramas1(smheParser.LblSanitizarDispensarGramas1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblUsarGramas(smheParser.LblUsarGramasContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblUsarGramas(smheParser.LblUsarGramasContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -473,66 +545,6 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLblLucesGramas(smheParser.LblLucesGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblLucesGramas(smheParser.LblLucesGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblVentanasPuertasGramas(smheParser.LblVentanasPuertasGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLblUsarGramas(smheParser.LblUsarGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblUsarGramas(smheParser.LblUsarGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLblSalirGramas(smheParser.LblSalirGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblSalirGramas(smheParser.LblSalirGramasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLblUsarFuncion(smheParser.LblUsarFuncionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -540,6 +552,18 @@ public class smheBaseListener implements smheListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLblUsarFuncion(smheParser.LblUsarFuncionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

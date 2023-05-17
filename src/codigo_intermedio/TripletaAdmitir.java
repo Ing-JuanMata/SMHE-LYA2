@@ -10,22 +10,31 @@ package codigo_intermedio;
  */
 public class TripletaAdmitir extends Tripleta {
 
-    private BloqueTripletas expresion;
+    private BloqueTripletas expresion, expresion1;
     private TripletaTiempoPor tiempo;
     private TripletaUsar usar;
 
-    public TripletaAdmitir(TripletaUsar usar, TripletaTiempoPor tiempo, Object expresion, TablaSimbolos tabla) {
+    public TripletaAdmitir(TripletaUsar usar, TripletaTiempoPor tiempo, Object expresion, Object expresion1, TablaSimbolos tabla) {
         super("admitir");
         this.tiempo = tiempo;
         this.usar = usar;
         this.ref1 = this.tiempo;
         analisis.LlaveTabla dirAdmision = new analisis.LlaveTabla("0admision_admitir0", "programa");
+        analisis.LlaveTabla dirCapacidad = new analisis.LlaveTabla("0capacidad_admitir0", "programa");
         if (expresion instanceof BloqueTripletas) {
             this.expresion = (BloqueTripletas) expresion;
             this.expresion.addTripleta(new TripletaAsignacion(dirAdmision, this.expresion.contenido.get(this.expresion.contenido.size() - 1)));
         } else {
             this.expresion = new BloqueTripletas();
             this.expresion.addTripleta(new TripletaAsignacion(dirAdmision, expresion));
+        }
+
+        if (expresion1 instanceof BloqueTripletas) {
+            this.expresion1 = (BloqueTripletas) expresion;
+            this.expresion1.addTripleta(new TripletaAsignacion(dirCapacidad, this.expresion1.contenido.get(this.expresion1.contenido.size() - 1)));
+        } else {
+            this.expresion1 = new BloqueTripletas();
+            this.expresion1.addTripleta(new TripletaAsignacion(dirCapacidad, expresion));
         }
     }
 
@@ -43,6 +52,7 @@ public class TripletaAdmitir extends Tripleta {
     public int enumerarTripleta(int inicio) {
         this.usar.ref1 = this;
         inicio = expresion.enumerarTripletas(inicio);
+        inicio = expresion1.enumerarTripletas(inicio);
         inicio = tiempo.enumerarTripleta(inicio);
         inicio = super.enumerarTripleta(inicio);
         return usar.enumerarTripleta(inicio);
@@ -53,9 +63,15 @@ public class TripletaAdmitir extends Tripleta {
         if (expresion != null) {
             this.expresion.optimizar();
         }
+
+        if (expresion1 != null) {
+            this.expresion1.optimizar();
+        }
+
         if (tiempo != null) {
             this.tiempo.optimizar(padre);
         }
+
         if (this.usar != null) {
             this.usar.optimizar(padre);
         }

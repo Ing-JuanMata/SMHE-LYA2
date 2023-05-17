@@ -14,18 +14,22 @@ import java.util.ArrayList;
 public class TablaFunciones {
 
     TablaSimbolos simbolos;
+    herramientas.TablaSimbolos simbolosSin;
+    herramientas.TablaFunciones funciones;
     java.util.HashMap<String, java.util.ArrayList<LlaveTabla>> tabla;
     java.util.HashMap<String, Tripleta> tripletasInicio;
 
-    public TablaFunciones(TablaSimbolos simbolos) {
+    public TablaFunciones(TablaSimbolos simbolos, herramientas.TablaFunciones funciones, herramientas.TablaSimbolos simbolosSin) {
         this.simbolos = simbolos;
         tabla = new java.util.HashMap<>();
         tripletasInicio = new java.util.HashMap<>();
+        this.funciones = funciones;
+        this.simbolosSin = simbolosSin;
         iniciarTabla();
     }
 
     private void iniciarTabla() {
-        herramientas.TablaFunciones tablaAnalisis = sintactico.MainParser.funciones;
+        herramientas.TablaFunciones tablaAnalisis = funciones;
         for (String funcion : tablaAnalisis.getTabla().keySet()) {
             tabla.put(funcion, tablaAnalisis.getParametros(funcion));
         }
@@ -43,8 +47,8 @@ public class TablaFunciones {
         LlaveTabla llave = this.tabla.get(id).get(pos);
         return simbolos.getDireccion(llave.id, llave.ambito);
     }
-    
-    public LlaveTabla getParametro(String id, int pos){
+
+    public LlaveTabla getParametro(String id, int pos) {
         return tabla.get(id).get(pos);
     }
 
@@ -61,7 +65,7 @@ public class TablaFunciones {
                 modelo.addColumn("Parametro: " + (modelo.getColumnCount() - 1));
             }
             for (LlaveTabla llave : parametros) {
-                fila.add(llave.id + ": " + sintactico.MainParser.tabla.getTipo(llave));
+                fila.add(llave.id + ": " + simbolosSin.getTipo(llave));
             }
             modelo.addRow(fila.toArray());
         });

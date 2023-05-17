@@ -41,6 +41,7 @@ public class TablaFunciones {
     }
 
     public void mostrarTabla(javax.swing.table.DefaultTableModel modelo) {
+        
         modelo.setRowCount(0);
         modelo.setColumnCount(0);
         modelo.addColumn("ID");
@@ -51,7 +52,7 @@ public class TablaFunciones {
                 modelo.addColumn("Parametro: " + (modelo.getColumnCount()));
             }
             for (LlaveTabla llave : parametros) {
-                fila.add(llave.id + ": " + sintactico.MainParser.tabla.getTipo(llave));
+                fila.add(llave.id + ": " + tablaSimbolos.getTipo(llave));
             }
             modelo.addRow(fila.toArray());
         });
@@ -64,7 +65,7 @@ public class TablaFunciones {
     public java.util.ArrayList<String> getTipos(String id) {
         java.util.ArrayList<String> tipos = new java.util.ArrayList<>();
 
-        tabla.get(id).forEach(llave -> tipos.add(sintactico.MainParser.tabla.getTipo(llave)));
+        tabla.get(id).forEach(llave -> tipos.add(tablaSimbolos.getTipo(llave)));
         return tipos;
     }
 

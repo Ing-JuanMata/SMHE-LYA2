@@ -13,15 +13,17 @@ import java.util.HashMap;
  */
 public class TablaSimbolos {
 
+    private herramientas.TablaSimbolos simbolos;
     private HashMap<LlaveTabla, String> tabla;
 
-    public TablaSimbolos() {
+    public TablaSimbolos(herramientas.TablaSimbolos simbolos) {
         tabla = new HashMap<>();
+        this.simbolos = simbolos;
         iniciarTabla();
     }
 
     private void iniciarTabla() {
-        herramientas.TablaSimbolos tablaAnalisis = sintactico.MainParser.tabla;
+        herramientas.TablaSimbolos tablaAnalisis = simbolos;
         int direccion = 0x0c;
         for (LlaveTabla llave : tablaAnalisis.getTabla().keySet()) {
             tabla.put(llave, Integer.toHexString(direccion++));
@@ -29,6 +31,7 @@ public class TablaSimbolos {
         tabla.put(new LlaveTabla("0puertas_ventilar0", "programa"), Integer.toHexString(direccion++));
         tabla.put(new LlaveTabla("0ventanas_ventilar0", "programa"), Integer.toHexString(direccion++));
         tabla.put(new LlaveTabla("0admision_admitir0", "programa"), Integer.toHexString(direccion++));
+        tabla.put(new LlaveTabla("0capacidad_admitir0", "programa"), Integer.toHexString(direccion++));
     }
 
     public void verTabla(javax.swing.table.DefaultTableModel modelo) {
