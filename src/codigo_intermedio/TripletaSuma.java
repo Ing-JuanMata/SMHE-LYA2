@@ -53,7 +53,7 @@ public class TripletaSuma extends TripletaExpresion {
         }
 
         if (super.siguiente == 1) {
-            return codigo + "MOVWF INDF\n" + "INCF FSR,F\n";
+            return codigo + "MOVWF INDF\nINCF FSR,F\n";
         }
         return codigo;
     }

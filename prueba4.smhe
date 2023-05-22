@@ -1,5 +1,5 @@
 inicio test{
 comienzo(cada 30 min){
-	declarar b como entero = (10+2)+(1-3) - (5+2-3) + 10;
+	declarar b como entero = 10-3*(6-8+1)/5 - 10/3+ 6;
 }
 }fin

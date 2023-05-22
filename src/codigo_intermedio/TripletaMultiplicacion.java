@@ -4,6 +4,9 @@
  */
 package codigo_intermedio;
 
+import analisis.LlaveTabla;
+import sintactico.CIVisitor;
+
 /**
  *
  * @author jujemataso
@@ -16,7 +19,46 @@ public class TripletaMultiplicacion extends TripletaExpresion {
 
     @Override
     public String codigoObjeto() {
-        return "";
+        String codigo = super.siguiente == 1 ? "BSF FF\n" : "BCF FF\n";
+        if (super.ref2 == null) {
+            Object valor = super.operando2;
+            if (valor instanceof Integer) {
+                valor = "0x" + Integer.toHexString((int) valor);
+                codigo += "MOVLW " + valor + "\n";
+                codigo += "MOVWF MB\n";
+            } /*else if (valor instanceof String) {
+                codigo += "CLRW\n";
+                codigo += valor.toString().equals("verdadero") ? "IORLW 0X01\n" : "";
+            }*/ else if (valor instanceof LlaveTabla) {
+                LlaveTabla id = (LlaveTabla) valor;
+                String dir = CIVisitor.simbolos.getDireccion(id);
+                codigo += "MOVFW " + dir + "\n";
+                codigo += "MOVWF MB\n";
+            }
+        } else {
+            codigo += "MOVWF MB\n";
+        }
+
+        if (super.ref1 == null) {
+            Object valor = super.operando1;
+            if (valor instanceof Integer) {
+                valor = "0x" + Integer.toHexString((int) valor);
+                codigo += "MOVLW " + valor + "\n";
+                codigo += "MOVWF MA\n";
+            } else if (valor instanceof LlaveTabla) {
+                LlaveTabla id = (LlaveTabla) valor;
+                String dir = CIVisitor.simbolos.getDireccion(id);
+                codigo += "MOVFW " + dir + "\n";
+                codigo += "MOVWF MA";
+            }
+        } else {
+            codigo += """
+                      DECF FSR,F
+                      MOVFW INDF
+                      MOVWF MA
+                      """;
+        }
+        return codigo + "CALL MUL\n";
     }
 
 }
