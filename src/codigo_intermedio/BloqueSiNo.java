@@ -12,8 +12,8 @@ public class BloqueSiNo extends BloqueCondicional {
 
     BloqueCondicion condicion;
 
-    public BloqueSiNo(BloqueTripletas bloquePadre) {
-        super(bloquePadre);
+    public BloqueSiNo(BloqueTripletas bloquePadre, int numero) {
+        super(bloquePadre, numero);
     }
 
     public void setCondicion(BloqueCondicion condicion) {
@@ -30,7 +30,7 @@ public class BloqueSiNo extends BloqueCondicional {
     @Override
     public int enumerarTripletas(int inicio) {
         if (condicion != null) {
-                inicio = condicion.enumerarTripletas(inicio);
+            inicio = condicion.enumerarTripletas(inicio);
         }
         return super.enumerarTripletas(inicio);
         //si no tiene condicion realizar solo el cuerpo del sino
@@ -41,8 +41,15 @@ public class BloqueSiNo extends BloqueCondicional {
     protected void optimizar() {
         super.optimizar(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
-    
-    
+
+    @Override
+    public String generarCO() {
+        if (this.condicion == null) {
+            return super.generarCO();
+        } else {
+            return this.condicion.generarCO();
+        }
+    }
 
     @Override
     public String toString() {

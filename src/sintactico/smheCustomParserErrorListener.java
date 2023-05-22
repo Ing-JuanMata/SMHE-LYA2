@@ -90,6 +90,7 @@ public class smheCustomParserErrorListener extends BaseErrorListener {
         if (p.getContext() instanceof smheParser.LblTiempoPorContext || p.getContext() instanceof smheParser.LblTiempoCadaContext) {
             errores.agregarErrorSintactico("ES7", line, getEsperados(p, v));
         }
+        errores.agregarErrorSintactico("ES7", line, getEsperados(p, v));
         System.out.println(getEsperados(p, v));
         System.out.println("Contexto: " + p.getRuleNames()[p.getContext().getRuleIndex()] + " id contexto: " + p.getContext().getRuleIndex());
     }

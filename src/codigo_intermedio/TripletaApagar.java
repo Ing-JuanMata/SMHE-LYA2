@@ -12,12 +12,12 @@ public class TripletaApagar extends Tripleta {
 
     public TripletaApagar(String actor) {
         super("apagar");
-        this.operando1 = actor;
+        super.operando1 = actor;
     }
 
     @Override
     public String codigoObjeto() {
-        return "";
+        return super.operando1.equals("luces") ? "CALL OFF_LUCES\n" : "CALL OFF_VENT\n";
     }
 
     @Override

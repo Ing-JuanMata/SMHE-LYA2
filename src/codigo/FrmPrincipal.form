@@ -227,10 +227,13 @@
                 </Menu>
               </SubComponents>
             </Menu>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+            <MenuItem class="javax.swing.JMenuItem" name="menuCO">
               <Properties>
                 <Property name="text" type="java.lang.String" value="C&#xf3;digo final"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuCOActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

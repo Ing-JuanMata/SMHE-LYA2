@@ -4,6 +4,8 @@
  */
 package codigo_intermedio;
 
+import analisis.LlaveTabla;
+
 /**
  *
  * @author jujemataso
@@ -11,20 +13,23 @@ package codigo_intermedio;
 public class TripletaDeclaracion extends Tripleta {
 
     private TripletaAsignacion inicializacion;
+    private LlaveTabla id;
 
-    public TripletaDeclaracion(String tipo, analisis.LlaveTabla id) {
+    public TripletaDeclaracion(String tipo, LlaveTabla id) {
         super(tipo);
-        super.operando1 = id.id;
+        this.id = id;
+        super.operando1 = this.id.id;
     }
 
     public void setInicializacion(TripletaAsignacion inicializacion) {
         this.inicializacion = inicializacion;
         this.inicializacion.ref1 = this;
+        this.inicializacion.setId(id);
     }
 
     @Override
     public String codigoObjeto() {
-        return "";
+        return this.inicializacion != null ? this.inicializacion.codigoObjeto() : "";
     }
 
     @Override

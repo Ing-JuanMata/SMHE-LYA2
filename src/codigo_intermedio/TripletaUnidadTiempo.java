@@ -4,11 +4,16 @@
  */
 package codigo_intermedio;
 
+import analisis.LlaveTabla;
+import sintactico.CIVisitor;
+
 /**
  *
  * @author jujemataso
  */
 public class TripletaUnidadTiempo extends Tripleta {
+
+    private LlaveTabla id;
 
     public TripletaUnidadTiempo(String unidad, Object expresion) {
         super(unidad);
@@ -16,7 +21,8 @@ public class TripletaUnidadTiempo extends Tripleta {
             super.ref1 = (Tripleta) expresion;
             return;
         } else if (expresion instanceof analisis.LlaveTabla) {
-            super.operando1 = ((analisis.LlaveTabla) expresion).id;
+            this.id = (analisis.LlaveTabla) expresion;
+            super.operando1 = this.id.id;
             return;
         }
 
@@ -25,14 +31,32 @@ public class TripletaUnidadTiempo extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        return "";
+        String codigo;
+        String unidad = "SEGUNDOS";
+        switch (super.operador) {
+            case "min" ->
+                unidad = "MINUTOS";
+            case "hr" ->
+                unidad = "HORAS";
+        }
+        unidad += ",F";
+        if (super.ref1 != null) {
+            return "ADDWF " + unidad + "\n";
+        } else {
+            if (this.id != null) {
+                String dir = CIVisitor.simbolos.getDireccion(this.id);
+                codigo = "MOVFW " + dir + "\n";
+                return codigo + "ADDWF " + unidad + "\n";
+            }
+
+            codigo = "MOVLW 0X" + Integer.toHexString(Integer.parseInt(super.operando1 + "")) + "\n";
+            return codigo + "ADDWF " + unidad + "\n";
+        }
     }
 
     @Override
     public void optimizar(BloqueTripletas padre) {
         super.resolverReferencias(padre);
     }
-    
-    
 
 }

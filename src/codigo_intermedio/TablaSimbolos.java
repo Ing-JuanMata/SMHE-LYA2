@@ -24,14 +24,14 @@ public class TablaSimbolos {
 
     private void iniciarTabla() {
         herramientas.TablaSimbolos tablaAnalisis = simbolos;
-        int direccion = 0x0c;
+        tabla.put(new LlaveTabla("0puertas_ventilar0", "programa"), "VENTP");
+        tabla.put(new LlaveTabla("0ventanas_ventilar0", "programa"), "VENTV");
+        tabla.put(new LlaveTabla("0admision_admitir0", "programa"), "ADMIP");
+        tabla.put(new LlaveTabla("0capacidad_admitir0", "programa"), "LIMITE");
+        int direccion = 0x18;
         for (LlaveTabla llave : tablaAnalisis.getTabla().keySet()) {
             tabla.put(llave, Integer.toHexString(direccion++));
         }
-        tabla.put(new LlaveTabla("0puertas_ventilar0", "programa"), Integer.toHexString(direccion++));
-        tabla.put(new LlaveTabla("0ventanas_ventilar0", "programa"), Integer.toHexString(direccion++));
-        tabla.put(new LlaveTabla("0admision_admitir0", "programa"), Integer.toHexString(direccion++));
-        tabla.put(new LlaveTabla("0capacidad_admitir0", "programa"), Integer.toHexString(direccion++));
     }
 
     public void verTabla(javax.swing.table.DefaultTableModel modelo) {
@@ -51,6 +51,10 @@ public class TablaSimbolos {
 
     public String getDireccion(String id, String ambito) {
         return "0x" + tabla.get(new LlaveTabla(id, getAmbito(id, ambito)));
+    }
+
+    public String getDireccion(LlaveTabla id) {
+        return getDireccion(id.id, id.ambito);
     }
 
     private String getAmbito(String id, String ambito) {

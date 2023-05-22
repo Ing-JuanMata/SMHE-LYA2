@@ -12,10 +12,12 @@ public abstract class BloqueCondicional extends BloqueTripletas {
 
     public BloqueTripletas bloquePadre;
     protected TripletaCondicion condicion;
+    protected int numero;
 
-    public BloqueCondicional(BloqueTripletas bloquePadre) {
+    public BloqueCondicional(BloqueTripletas bloquePadre, int numero) {
         super();
         this.bloquePadre = bloquePadre;
+        this.numero = numero;
     }
 
     public void setCondicion(TripletaCondicion condicion) {

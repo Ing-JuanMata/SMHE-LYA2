@@ -16,7 +16,7 @@ public class TripletaFin extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        return "";
+        return "END\n";
     }
 
     @Override

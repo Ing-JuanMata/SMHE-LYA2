@@ -27,7 +27,7 @@ import codigo_intermedio.TripletaCondicion;
 import codigo_intermedio.TripletaDeclaracion;
 import codigo_intermedio.TripletaDecremento;
 import codigo_intermedio.TripletaDiferente;
-import codigo_intermedio.TripletaDispensar;
+import codigo_intermedio.TripletaDivision;
 import codigo_intermedio.TripletaEncender;
 import codigo_intermedio.TripletaEstado;
 import codigo_intermedio.TripletaIgual;
@@ -36,6 +36,7 @@ import codigo_intermedio.TripletaMayor;
 import codigo_intermedio.TripletaMayorIgual;
 import codigo_intermedio.TripletaMenor;
 import codigo_intermedio.TripletaMenorIgual;
+import codigo_intermedio.TripletaMultiplicacion;
 import codigo_intermedio.TripletaNegacion;
 import codigo_intermedio.TripletaObtener;
 import codigo_intermedio.TripletaOr;
@@ -56,14 +57,14 @@ import java.util.ArrayList;
 public class CIVisitor extends smheBaseVisitor<Tripleta> {
 
     private String ambito = "";
-    private int anidamiento = 0;
-    private TablaSimbolos simbolos;
-    private TablaFunciones funciones;
+    private int anidamiento = 0, nm = 0, nc = 0, nsn = 0;
+    public static TablaSimbolos simbolos;
+    public static TablaFunciones funciones;
     public static BloquePrograma programa;
     private BloqueTripletas bloqueActual, bloqueAux;
     private Tripleta tripletaActual;
     private TripletaAux tAux;
-    private Object aux1, aux2, aux3, aux4, valorActual, expr1, expr2;
+    private Object valorActual, expr1, expr2;
     private boolean inicial = false;
     private ArrayList<Integer> anidamientos = new ArrayList<>();
 
@@ -72,7 +73,7 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
         this.funciones = funciones;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Gestion de bloques y trpletas">
+    // <editor-fold defaultstate="collapsed" desc="Gestion de bloques y tripletas">
     private void agregarTripletaBloque(Tripleta tripleta) {
         bloqueActual.addTripleta(tripleta);
     }
@@ -208,13 +209,18 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
 
     @Override
     public Tripleta visitLblAndOr(smheParser.LblAndOrContext ctx) {
-        aux1 = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
-        valorActual = visit(ctx.op2());
-        valorActual = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
+        Object aux1;
+        if (valorActual instanceof TripletaAux) {
+            aux1 = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(1);
+            aux1 = valorActual;
+        }
+        if (valorActual instanceof TripletaAux) {
+            valorActual = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(2);
+        }
         valorActual = ctx.op.getType() == smheParser.AND
                 ? new TripletaAnd(aux1, valorActual)
                 : new TripletaOr(aux1, valorActual);
@@ -224,13 +230,19 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
 
     @Override
     public Tripleta visitLblRelacionales(smheParser.LblRelacionalesContext ctx) {
-        aux2 = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
+        Object aux2;
+        if (valorActual instanceof TripletaAux) {
+            aux2 = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(1);
+            aux2 = valorActual;
+        }
         valorActual = visit(ctx.op4());
-        valorActual = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
+        if (valorActual instanceof TripletaAux) {
+            valorActual = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(2);
+        }
         switch (ctx.op.getType()) {
             case smheParser.MENOR ->
                 valorActual = new TripletaMenor(aux2, valorActual);
@@ -252,13 +264,19 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
 
     @Override
     public Tripleta visitLblSumaResta(smheParser.LblSumaRestaContext ctx) {
-        aux3 = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
+        Object aux3;
+        if (valorActual instanceof TripletaAux) {
+            aux3 = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(1);
+            aux3 = valorActual;
+        }
         valorActual = visit(ctx.op6());
-        valorActual = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
+        if (valorActual instanceof TripletaAux) {
+            valorActual = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(2);
+        }
         valorActual = ctx.op.getType() == smheParser.SUMA
                 ? new TripletaSuma(aux3, valorActual)
                 : new TripletaResta(aux3, valorActual);
@@ -269,16 +287,22 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
 
     @Override
     public Tripleta visitLblMultDiv(smheParser.LblMultDivContext ctx) {
-        aux4 = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
+        Object aux4;
+        if (valorActual instanceof TripletaAux) {
+            aux4 = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(1);
+            aux4 = valorActual;
+        }
         valorActual = visit(ctx.op8());
-        valorActual = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
-        valorActual = ctx.op.getType() == smheParser.SUMA
-                ? new TripletaSuma(aux3, valorActual)
-                : new TripletaResta(aux3, valorActual);
+        if (valorActual instanceof TripletaAux) {
+            valorActual = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(2);
+        }
+        valorActual = ctx.op.getType() == smheParser.MULTIPLICACION
+                ? new TripletaMultiplicacion(aux4, valorActual)
+                : new TripletaDivision(aux4, valorActual);
 
         agregarTripletaBloque((Tripleta) valorActual);
         return ctx.op7() == null ? (Tripleta) valorActual : visit(ctx.op7());
@@ -287,9 +311,11 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
     @Override
     public Tripleta visitLblNegacionLog(smheParser.LblNegacionLogContext ctx) {
         valorActual = visit(ctx.op8());
-        valorActual = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
+        if (valorActual instanceof TripletaAux) {
+            valorActual = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(1);
+        }
         valorActual = new TripletaNegacion(valorActual);
         agregarTripletaBloque((Tripleta) valorActual);
         return (Tripleta) valorActual;
@@ -298,9 +324,11 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
     @Override
     public Tripleta visitLblNegacionAr(smheParser.LblNegacionArContext ctx) {
         valorActual = visit(ctx.op8());
-        valorActual = valorActual instanceof TripletaAux
-                ? ((TripletaAux) valorActual).getOperando1()
-                : valorActual;
+        if (valorActual instanceof TripletaAux) {
+            valorActual = ((TripletaAux) valorActual).getOperando1();
+        } else {
+            ((Tripleta) valorActual).setSiguiente(1);
+        }
         valorActual = new TripletaResta(valorActual);
         agregarTripletaBloque((Tripleta) valorActual);
         return (Tripleta) valorActual;
@@ -495,9 +523,7 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
     @Override
     public Tripleta visitLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx) {
         TripletaTiempoPor tiempo = (TripletaTiempoPor) visit(ctx.tp());
-        Tripleta t = ctx.accion.getType() == smheParser.SANITIZAR
-                ? new TripletaSanitizar(tiempo)
-                : new TripletaDispensar(tiempo);
+        Tripleta t = new TripletaSanitizar(tiempo);
         agregarTripletaBloque(t);
         return null;
     }
@@ -625,7 +651,7 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
 
     @Override
     public Tripleta visitLblMientras(smheParser.LblMientrasContext ctx) {
-        bloqueActual = new BloqueMientras(bloqueActual);
+        bloqueActual = new BloqueMientras(bloqueActual, nm++);
         bloqueAux = bloqueActual;
         bloqueActual = new BloqueTripletas();
         expr1 = visit(ctx.expresion());
@@ -647,7 +673,7 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
     @Override
     public Tripleta visitLblCondicion(smheParser.LblCondicionContext ctx) {
         if (!(bloqueActual instanceof BloqueCondicion)) {
-            bloqueActual = new BloqueCondicion(bloqueActual);
+            bloqueActual = new BloqueCondicion(bloqueActual, nc++);
             inicial = true;
         }
         bloqueAux = bloqueActual;
@@ -674,7 +700,7 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
     @Override
     public Tripleta visitLblSino(smheParser.LblSinoContext ctx) {
         inicial = false;
-        bloqueActual = new BloqueSiNo(bloqueActual);
+        bloqueActual = new BloqueSiNo(bloqueActual, nsn++);
         ((BloqueCondicion) bloqueAux).setSiNo((BloqueSiNo) bloqueActual);
         if (ctx.gramas() != null) {
             ambito += ":" + agregarAnidamiento();
@@ -688,8 +714,8 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
     @Override
     public Tripleta visitLblSinoCondicionales(smheParser.LblSinoCondicionalesContext ctx) {
         inicial = false;
-        BloqueSiNo bsn = new BloqueSiNo(bloqueActual);
-        BloqueCondicion bc = new BloqueCondicion(bloqueActual);
+        BloqueSiNo bsn = new BloqueSiNo(bloqueActual, nsn++);
+        BloqueCondicion bc = new BloqueCondicion(bloqueActual, nc++);
         bsn.setCondicion(bc);
         ((BloqueCondicion) bloqueAux).setSiNo(bsn);
         bloqueActual = bc;

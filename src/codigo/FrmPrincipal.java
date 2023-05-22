@@ -114,7 +114,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu7 = new javax.swing.JMenu();
         intermedioSimbolos = new javax.swing.JMenuItem();
         intermedioFunciones = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        menuCO = new javax.swing.JMenuItem();
 
         jMenu2.setText("jMenu2");
 
@@ -415,8 +415,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jMenu1.add(jMenu6);
 
-        jMenuItem2.setText("Código final");
-        jMenu1.add(jMenuItem2);
+        menuCO.setText("Código final");
+        menuCO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCOActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuCO);
 
         jMenuBar2.add(jMenu1);
 
@@ -780,6 +785,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
         vc.setVisible(true);
     }//GEN-LAST:event_intermedioOptimoActionPerformed
 
+    private void menuCOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCOActionPerformed
+        if (intermedio == null) {
+            this.analisisSintactico(true);
+        }
+        intermedio.generarCO();
+    }//GEN-LAST:event_menuCOActionPerformed
+
     private void abrirArchivo() {
         JFileChooser fc = getJFileChooser();
         fc.setCurrentDirectory(new java.io.File(System.getProperty("user.dir")));
@@ -946,12 +958,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel lblConsola;
+    private javax.swing.JMenuItem menuCO;
     private javax.swing.JMenuItem menuErrores;
     private javax.swing.JMenuItem menuFunciones;
     private javax.swing.JMenuItem menuLexico;

@@ -35,8 +35,9 @@ public class TripletaTiempo extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        //Colocar valores de temporizacion
-        return "";
+        String codigo = this.unidad.codigoObjeto();
+        codigo += "CALL TIMER\n";
+        return codigo;
     }
 
     @Override

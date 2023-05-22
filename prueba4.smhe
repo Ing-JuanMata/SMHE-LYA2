@@ -1,7 +1,5 @@
 inicio test{
-     declarar a como entero = 1;
 comienzo(cada 30 min){
-	usar b(10, verdadero);
+	declarar b como entero = (10+2)+(1-3) - (5+2-3) + 10;
 }
-funcion b(declarar c como entero, declarar d como logico){salir;}
 }fin

@@ -20,8 +20,9 @@ public class TripletaSanitizar extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        //Configurar el tiempo y luego realizar la accion
-        return "";
+        String codigo = this.tiempo.codigoObjeto();
+        codigo = codigo.substring(0, codigo.lastIndexOf("CALL TIMER\n"));
+        return codigo + "CALL AC_SANIT\n";
     }
 
     @Override

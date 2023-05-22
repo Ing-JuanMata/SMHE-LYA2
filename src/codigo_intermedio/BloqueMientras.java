@@ -10,8 +10,8 @@ package codigo_intermedio;
  */
 public class BloqueMientras extends BloqueCondicional {
 
-    public BloqueMientras(BloqueTripletas bloquePadre) {
-        super(bloquePadre);
+    public BloqueMientras(BloqueTripletas bloquePadre, int numero) {
+        super(bloquePadre, numero);
     }
 
     public void referenciarSiguiente(Tripleta t) {
@@ -37,6 +37,12 @@ public class BloqueMientras extends BloqueCondicional {
             return;
         }
         super.optimizar();
+    }
+
+    @Override
+    public String generarCO() {
+        String codigo = super.condicion.codigoObjeto();
+        return codigo + super.generarCO();
     }
 
 }

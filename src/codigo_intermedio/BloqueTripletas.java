@@ -104,6 +104,23 @@ public class BloqueTripletas {
         }
     }
 
+    public String generarCO() {
+        String codigo = "";
+        for (Object o : contenido) {
+            if (o instanceof BloqueTripletas) {
+                BloqueTripletas bt = (BloqueTripletas) o;
+                codigo += bt.generarCO();
+                continue;
+            }
+
+            if (o instanceof Tripleta) {
+                Tripleta t = (Tripleta) o;
+                codigo += t.codigoObjeto();
+            }
+        }
+        return codigo;
+    }
+
     @Override
     public String toString() {
         if (contenido.isEmpty()) {

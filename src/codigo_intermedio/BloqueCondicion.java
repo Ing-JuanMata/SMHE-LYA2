@@ -12,8 +12,8 @@ public class BloqueCondicion extends BloqueCondicional {
 
     private BloqueSiNo sino;
 
-    public BloqueCondicion(BloqueTripletas bloquePadre) {
-        super(bloquePadre);
+    public BloqueCondicion(BloqueTripletas bloquePadre, int numero) {
+        super(bloquePadre, numero);
     }
 
     public void setSiNo(BloqueSiNo sino) {
@@ -60,6 +60,13 @@ public class BloqueCondicion extends BloqueCondicional {
         //Comenzar con las tripletas de la condición y seguir con las del cuerpo
         //En caso de existir el bloque si no, enumerarlo despues del cuerpo
         return sino == null ? inicio : sino.enumerarTripletas(inicio);
+    }
+
+    @Override
+    public String generarCO() {
+        String codigo = super.condicion.codigoObjeto();
+        codigo += super.generarCO();
+        return codigo + (this.sino == null ? "" : this.sino.generarCO());
     }
 
     @Override

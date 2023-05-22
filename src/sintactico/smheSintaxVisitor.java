@@ -374,7 +374,7 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     @Override
     public Object visitLblObtener1(smheParser.LblObtener1Context ctx) {
         if (ctx.obtener() == null) {
-            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), "[\"temperatura\", \"personas\"]");
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), "[\"personas\"]");
         }
         return "entero";
     }
@@ -825,7 +825,7 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     @Override
     public Object visitLblSanitizarDispensarGramas(smheParser.LblSanitizarDispensarGramasContext ctx) {
         if (ctx.accion == null) {
-            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), "\"sanitizar\", \"dispensar\"");
+            errores.agregarErrorSintactico("ES7", ctx.start.getLine(), "\"sanitizar\"");
         }
 
         visit(ctx.tp());

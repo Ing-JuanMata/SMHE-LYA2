@@ -16,7 +16,7 @@ public class TripletaInicio extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        return "codigo de cabecera";
+        return "codigo de cabecera\n";
     }
 
     @Override

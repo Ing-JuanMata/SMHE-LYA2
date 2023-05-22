@@ -19,7 +19,7 @@ public class BloqueComienzo extends BloqueTripletas {
 
     @Override
     public int enumerarTripletas(int inicio) {
-        if(super.contenido.isEmpty()){
+        if (super.contenido.isEmpty()) {
             return tiempo.enumerarTripleta(inicio);
         }
         inicio = super.enumerarTripletas(inicio);
@@ -41,10 +41,17 @@ public class BloqueComienzo extends BloqueTripletas {
     }
 
     @Override
+    public String generarCO() {
+        String codigo = "COMIENZO " + super.generarCO();
+        codigo += this.tiempo.codigoObjeto();
+        return codigo + "GOTO COMIENZO\n";
+    }
+
+    @Override
     public String toString() {
-        if(super.contenido.isEmpty()){
+        if (super.contenido.isEmpty()) {
             tiempo.ref2 = tiempo;
-            return super.toString() + "\n" + tiempo.toString();
+            return tiempo.toString();
         }
         Object inicio = super.contenido.get(0);
         while ((inicio instanceof BloqueTripletas)) {

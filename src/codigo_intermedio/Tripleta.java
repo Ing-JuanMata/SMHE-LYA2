@@ -10,8 +10,8 @@ package codigo_intermedio;
  */
 public abstract class Tripleta {
 
-    protected int numero;
-    protected String operador;
+    protected int numero, siguiente = 0;
+    protected String operador, temporal;
     protected Tripleta ref1, ref2;
     protected Object operando1, operando2;
     protected boolean calculada = false;
@@ -72,6 +72,10 @@ public abstract class Tripleta {
     public void setOperando2(Object operando2) {
         this.operando2 = operando2;
     }
+    
+    public void setSiguiente(int siguiente){
+        this.siguiente = siguiente;
+    }
 
     @Override
     public String toString() {
@@ -116,5 +120,9 @@ public abstract class Tripleta {
             padre.contenido.remove(this.ref2);
             this.ref2 = null;
         }
+    }
+
+    protected boolean tieneReferencias() {
+        return this.ref1 != null || this.ref2 != null;
     }
 }

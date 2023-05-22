@@ -48,6 +48,16 @@ public class BloquePrograma extends BloqueTripletas {
     }
 
     @Override
+    public String generarCO() {
+        String codigo = this.inicio.codigoObjeto();
+        for (BloqueTripletas bt : bloques) {
+            codigo += bt.generarCO();
+        }
+        codigo += this.fin.codigoObjeto();
+        return codigo;
+    }
+
+    @Override
     public String toString() {
         String cadena = inicio.toString() + "\n";
         for (BloqueTripletas bt : bloques) {

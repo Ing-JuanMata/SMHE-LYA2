@@ -27,4 +27,8 @@ public class CodigoIntermedio {
         CIVisitor.programa.optimizar = optimizar;
         CIVisitor.programa.enumerarTripletas(0);
     }
+
+    public void generarCO() {
+        System.out.println(CIVisitor.programa.generarCO());
+    }
 }
