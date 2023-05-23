@@ -19,31 +19,39 @@ public class TripletaVentilar extends Tripleta {
         this.ref1 = tiempo;
         this.usar = usar;
         this.tiempo = tiempo;
-        analisis.LlaveTabla dirPuertas = new analisis.LlaveTabla("0puertas_ventilacion0", "programa");
-        analisis.LlaveTabla dirVentanas = new analisis.LlaveTabla("0ventanas_ventilacion0", "programa");
+        analisis.LlaveTabla dirPuertas = new analisis.LlaveTabla("0puertas_ventilar0", "programa");
+        analisis.LlaveTabla dirVentanas = new analisis.LlaveTabla("0ventanas_ventilar0", "programa");
         if (puertas instanceof BloqueTripletas) {
             this.puertas = (BloqueTripletas) puertas;
-            this.puertas.addTripleta(new TripletaAsignacion(dirPuertas, this.puertas.contenido.get(this.puertas.contenido.size() - 1)));
+            TripletaAsignacion ta = new TripletaAsignacion(dirPuertas, this.puertas.contenido.get(this.puertas.contenido.size() - 1));
+            ta.setBit();
+            this.puertas.addTripleta(ta);
         } else {
             this.puertas = new BloqueTripletas();
-            this.puertas.addTripleta(new TripletaAsignacion(dirPuertas, puertas));
+            TripletaAsignacion ta = new TripletaAsignacion(dirPuertas, puertas);
+            ta.setBit();
+            this.puertas.addTripleta(ta);
         }
 
         if (ventanas instanceof BloqueTripletas) {
             this.ventanas = (BloqueTripletas) ventanas;
-            this.ventanas.addTripleta(new TripletaAsignacion(dirVentanas, this.ventanas.contenido.get(this.ventanas.contenido.size() - 1)));
+            TripletaAsignacion ta = new TripletaAsignacion(dirVentanas, this.ventanas.contenido.get(this.ventanas.contenido.size() - 1));
+            ta.setBit();
+            this.ventanas.addTripleta(ta);
         } else {
             this.ventanas = new BloqueTripletas();
-            this.ventanas.addTripleta(new TripletaAsignacion(dirVentanas, ventanas));
+            TripletaAsignacion ta = new TripletaAsignacion(dirVentanas, ventanas);
+            ta.setBit();
+            this.ventanas.addTripleta(ta);
         }
     }
 
     @Override
     public String codigoObjeto() {
-        //Numerar tripletas de puertas y luego asignar a la variable 0var_ventilar
-        //Numerar tripletas de ventanas y luego asignar a la variable 1var_ventilar
-        //Enumerar tripleta de tiempo
-        return "";
+        String codigo = this.puertas.generarCO() + this.ventanas.generarCO();
+        String t = this.tiempo.codigoObjeto();
+        codigo += t.substring(0, t.lastIndexOf("CALL"));
+        return codigo + this.usar.codigoObjeto();
     }
 
     @Override

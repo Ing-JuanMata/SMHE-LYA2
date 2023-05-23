@@ -10,7 +10,7 @@ package codigo_intermedio;
  */
 public class TripletaTiempo extends Tripleta {
 
-    protected Object expresion;
+    protected BloqueTripletas expresion;
     protected TripletaUnidadTiempo unidad;
 
     public TripletaTiempo(String operador, Object expresion, String unidad) {
@@ -19,7 +19,8 @@ public class TripletaTiempo extends Tripleta {
             BloqueTripletas b = (BloqueTripletas) expresion;
             Tripleta t = (Tripleta) b.contenido.get(b.contenido.size() - 1);
             super.ref1 = this.unidad = new TripletaUnidadTiempo(unidad, t);
-            this.expresion = expresion;
+            this.expresion = b;
+            this.expresion.addTripleta(this.unidad);
             return;
         }
         super.ref1 = this.unidad = new TripletaUnidadTiempo(unidad, expresion);
@@ -28,14 +29,14 @@ public class TripletaTiempo extends Tripleta {
     @Override
     public Tripleta getInicio() {
         if (expresion != null) {
-            return ((BloqueTripletas) expresion).getInicio();
+            return expresion.getInicio();
         }
         return unidad;
     }
 
     @Override
     public String codigoObjeto() {
-        String codigo = this.unidad.codigoObjeto();
+        String codigo = this.expresion == null ? this.unidad.codigoObjeto() : this.expresion.generarCO();
         codigo += "CALL TIMER\n";
         return codigo;
     }
@@ -43,23 +44,24 @@ public class TripletaTiempo extends Tripleta {
     @Override
     public void optimizar(BloqueTripletas padre) {
         if (this.expresion != null) {
-            ((BloqueTripletas) this.expresion).optimizar();
-            this.unidad.optimizar((BloqueTripletas) this.expresion);
+            this.expresion.optimizar();
         }
     }
 
     @Override
     public int enumerarTripleta(int inicio) {
         if (expresion != null) {
-            inicio = ((BloqueTripletas) expresion).enumerarTripletas(inicio);
+            inicio = expresion.enumerarTripletas(inicio);
+        } else {
+            inicio = unidad.enumerarTripleta(inicio);
         }
-        inicio = unidad.enumerarTripleta(inicio);
+
         return super.enumerarTripleta(inicio);
 
     }
 
     @Override
     public String toString() {
-        return ((expresion != null) ? expresion.toString() + "\n" : "") + unidad.toString() + "\n" + super.toString();
+        return ((expresion != null) ? expresion.toString() + "\n" : unidad.toString() + "\n") + super.toString();
     }
 }

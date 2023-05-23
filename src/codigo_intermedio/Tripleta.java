@@ -11,7 +11,7 @@ package codigo_intermedio;
 public abstract class Tripleta {
 
     protected int numero, siguiente = 0;
-    protected String operador, temporal;
+    protected String operador, temporal, etiqueta;
     protected Tripleta ref1, ref2;
     protected Object operando1, operando2;
     protected boolean calculada = false;
@@ -72,9 +72,13 @@ public abstract class Tripleta {
     public void setOperando2(Object operando2) {
         this.operando2 = operando2;
     }
-    
-    public void setSiguiente(int siguiente){
+
+    public void setSiguiente(int siguiente) {
         this.siguiente = siguiente;
+    }
+
+    public void setEtiqueta(String etiqueta) {
+        this.etiqueta = etiqueta;
     }
 
     @Override

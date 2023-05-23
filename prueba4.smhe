@@ -1,5 +1,6 @@
 inicio test{
-comienzo(cada 30 min){
-	declarar b como entero = 10-3*(6-8+1)/5 - 10/3+ 6;
+	declarar a como entero = 10;
+comienzo(cada a + 20/2 min){
+	usar ventilar(por 10 min, verdadero, falso);
 }
 }fin

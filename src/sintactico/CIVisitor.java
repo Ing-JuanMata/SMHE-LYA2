@@ -185,26 +185,26 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
     //<editor-fold defaultstate="collapsed" desc="Visitar a expresion">
     @Override
     public Tripleta visitLblExpresion(smheParser.LblExpresionContext ctx) {
-        Tripleta op2 = visit(ctx.op2());
-        return ctx.op1() != null ? visit(ctx.op1()) : op2;
+        valorActual = visit(ctx.op2());
+        return ctx.op1() != null ? visit(ctx.op1()) : (Tripleta) valorActual;
     }
 
     @Override
     public Tripleta visitLblOp2(smheParser.LblOp2Context ctx) {
-        Tripleta op4 = visit(ctx.op4());
-        return ctx.op3() != null ? visit(ctx.op3()) : op4;
+        valorActual = visit(ctx.op4());
+        return ctx.op3() != null ? visit(ctx.op3()) : (Tripleta) valorActual;
     }
 
     @Override
     public Tripleta visitLblOp4(smheParser.LblOp4Context ctx) {
-        Tripleta op6 = visit(ctx.op6());
-        return ctx.op5() != null ? visit(ctx.op5()) : op6;
+        valorActual = visit(ctx.op6());
+        return ctx.op5() != null ? visit(ctx.op5()) : (Tripleta) valorActual;
     }
 
     @Override
     public Tripleta visitLblOp6(smheParser.LblOp6Context ctx) {
-        Tripleta op8 = visit(ctx.op8());
-        return ctx.op7() != null ? visit(ctx.op7()) : op8;
+        valorActual = visit(ctx.op8());
+        return ctx.op7() != null ? visit(ctx.op7()) : (Tripleta) valorActual;
     }
 
     @Override
@@ -216,6 +216,7 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
             ((Tripleta) valorActual).setSiguiente(1);
             aux1 = valorActual;
         }
+        valorActual = visit(ctx.op2());
         if (valorActual instanceof TripletaAux) {
             valorActual = ((TripletaAux) valorActual).getOperando1();
         } else {
@@ -603,13 +604,13 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
                 ? ((TripletaAux) expresion).getOperando1()
                 : bloqueActual;
         bloqueActual = new BloqueTripletas();
-        Object expresion1 = visit(ctx.expresion(0));
-        expresion = expresion instanceof TripletaAux
-                ? ((TripletaAux) expresion).getOperando1()
+        Object expresion1 = visit(ctx.expresion(1));
+        expresion1 = expresion1 instanceof TripletaAux
+                ? ((TripletaAux) expresion1).getOperando1()
                 : bloqueActual;
         bloqueActual = bloqueAux;
         TripletaTiempoPor tiempo = (TripletaTiempoPor) visit(ctx.tp());
-        agregarTripletaBloque(new TripletaAdmitir(new TripletaUsar(), tiempo, expresion, expresion1, simbolos));
+        agregarTripletaBloque(new TripletaAdmitir(new TripletaUsar("ADMITIR", funciones), tiempo, expresion, expresion1, simbolos));
 
         return null;
     }
@@ -629,7 +630,7 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
                 ? ((TripletaAux) expr2).getOperando1()
                 : bloqueActual;
         bloqueActual = bloqueAux;
-        agregarTripletaBloque(new TripletaVentilar(new TripletaUsar(), tiempo, expr1, expr2, simbolos));
+        agregarTripletaBloque(new TripletaVentilar(new TripletaUsar("VENTILAR", funciones), tiempo, expr1, expr2, simbolos));
         return null;
     }
 

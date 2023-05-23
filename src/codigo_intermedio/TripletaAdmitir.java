@@ -10,7 +10,7 @@ package codigo_intermedio;
  */
 public class TripletaAdmitir extends Tripleta {
 
-    private BloqueTripletas expresion, expresion1;
+    private BloqueTripletas eAdmitir, eCapacidad;
     private TripletaTiempoPor tiempo;
     private TripletaUsar usar;
 
@@ -22,37 +22,48 @@ public class TripletaAdmitir extends Tripleta {
         analisis.LlaveTabla dirAdmision = new analisis.LlaveTabla("0admision_admitir0", "programa");
         analisis.LlaveTabla dirCapacidad = new analisis.LlaveTabla("0capacidad_admitir0", "programa");
         if (expresion instanceof BloqueTripletas) {
-            this.expresion = (BloqueTripletas) expresion;
-            this.expresion.addTripleta(new TripletaAsignacion(dirAdmision, this.expresion.contenido.get(this.expresion.contenido.size() - 1)));
+            this.eAdmitir = (BloqueTripletas) expresion;
+            TripletaAsignacion ta = new TripletaAsignacion(dirAdmision, this.eAdmitir.contenido.get(this.eAdmitir.contenido.size() - 1));
+            ta.setBit();
+            this.eAdmitir.addTripleta(ta);
         } else {
-            this.expresion = new BloqueTripletas();
-            this.expresion.addTripleta(new TripletaAsignacion(dirAdmision, expresion));
+            this.eAdmitir = new BloqueTripletas();
+            TripletaAsignacion ta = new TripletaAsignacion(dirAdmision, expresion);
+            ta.setBit();
+            this.eAdmitir.addTripleta(ta);
         }
 
         if (expresion1 instanceof BloqueTripletas) {
-            this.expresion1 = (BloqueTripletas) expresion;
-            this.expresion1.addTripleta(new TripletaAsignacion(dirCapacidad, this.expresion1.contenido.get(this.expresion1.contenido.size() - 1)));
+            this.eCapacidad = (BloqueTripletas) expresion1;
+            TripletaAsignacion ta = new TripletaAsignacion(dirCapacidad, this.eCapacidad.contenido.get(this.eCapacidad.contenido.size() - 1));
+            ta.setBit();
+            this.eCapacidad.addTripleta(ta);
         } else {
-            this.expresion1 = new BloqueTripletas();
-            this.expresion1.addTripleta(new TripletaAsignacion(dirCapacidad, expresion));
+            this.eCapacidad = new BloqueTripletas();
+            TripletaAsignacion ta = new TripletaAsignacion(dirCapacidad, expresion1);
+            ta.setBit();
+            this.eCapacidad.addTripleta(ta);
         }
     }
 
     @Override
     public String codigoObjeto() {
-        return "";
+        String codigo = this.eAdmitir.generarCO() + this.eCapacidad.generarCO();
+        String t = this.tiempo.codigoObjeto();
+        codigo += t.substring(0, t.lastIndexOf("CALL"));
+        return codigo + this.usar.codigoObjeto();
     }
 
     @Override
     public Tripleta getInicio() {
-        return expresion.getInicio();
+        return eAdmitir.getInicio();
     }
 
     @Override
     public int enumerarTripleta(int inicio) {
         this.usar.ref1 = this;
-        inicio = expresion.enumerarTripletas(inicio);
-        inicio = expresion1.enumerarTripletas(inicio);
+        inicio = eAdmitir.enumerarTripletas(inicio);
+        inicio = eCapacidad.enumerarTripletas(inicio);
         inicio = tiempo.enumerarTripleta(inicio);
         inicio = super.enumerarTripleta(inicio);
         return usar.enumerarTripleta(inicio);
@@ -60,26 +71,15 @@ public class TripletaAdmitir extends Tripleta {
 
     @Override
     public void optimizar(BloqueTripletas padre) {
-        if (expresion != null) {
-            this.expresion.optimizar();
-        }
-
-        if (expresion1 != null) {
-            this.expresion1.optimizar();
-        }
-
-        if (tiempo != null) {
-            this.tiempo.optimizar(padre);
-        }
-
-        if (this.usar != null) {
-            this.usar.optimizar(padre);
-        }
+        this.eAdmitir.optimizar();
+        this.eCapacidad.optimizar();
+        this.tiempo.optimizar(padre);
+        this.usar.optimizar(padre);
     }
 
     @Override
     public String toString() {
-        return expresion.toString() + "\n" + tiempo.toString() + "\n" + super.toString() + "\n" + usar.toString();
+        return eAdmitir.toString() + "\n" + eCapacidad.toString() + "\n" + tiempo.toString() + "\n" + super.toString() + "\n" + usar.toString();
     }
 
 }

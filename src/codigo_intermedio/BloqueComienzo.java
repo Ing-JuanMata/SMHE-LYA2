@@ -41,6 +41,14 @@ public class BloqueComienzo extends BloqueTripletas {
     }
 
     @Override
+    protected void optimizar() {
+        this.tiempo.optimizar(this);
+        super.optimizar();
+    }
+    
+    
+
+    @Override
     public String generarCO() {
         String codigo = "COMIENZO " + super.generarCO();
         codigo += this.tiempo.codigoObjeto();

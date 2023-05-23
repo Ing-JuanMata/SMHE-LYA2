@@ -44,13 +44,13 @@ public class TablaSimbolos {
             Object[] fila = new Object[3];
             fila[0] = llave.id;
             fila[1] = llave.ambito;
-            fila[2] = "0x" + direccion;
+            fila[2] = (direccion.matches("[0-9]+") ? "0x" : "") + direccion;
             modelo.addRow(fila);
         });
     }
 
     public String getDireccion(String id, String ambito) {
-        return "0x" + tabla.get(new LlaveTabla(id, getAmbito(id, ambito)));
+        return (id.startsWith("0") ? "" : "0x") + tabla.get(new LlaveTabla(id, getAmbito(id, ambito)));
     }
 
     public String getDireccion(LlaveTabla id) {

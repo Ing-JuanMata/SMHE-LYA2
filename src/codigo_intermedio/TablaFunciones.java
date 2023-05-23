@@ -18,6 +18,7 @@ public class TablaFunciones {
     herramientas.TablaFunciones funciones;
     java.util.HashMap<String, java.util.ArrayList<LlaveTabla>> tabla;
     java.util.HashMap<String, Tripleta> tripletasInicio;
+    int n = 0;
 
     public TablaFunciones(TablaSimbolos simbolos, herramientas.TablaFunciones funciones, herramientas.TablaSimbolos simbolosSin) {
         this.simbolos = simbolos;
@@ -36,6 +37,7 @@ public class TablaFunciones {
     }
 
     public void setInicio(String funcion, Tripleta inicio) {
+        inicio.setEtiqueta("F" + n++);
         tripletasInicio.put(funcion, inicio);
     }
 

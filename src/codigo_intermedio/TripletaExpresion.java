@@ -20,9 +20,7 @@ public abstract class TripletaExpresion extends Tripleta {
             super.ref1 = (Tripleta) operando1;
             return;
         } else if (operando1 instanceof analisis.LlaveTabla) {
-            super.operando1 = ((analisis.LlaveTabla) operando1).id;
             this.usaIds = true;
-            return;
         }
         super.operando1 = operando1;
     }
@@ -53,13 +51,13 @@ public abstract class TripletaExpresion extends Tripleta {
         Object temp = null;
         switch (super.operador) {
             case "&&" ->
-                temp = Boolean.valueOf(super.operando1.toString()) && Boolean.valueOf(super.operando2.toString());
+                temp = super.operando1.toString().equals("verdadero") && super.operando2.toString().equals("verdadero");
             case "||" ->
-                temp = Boolean.valueOf(super.operando1.toString()) || Boolean.valueOf(super.operando2.toString());
+                temp = super.operando1.toString().equals("verdadero") || super.operando2.toString().equals("verdadero");
             case "!=" ->
                 temp = !Objects.equals(Integer.valueOf(super.operando1.toString()), Integer.valueOf(super.operando2.toString()));
             case "!" ->
-                temp = !Boolean.valueOf(super.operando1.toString());
+                temp = !super.operando1.toString().equals("verdadero");
             case "==" ->
                 temp = Objects.equals(super.operando1, super.operando2);
             case ">" ->

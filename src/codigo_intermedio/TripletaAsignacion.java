@@ -14,6 +14,7 @@ import sintactico.CIVisitor;
 public class TripletaAsignacion extends Tripleta {
 
     private LlaveTabla id;
+    private boolean bit = false;
 
     public TripletaAsignacion(Object valor) {
         super("=");
@@ -36,21 +37,48 @@ public class TripletaAsignacion extends Tripleta {
         this.id = id;
     }
 
+    public void setBit() {
+        this.bit = true;
+    }
+
     @Override
     public String codigoObjeto() {
         String dir = CIVisitor.simbolos.getDireccion(id);
         if (super.ref2 != null) {
-            return "MOVWF " + dir + "\n";
+            String block = """
+                         XORLW 0X01
+                         BTFSS STATUS,Z
+                         GOTO $+3
+                         BSF %s
+                         GOTO $+2
+                         BCF %s
+                         """;
+            return bit ? String.format(block, dir, dir) : "MOVWF " + dir + "\n";
         } else {
             if (super.operando2 instanceof Integer) {
                 String n = Integer.toHexString(Integer.parseInt(super.operando2 + ""));
                 String codigo = "MOVLW 0X" + n + "\n";
                 return codigo + "MOVWF " + dir + "\n";
-            } else {
-                String codigo = "CLRW\n";
+            } else if (super.operando2 instanceof String) {
+                String codigo;
                 if (((String) super.operando2).equals("verdadero")) {
-                    codigo += "IORLW 0x01\n";
+                    if (bit) {
+                        return "BSF " + dir + "\n";
+                    }
+                    codigo = "MOVLW 0x01\n";
+                } else {
+                    if (bit) {
+                        return "BCF " + dir + "\n";
+                    }
+                    codigo = "CLRW\n";
                 }
+                return codigo + "MOVWF " + dir + "\n";
+            } else {
+                boolean valor = (boolean) super.operando2;
+                if (bit) {
+                    return (valor ? "BSF " : "BCF ") + dir + "\n";
+                }
+                String codigo = valor ? "MOVLW 0X01\n" : "CLRW\n";
                 return codigo + "MOVWF " + dir + "\n";
             }
         }
