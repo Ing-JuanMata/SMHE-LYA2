@@ -51,13 +51,13 @@ public abstract class TripletaExpresion extends Tripleta {
         Object temp = null;
         switch (super.operador) {
             case "&&" ->
-                temp = super.operando1.toString().equals("verdadero") && super.operando2.toString().equals("verdadero");
+                temp = (super.operando1.toString().equals("verdadero") || super.operando1.toString().equals("true")) && (super.operando2.toString().equals("verdadero") || super.operando2.toString().equals("true"));
             case "||" ->
-                temp = super.operando1.toString().equals("verdadero") || super.operando2.toString().equals("verdadero");
+                temp = (super.operando1.toString().equals("verdadero") || super.operando1.toString().equals("true")) || (super.operando2.toString().equals("verdadero") || super.operando2.toString().equals("true"));
             case "!=" ->
                 temp = !Objects.equals(Integer.valueOf(super.operando1.toString()), Integer.valueOf(super.operando2.toString()));
             case "!" ->
-                temp = !super.operando1.toString().equals("verdadero");
+                temp = !super.operando1.toString().equals("verdadero") || super.operando1.toString().equals("true");
             case "==" ->
                 temp = Objects.equals(super.operando1, super.operando2);
             case ">" ->

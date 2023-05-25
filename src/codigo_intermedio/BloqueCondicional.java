@@ -24,6 +24,10 @@ public abstract class BloqueCondicional extends BloqueTripletas {
         this.condicion = condicion;
     }
 
+    public BloqueTripletas bloquePadreM() {
+        return this.bloquePadre instanceof BloqueCondicional ? ((BloqueCondicional) bloquePadre).bloquePadreM() : this.bloquePadre;
+    }
+
     @Override
     public Tripleta getInicio() {
         return condicion != null ? condicion.getInicio() : super.getInicio();

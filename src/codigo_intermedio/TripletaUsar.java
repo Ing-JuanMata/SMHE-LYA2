@@ -36,7 +36,7 @@ public class TripletaUsar extends Tripleta {
     @Override
     public String codigoObjeto() {
         Tripleta inicio = this.tabla.getInicio(nombre);
-        return "CALL " + (inicio == null ? this.nombre.toUpperCase() : inicio.etiqueta) + "\n";
+        return (super.etiqueta == null ? "" : super.etiqueta + " ") + "CALL " + (inicio == null ? this.nombre.toUpperCase() : inicio.etiqueta) + "\n";
     }
 
     @Override

@@ -17,7 +17,7 @@ public class TripletaEncender extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        return super.operando1.equals("luces") ? "CALL ON_LUCES\n" : "CALL ON_VENT\n";
+        return (super.etiqueta == null ? "" : super.etiqueta + " ") + (super.operando1.equals("luces") ? "CALL ON_LUCES\n" : "CALL ON_VENT\n");
     }
 
     @Override

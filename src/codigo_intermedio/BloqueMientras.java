@@ -15,6 +15,7 @@ public class BloqueMientras extends BloqueCondicional {
     }
 
     public void referenciarSiguiente(Tripleta t) {
+        t.setEtiqueta("FBM" + super.numero);
         super.condicion.ref2 = t.getInicio();
     }
 
@@ -41,6 +42,7 @@ public class BloqueMientras extends BloqueCondicional {
 
     @Override
     public String generarCO() {
+        super.condicion.setEtiqueta("BM" + super.numero);
         String codigo = super.condicion.codigoObjeto();
         return codigo + super.generarCO();
     }

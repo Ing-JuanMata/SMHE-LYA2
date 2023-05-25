@@ -25,7 +25,7 @@ public class TripletaCerrar extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        String codigo = super.operando1.equals("puertas") ? "CALL CPUERTA\n" : "CALL CVENTANA\n";
+        String codigo = (super.etiqueta == null ? "" : super.etiqueta + " ") + (super.operando1.equals("puertas") ? "CALL CPUERTA\n" : "CALL CVENTANA\n");
         if (this.tiempo != null) {
             codigo += this.tiempo.codigoObjeto();
             return codigo + (super.operando1.equals("puertas") ? "CALL APUERTA\n" : "CALL AVENTANA\n");

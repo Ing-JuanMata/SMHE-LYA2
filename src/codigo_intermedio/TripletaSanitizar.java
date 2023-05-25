@@ -19,6 +19,16 @@ public class TripletaSanitizar extends Tripleta {
     }
 
     @Override
+    public void setEtiqueta(String etiqueta) {
+        this.tiempo.setEtiqueta(etiqueta);
+    }
+
+    @Override
+    public String getEtiqueta() {
+        return this.tiempo.getEtiqueta();
+    }
+
+    @Override
     public String codigoObjeto() {
         String codigo = this.tiempo.codigoObjeto();
         codigo = codigo.substring(0, codigo.lastIndexOf("CALL TIMER\n"));

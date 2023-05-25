@@ -21,12 +21,11 @@ public class TripletaGoto extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        return "";
+        return (super.etiqueta == null ? "" : super.etiqueta + " ") + "GOTO " + super.ref1.getEtiqueta() + "\n";
     }
 
     @Override
     public void optimizar(BloqueTripletas padre) {
-
     }
 
 }

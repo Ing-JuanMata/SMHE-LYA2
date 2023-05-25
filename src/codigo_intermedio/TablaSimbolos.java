@@ -67,7 +67,7 @@ public class TablaSimbolos {
                 ambito = ambito.substring(0, ambito.lastIndexOf(":"));
             }
         }
-        return ambito.split(":")[0];
+        return tabla.get(new LlaveTabla(id, ambito)) != null ? ambito.split(":")[0] : "programa";
     }
 
 }

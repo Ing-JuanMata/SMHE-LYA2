@@ -81,6 +81,10 @@ public abstract class Tripleta {
         this.etiqueta = etiqueta;
     }
 
+    public String getEtiqueta() {
+        return this.etiqueta;
+    }
+
     @Override
     public String toString() {
         return numero + ":(" + operador + ", " + getOperando(1) + ", " + getOperando(2) + ")";

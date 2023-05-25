@@ -19,7 +19,7 @@ public class TripletaMenorIgual extends TripletaExpresion {
 
     @Override
     public String codigoObjeto() {
-        String codigo = "";
+        String codigo = super.etiqueta == null ? "" : super.etiqueta + " ";
         if (super.ref2 == null) {
             Object valor = super.operando2;
             if (valor instanceof Integer) {

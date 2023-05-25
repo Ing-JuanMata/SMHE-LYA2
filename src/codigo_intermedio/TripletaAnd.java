@@ -19,7 +19,7 @@ public class TripletaAnd extends TripletaExpresion {
 
     @Override
     public String codigoObjeto() {
-        String codigo = "";
+        String codigo = super.etiqueta == null ? "" : super.etiqueta + " ";
         if (super.ref2 == null) {
             Object valor = super.operando2;
             if (valor instanceof Boolean) {
@@ -36,9 +36,9 @@ public class TripletaAnd extends TripletaExpresion {
         if (super.ref1 == null) {
             Object valor = super.operando1;
             if (valor instanceof Boolean) {
-                codigo += ((boolean) valor) ? "ANDLW 0X01\n" : "CLRW";
+                codigo += ((boolean) valor) ? "ANDLW 0X01\n" : "CLRW\n";
             } else if (valor instanceof String) {
-                codigo += valor.toString().equals("verdadero") ? "ANDLW 0X01\n" : "CLRW";
+                codigo += valor.toString().equals("verdadero") ? "ANDLW 0X01\n" : "CLRW\n";
             } else if (valor instanceof LlaveTabla) {
                 LlaveTabla id = (LlaveTabla) valor;
                 String dir = CIVisitor.simbolos.getDireccion(id);

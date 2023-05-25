@@ -34,6 +34,10 @@ public class BloqueComienzo extends BloqueTripletas {
         return tiempo.enumerarTripleta(inicio);
     }
 
+    public Tripleta getTiempo() {
+        return this.tiempo;
+    }
+
     @Override
     public Tripleta getInicio() {
         Tripleta inicio = super.getInicio();
@@ -45,12 +49,10 @@ public class BloqueComienzo extends BloqueTripletas {
         this.tiempo.optimizar(this);
         super.optimizar();
     }
-    
-    
 
     @Override
     public String generarCO() {
-        String codigo = "COMIENZO " + super.generarCO();
+        String codigo = "COMIENZO\n" + super.generarCO();
         codigo += this.tiempo.codigoObjeto();
         return codigo + "GOTO COMIENZO\n";
     }

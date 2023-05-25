@@ -4,6 +4,9 @@
  */
 package codigo_intermedio;
 
+import analisis.LlaveTabla;
+import sintactico.CIVisitor;
+
 /**
  *
  * @author jujemataso
@@ -11,16 +14,31 @@ package codigo_intermedio;
 public class TripletaIncremento extends Tripleta {
 
     public boolean pre;
+    private LlaveTabla id;
 
     public TripletaIncremento(analisis.LlaveTabla id, boolean pre) {
         super("++");
-        super.operando1 = id;
+        this.id = id;
+        super.operando1 = this.id;
         this.pre = pre;
     }
 
     @Override
     public String codigoObjeto() {
-        return "";
+        String dir = CIVisitor.simbolos.getDireccion(id);
+        String codigo = (super.etiqueta == null ? "" : super.etiqueta + " ")
+                + (this.pre ? """
+                            INCF %s,F
+                            MOVFW %s
+                            """ : """
+                                  MOVFW %s
+                                  INCF, %s,F
+                                  """);
+        codigo = String.format(codigo, dir, dir);
+        if (super.siguiente == 1) {
+            return codigo + "MOVWF INDF\nINCF FSR,F\n";
+        }
+        return codigo;
     }
 
     @Override

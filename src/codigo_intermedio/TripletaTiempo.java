@@ -35,6 +35,20 @@ public class TripletaTiempo extends Tripleta {
     }
 
     @Override
+    public void setEtiqueta(String etiqueta) {
+        if (expresion != null) {
+            expresion.getInicio().setEtiqueta(etiqueta);
+        } else {
+            unidad.setEtiqueta(etiqueta);
+        }
+    }
+
+    @Override
+    public String getEtiqueta() {
+        return expresion == null ? unidad.getEtiqueta() : expresion.getInicio().getEtiqueta();
+    }
+
+    @Override
     public String codigoObjeto() {
         String codigo = this.expresion == null ? this.unidad.codigoObjeto() : this.expresion.generarCO();
         codigo += "CALL TIMER\n";

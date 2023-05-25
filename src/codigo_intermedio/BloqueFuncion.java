@@ -4,19 +4,14 @@
  */
 package codigo_intermedio;
 
-import analisis.LlaveTabla;
-
 /**
  *
  * @author jujemataso
  */
 public class BloqueFuncion extends BloqueTripletas {
 
-    private String nombre;
-
     public BloqueFuncion(String nombre) {
         super();
-        this.nombre = nombre;
     }
 
 }

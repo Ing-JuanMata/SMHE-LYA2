@@ -31,7 +31,7 @@ public class TripletaUnidadTiempo extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        String codigo;
+        String codigo = super.etiqueta == null ? "" : super.etiqueta + " ";
         String unidad = "SEGUNDOS";
         switch (super.operador) {
             case "min" ->
@@ -41,15 +41,15 @@ public class TripletaUnidadTiempo extends Tripleta {
         }
         unidad += ",F";
         if (super.ref1 != null) {
-            return "ADDWF " + unidad + "\n";
+            return codigo + "ADDWF " + unidad + "\n";
         } else {
             if (this.id != null) {
                 String dir = CIVisitor.simbolos.getDireccion(this.id);
-                codigo = "MOVFW " + dir + "\n";
+                codigo += "MOVFW " + dir + "\n";
                 return codigo + "ADDWF " + unidad + "\n";
             }
 
-            codigo = "MOVLW 0X" + Integer.toHexString(Integer.parseInt(super.operando1 + "")) + "\n";
+            codigo += "MOVLW 0X" + Integer.toHexString(Integer.parseInt(super.operando1 + "")) + "\n";
             return codigo + "ADDWF " + unidad + "\n";
         }
     }

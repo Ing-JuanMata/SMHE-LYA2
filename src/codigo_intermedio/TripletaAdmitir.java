@@ -47,6 +47,16 @@ public class TripletaAdmitir extends Tripleta {
     }
 
     @Override
+    public void setEtiqueta(String etiqueta) {
+        this.eAdmitir.getInicio().setEtiqueta(etiqueta);
+    }
+
+    @Override
+    public String getEtiqueta() {
+        return this.eAdmitir.getInicio().getEtiqueta();
+    }
+
+    @Override
     public String codigoObjeto() {
         String codigo = this.eAdmitir.generarCO() + this.eCapacidad.generarCO();
         String t = this.tiempo.codigoObjeto();

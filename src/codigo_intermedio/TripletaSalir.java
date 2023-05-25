@@ -16,8 +16,7 @@ public class TripletaSalir extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        //Configurar el tiempo y luego realizar la accion
-        return "";
+        return (super.etiqueta == null ? "" : super.etiqueta + " ") + "RETURN\n";
     }
 
     @Override

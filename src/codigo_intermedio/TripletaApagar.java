@@ -17,7 +17,7 @@ public class TripletaApagar extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        return super.operando1.equals("luces") ? "CALL OFF_LUCES\n" : "CALL OFF_VENT\n";
+        return (super.etiqueta == null ? "" : super.etiqueta + " ") + (super.operando1.equals("luces") ? "CALL OFF_LUCES\n" : "CALL OFF_VENT\n");
     }
 
     @Override

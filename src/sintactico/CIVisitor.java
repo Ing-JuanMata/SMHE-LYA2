@@ -30,6 +30,7 @@ import codigo_intermedio.TripletaDiferente;
 import codigo_intermedio.TripletaDivision;
 import codigo_intermedio.TripletaEncender;
 import codigo_intermedio.TripletaEstado;
+import codigo_intermedio.TripletaGoto;
 import codigo_intermedio.TripletaIgual;
 import codigo_intermedio.TripletaIncremento;
 import codigo_intermedio.TripletaMayor;
@@ -448,7 +449,10 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
 
     @Override
     public Tripleta visitLblGramas(smheParser.LblGramasContext ctx) {
-        visit(ctx.stmt());
+        if (visit(ctx.stmt()) != null) {
+            return null;
+        }
+
         if (ctx.gramas() != null) {
             visit(ctx.gramas());
         }
@@ -636,6 +640,16 @@ public class CIVisitor extends smheBaseVisitor<Tripleta> {
 
     @Override
     public Tripleta visitLblSalirGramas(smheParser.LblSalirGramasContext ctx) {
+        if (this.bloqueActual instanceof BloqueComienzo) {
+            return new TripletaAux(0);
+        } else if (this.bloqueActual instanceof BloqueCondicional) {
+            BloqueCondicional bc = (BloqueCondicional) this.bloqueActual;
+            BloqueTripletas bt = bc.bloquePadreM();
+            if (bt instanceof BloqueComienzo) {
+                agregarTripletaBloque(new TripletaGoto(((BloqueComienzo) bt).getTiempo().getInicio()));
+                return new TripletaAux(0);
+            }
+        }
         agregarTripletaBloque(new TripletaSalir());
         return null;
     }

@@ -19,7 +19,7 @@ public class TripletaSuma extends TripletaExpresion {
 
     @Override
     public String codigoObjeto() {
-        String codigo = "";
+        String codigo = super.etiqueta == null ? "" : super.etiqueta + " ";
         //Si es != null el valor ya esta en w
         if (super.ref2 == null) {
             Object valor = super.operando2;

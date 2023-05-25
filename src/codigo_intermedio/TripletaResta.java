@@ -23,7 +23,7 @@ public class TripletaResta extends TripletaExpresion {
 
     @Override
     public String codigoObjeto() {
-        String codigo = "";
+        String codigo = super.etiqueta == null ? "" : super.etiqueta + " ";
         //Comprobamos si es una negacion aritmetica
         if (super.ref2 == null && super.operando2 == null) {
             if (super.ref1 == null) {

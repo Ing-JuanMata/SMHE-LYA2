@@ -47,6 +47,16 @@ public class TripletaVentilar extends Tripleta {
     }
 
     @Override
+    public void setEtiqueta(String etiqueta) {
+        puertas.getInicio().setEtiqueta(etiqueta);
+    }
+
+    @Override
+    public String getEtiqueta() {
+        return puertas.getInicio().getEtiqueta();
+    }
+
+    @Override
     public String codigoObjeto() {
         String codigo = this.puertas.generarCO() + this.ventanas.generarCO();
         String t = this.tiempo.codigoObjeto();

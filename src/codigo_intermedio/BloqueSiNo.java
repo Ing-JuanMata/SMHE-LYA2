@@ -42,9 +42,18 @@ public class BloqueSiNo extends BloqueCondicional {
         super.optimizar(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
 
+    public void etiquetar() {
+        if (this.condicion == null) {
+            super.getInicio().setEtiqueta("BSN" + super.numero);
+        } else {
+            this.condicion.etiquetar();
+        }
+    }
+
     @Override
     public String generarCO() {
         if (this.condicion == null) {
+
             return super.generarCO();
         } else {
             return this.condicion.generarCO();

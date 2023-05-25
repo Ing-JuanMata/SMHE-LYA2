@@ -19,7 +19,7 @@ public class TripletaDivision extends TripletaExpresion {
 
     @Override
     public String codigoObjeto() {
-        String codigo = super.siguiente == 1 ? "BSF FF\n" : "BCF FF\n";
+        String codigo = (super.etiqueta == null ? "" : super.etiqueta + " ") + (super.siguiente == 1 ? "BSF FF\n" : "BCF FF\n");
         if (super.ref2 == null) {
             Object valor = super.operando2;
             if (valor instanceof Integer) {

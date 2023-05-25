@@ -46,39 +46,46 @@ public class TripletaAsignacion extends Tripleta {
         String dir = CIVisitor.simbolos.getDireccion(id);
         if (super.ref2 != null) {
             String block = """
-                         XORLW 0X01
+                         %s XORLW 0X01
                          BTFSS STATUS,Z
                          GOTO $+3
                          BSF %s
                          GOTO $+2
                          BCF %s
                          """;
-            return bit ? String.format(block, dir, dir) : "MOVWF " + dir + "\n";
+            return bit ? String.format(block, super.etiqueta == null ? "" : super.etiqueta, dir, dir) : "MOVWF " + dir + "\n";
         } else {
             if (super.operando2 instanceof Integer) {
                 String n = Integer.toHexString(Integer.parseInt(super.operando2 + ""));
-                String codigo = "MOVLW 0X" + n + "\n";
+                String codigo = (super.etiqueta == null ? "" : super.etiqueta + " ") + " MOVLW 0X" + n + "\n";
                 return codigo + "MOVWF " + dir + "\n";
             } else if (super.operando2 instanceof String) {
-                String codigo;
+                String codigo = super.etiqueta == null ? "" : super.etiqueta + " ";
                 if (((String) super.operando2).equals("verdadero")) {
                     if (bit) {
-                        return "BSF " + dir + "\n";
+                        return codigo + "BSF " + dir + "\n";
                     }
-                    codigo = "MOVLW 0x01\n";
+                    codigo += "MOVLW 0x01\n";
                 } else {
                     if (bit) {
-                        return "BCF " + dir + "\n";
+                        return codigo + "BCF " + dir + "\n";
                     }
-                    codigo = "CLRW\n";
+                    codigo += "CLRW\n";
                 }
                 return codigo + "MOVWF " + dir + "\n";
+            } else if (super.operando2 instanceof LlaveTabla) {
+                String dir2 = CIVisitor.simbolos.getDireccion((LlaveTabla) super.operando2);
+                return String.format(
+                        """
+                        %s MOVFW %s
+                        MOVWF %s
+                       """, super.etiqueta == null ? "" : super.etiqueta, dir2, dir);
             } else {
                 boolean valor = (boolean) super.operando2;
                 if (bit) {
-                    return (valor ? "BSF " : "BCF ") + dir + "\n";
+                    return (super.etiqueta == null ? "" : super.etiqueta + " ") + (valor ? "BSF " : "BCF ") + dir + "\n";
                 }
-                String codigo = valor ? "MOVLW 0X01\n" : "CLRW\n";
+                String codigo = (super.etiqueta == null ? "" : super.etiqueta + " ") + (valor ? "MOVLW 0X01\n" : "CLRW\n");
                 return codigo + "MOVWF " + dir + "\n";
             }
         }

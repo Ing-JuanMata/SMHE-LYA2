@@ -17,7 +17,29 @@ public class TripletaEstado extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        return "";
+        String opcion = (String) super.operando1;
+        String codigo = (super.etiqueta == null ? "" : super.etiqueta + " ") + "BTFSS ";
+        switch (opcion) {
+            case "ventilacion" ->
+                codigo += "VENTILACION\n";
+            case "ventanas" ->
+                codigo += "EVENTANAS\n";
+            case "puertas" ->
+                codigo += "EPUERTAS\n";
+            case "luces" ->
+                codigo += "ELUCES\n";
+        }
+
+        codigo += """
+                  GOTO $+3
+                  MOVLW 0X01
+                  GOTO $+2
+                  CLRW
+                  """;
+        if (super.siguiente == 1) {
+            return codigo + "MOVWF INDF\nINCF FSR,F\n";
+        }
+        return codigo;
     }
 
     @Override

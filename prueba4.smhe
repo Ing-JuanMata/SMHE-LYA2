@@ -1,6 +1,8 @@
 inicio test{
-	declarar a como entero = 10;
-comienzo(cada a + 20/2 min){
-	usar ventilar(por 10 min, verdadero, falso);
+	declarar a como entero;
+comienzo(cada 1 min){
+	declarar b como logico = falso;
+	condicion(falso){a = 10;}
+	sino{a = 20;}
 }
 }fin

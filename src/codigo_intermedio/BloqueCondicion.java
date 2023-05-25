@@ -22,6 +22,7 @@ public class BloqueCondicion extends BloqueCondicional {
     }
 
     public void refenciarSiguiente(Tripleta t) {
+        t.setEtiqueta("FBC" + super.numero);
         if (this.sino != null && super.condicion.ref2 == null) {
             ((TripletaGoto) this.contenido.get(this.contenido.size() - 1)).ref1 = t.getInicio();
             if (this.sino.condicion != null) {
@@ -38,6 +39,9 @@ public class BloqueCondicion extends BloqueCondicional {
     private void siguienteInterno() {
         Object ultimo = super.contenido.get(super.contenido.size() - 1);
         if (ultimo instanceof TripletaGoto) {
+            if (super.contenido.size() == 1) {
+                return;
+            }
             Object previo = super.contenido.get(super.contenido.size() - 2);
             if (previo instanceof BloqueCondicion) {
                 ((BloqueCondicion) previo).refenciarSiguiente((Tripleta) ultimo);
@@ -62,8 +66,16 @@ public class BloqueCondicion extends BloqueCondicional {
         return sino == null ? inicio : sino.enumerarTripletas(inicio);
     }
 
+    public void etiquetar() {
+        super.condicion.setEtiqueta("BC" + super.numero);
+    }
+
     @Override
     public String generarCO() {
+        etiquetar();
+        if (this.sino != null) {
+            this.sino.etiquetar();
+        }
         String codigo = super.condicion.codigoObjeto();
         codigo += super.generarCO();
         return codigo + (this.sino == null ? "" : this.sino.generarCO());

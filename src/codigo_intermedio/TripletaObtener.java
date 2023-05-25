@@ -17,7 +17,12 @@ public class TripletaObtener extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        return "";
+        String codigo = (super.etiqueta == null ? "" : super.etiqueta + " ") + "MOVFW PERSONAS\n";
+
+        if (super.siguiente == 1) {
+            return codigo + "MOVWF INDF\nINCF FSR,F\n";
+        }
+        return codigo;
     }
 
     @Override
