@@ -29,10 +29,11 @@ public class TripletaNegacion extends TripletaExpresion {
             } else if (valor instanceof LlaveTabla) {
                 LlaveTabla id = (LlaveTabla) valor;
                 String dir = CIVisitor.simbolos.getDireccion(id);
+                codigo += "MOVLW 0X01\n";
                 codigo += "XORWF " + dir + ",W\n";
             }
         } else {
-            codigo += "DECF FSR,F\nXORWF INDF," + (super.siguiente == 1 ? "F" : "W") + "\n";
+            codigo += "MOVLW 0X01\nDECF FSR,F\nXORWF INDF," + (super.siguiente == 1 ? "F" : "W") + "\n";
             return codigo + (super.siguiente == 1 ? "INCF FSR,F\n" : "");
         }
 

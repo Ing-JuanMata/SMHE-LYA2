@@ -29,6 +29,14 @@ public abstract class BloqueCondicional extends BloqueTripletas {
     }
 
     @Override
+    protected void optimizar() {
+        if (this.condicion != null) {
+            this.condicion.optimizar(this);
+        }
+        super.optimizar();
+    }
+
+    @Override
     public Tripleta getInicio() {
         return condicion != null ? condicion.getInicio() : super.getInicio();
     }

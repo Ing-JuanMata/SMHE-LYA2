@@ -5,6 +5,7 @@
 package codigo_intermedio;
 
 import java.util.ArrayList;
+import sintactico.CIVisitor;
 
 /**
  *
@@ -50,6 +51,8 @@ public class BloquePrograma extends BloqueTripletas {
     @Override
     public String generarCO() {
         String codigo = this.inicio.codigoObjeto();
+        codigo += "MOVLW " + CIVisitor.simbolos.getFinDatos() + "\n";
+        codigo += "MOVWF FSR\n";
         for (BloqueTripletas bt : bloques) {
             codigo += bt.generarCO();
         }

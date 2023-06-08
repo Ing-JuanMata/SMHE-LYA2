@@ -28,7 +28,7 @@ public class CodigoIntermedio {
         CIVisitor.programa.enumerarTripletas(0);
     }
 
-    public void generarCO() {
-        System.out.println(CIVisitor.programa.generarCO());
+    public String generarCO() {
+        return CIVisitor.programa.generarCO();
     }
 }

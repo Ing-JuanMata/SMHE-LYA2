@@ -39,7 +39,11 @@ public class BloqueSiNo extends BloqueCondicional {
 
     @Override
     protected void optimizar() {
-        super.optimizar(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        if (this.condicion != null) {
+            this.condicion.optimizar();
+        } else {
+            super.optimizar();
+        }
     }
 
     public void etiquetar() {

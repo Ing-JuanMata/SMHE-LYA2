@@ -46,10 +46,16 @@ public class TripletaDiferente extends TripletaExpresion {
                 codigo += "XORWF " + dir + ",W\n";
             }
         } else {
-            codigo += "DECF FSR,F\nXORWF INDF," + (super.siguiente == 1 ? "F" : "W") + "\n";
-            return codigo + (super.siguiente == 1 ? "INCF FSR,F\n" : "");
+            codigo += "DECF FSR,F\nXORWF INDF,W\n";
         }
 
+        codigo += """
+                  BTFSC STATUS,Z
+                  GOTO $+3
+                  MOVLW 0X01
+                  GOTO $+2
+                  CLRW
+                  """;
         if (super.siguiente == 1) {
             return codigo + """
                       MOVWF INDF

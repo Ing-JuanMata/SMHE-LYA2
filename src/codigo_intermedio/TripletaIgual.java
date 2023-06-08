@@ -50,8 +50,10 @@ public class TripletaIgual extends TripletaExpresion {
         }
         codigo += """
                   BTFSS STATUS,Z
+                  GOTO $+3
+                  MOVLW 0X01
                   GOTO $+2
-                  IORLW 0X01
+                  CLRW
                   """;
         if (super.siguiente == 1) {
             return codigo + """

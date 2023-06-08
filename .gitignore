@@ -6,3 +6,12 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+*.fil
+*.asm
+*.err
+*.o
+*.hex
+*.O
+*.lst
+*.cof
+*.map

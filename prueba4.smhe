@@ -1,8 +1,7 @@
 inicio test{
-	declarar a como entero;
 comienzo(cada 1 min){
-	declarar b como logico = falso;
-	condicion(falso){a = 10;}
-	sino{a = 20;}
+	abrir puertas mantener;
+	condicion(obtener personas == 2){ encender luces; }
+	sino { apagar luces; }
 }
 }fin

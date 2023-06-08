@@ -15,6 +15,7 @@ public class TablaSimbolos {
 
     private herramientas.TablaSimbolos simbolos;
     private HashMap<LlaveTabla, String> tabla;
+    private String finDatos;
 
     public TablaSimbolos(herramientas.TablaSimbolos simbolos) {
         tabla = new HashMap<>();
@@ -28,10 +29,11 @@ public class TablaSimbolos {
         tabla.put(new LlaveTabla("0ventanas_ventilar0", "programa"), "VENTV");
         tabla.put(new LlaveTabla("0admision_admitir0", "programa"), "ADMIP");
         tabla.put(new LlaveTabla("0capacidad_admitir0", "programa"), "LIMITE");
-        int direccion = 0x18;
+        int direccion = 0x1E;
         for (LlaveTabla llave : tablaAnalisis.getTabla().keySet()) {
             tabla.put(llave, Integer.toHexString(direccion++));
         }
+        this.finDatos = "0x" + Integer.toHexString(direccion);
     }
 
     public void verTabla(javax.swing.table.DefaultTableModel modelo) {
@@ -55,6 +57,10 @@ public class TablaSimbolos {
 
     public String getDireccion(LlaveTabla id) {
         return getDireccion(id.id, id.ambito);
+    }
+
+    public String getFinDatos() {
+        return this.finDatos;
     }
 
     private String getAmbito(String id, String ambito) {

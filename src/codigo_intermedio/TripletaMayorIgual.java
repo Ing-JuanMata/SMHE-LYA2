@@ -49,7 +49,7 @@ public class TripletaMayorIgual extends TripletaExpresion {
             codigo += "DECF FSR,F\nSUBWF INDF,W\n";
         }
         codigo += """
-                  CLRW
+                  MOVLW 0X0
                   BTFSS STATUS,C
                   GOTO $+2
                   IORLW 0X01

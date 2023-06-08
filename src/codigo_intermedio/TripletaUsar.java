@@ -36,7 +36,18 @@ public class TripletaUsar extends Tripleta {
     @Override
     public String codigoObjeto() {
         Tripleta inicio = this.tabla.getInicio(nombre);
-        return (super.etiqueta == null ? "" : super.etiqueta + " ") + "CALL " + (inicio == null ? this.nombre.toUpperCase() : inicio.etiqueta) + "\n";
+        String codigo = super.etiqueta == null ? "" : super.etiqueta + " ";
+        for (Object parametro : parametros) {
+            if (parametro instanceof BloqueTripletas) {
+                codigo += ((BloqueTripletas) parametro).generarCO();
+                continue;
+            }
+
+            if (parametro instanceof Tripleta) {
+                codigo += ((Tripleta) parametro).codigoObjeto();
+            }
+        }
+        return codigo + "CALL " + (inicio == null ? this.nombre.toUpperCase() : inicio.etiqueta) + "\n";
     }
 
     @Override
@@ -71,6 +82,8 @@ public class TripletaUsar extends Tripleta {
                     bt.addTripleta(new TripletaAsignacion(id, valor));
                     inicio = bt.enumerarTripletas(inicio);
                 }
+            } else if (o instanceof Tripleta) {
+                inicio = ((Tripleta) o).enumerarTripleta(inicio);
             } else {
                 analisis.LlaveTabla id = tabla.getParametro(nombre, i++);
                 TripletaAsignacion t = new TripletaAsignacion(id, o);

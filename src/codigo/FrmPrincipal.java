@@ -9,7 +9,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -101,6 +103,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuGuardar = new javax.swing.JMenuItem();
         mnuGuardarC = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        mnuProgramar = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         menuLexico = new javax.swing.JMenuItem();
         menuSintactico = new javax.swing.JMenuItem();
@@ -323,6 +327,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu3.add(mnuGuardarC);
+        jMenu3.add(jSeparator4);
+
+        mnuProgramar.setText("Programar");
+        mnuProgramar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuProgramarActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mnuProgramar);
 
         jMenuBar2.add(jMenu3);
 
@@ -789,8 +802,77 @@ public class FrmPrincipal extends javax.swing.JFrame {
         if (intermedio == null) {
             this.analisisSintactico(true);
         }
-        intermedio.generarCO();
+        VistaCodigo vc = new VistaCodigo(intermedio.generarCO());
+        vc.setVisible(true);
     }//GEN-LAST:event_menuCOActionPerformed
+
+    private void mnuProgramarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProgramarActionPerformed
+        try {
+            FileWriter asm = new FileWriter("smhe.asm");
+            asm.write(intermedio.generarCO());
+            asm.close();
+            txtError.setText("Archivo ensamblador generado");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        try {
+            Process cmd = Runtime.getRuntime().exec("/opt/microchip/mplabx/v3.65/mpasmx/mpasmx -q -p16f84a -u -lsmhe.lst -esmhe.err -osmhe.o smhe.asm");
+            BufferedReader salida = new BufferedReader(new InputStreamReader(cmd.getInputStream()));
+            BufferedReader error = new BufferedReader(new InputStreamReader(cmd.getErrorStream()));
+            String s;
+            System.out.println("Salida");
+            while ((s = salida.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            System.out.println("Error");
+            while ((s = error.readLine()) != null) {
+                System.out.println(s);
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        }
+        
+        try {
+            Process cmd = Runtime.getRuntime().exec("/opt/microchip/mplabx/v3.65/mpasmx/mplink -p16f84a -w -msmhe.map -z__MPLAB_BUILD=1  -osmhe.cof smhe.o");
+            BufferedReader salida = new BufferedReader(new InputStreamReader(cmd.getInputStream()));
+            BufferedReader error = new BufferedReader(new InputStreamReader(cmd.getErrorStream()));
+            String s;
+            System.out.println("Salida");
+            while ((s = salida.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            System.out.println("Error");
+            while ((s = error.readLine()) != null) {
+                System.out.println(s);
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        }
+        
+        try {
+            Process cmd = Runtime.getRuntime().exec("pk2cmd -P -M -F smhe.hex");
+            BufferedReader salida = new BufferedReader(new InputStreamReader(cmd.getInputStream()));
+            BufferedReader error = new BufferedReader(new InputStreamReader(cmd.getErrorStream()));
+            String s;
+            System.out.println("Salida");
+            while ((s = salida.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            System.out.println("Error");
+            while ((s = error.readLine()) != null) {
+                System.out.println(s);
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_mnuProgramarActionPerformed
 
     private void abrirArchivo() {
         JFileChooser fc = getJFileChooser();
@@ -961,6 +1043,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel lblConsola;
     private javax.swing.JMenuItem menuCO;
@@ -974,6 +1057,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuGuardar;
     private javax.swing.JMenuItem mnuGuardarC;
     private javax.swing.JMenuItem mnuNuevo;
+    private javax.swing.JMenuItem mnuProgramar;
     private javax.swing.JPanel panelConsola;
     private javax.swing.JScrollPane scrollConsola;
     private javax.swing.JScrollPane scrollEntrada;

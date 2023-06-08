@@ -66,6 +66,14 @@ public class BloqueCondicion extends BloqueCondicional {
         return sino == null ? inicio : sino.enumerarTripletas(inicio);
     }
 
+    @Override
+    protected void optimizar() {
+        super.optimizar();
+        if (this.sino != null) {
+            this.sino.optimizar();  
+        }
+    }
+
     public void etiquetar() {
         super.condicion.setEtiqueta("BC" + super.numero);
     }
