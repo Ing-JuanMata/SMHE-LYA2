@@ -59,7 +59,7 @@ public class TripletaCondicion extends Tripleta {
             LlaveTabla id = (LlaveTabla) valor;
             String dir = CIVisitor.simbolos.getDireccion(id);
             String codigo = """
-                            %s BTFSS %s
+                            %s BTFSS %s,0
                             GOTO %s
                             """;
             return String.format(codigo, super.etiqueta, dir, super.ref2.getEtiqueta());

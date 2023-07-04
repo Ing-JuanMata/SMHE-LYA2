@@ -1,4 +1,4 @@
-// Generated from smhe.g4 by ANTLR 4.12.0
+// Generated from smhe.g4 by ANTLR 4.13.0
 package sintactico;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -81,6 +81,13 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblExpresion(smheParser.LblExpresionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code lblExpresion1}
+	 * labeled alternative in {@link smheParser#expresion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblExpresion1(smheParser.LblExpresion1Context ctx);
+	/**
 	 * Visit a parse tree produced by the {@code lblAndOr}
 	 * labeled alternative in {@link smheParser#op1}.
 	 * @param ctx the parse tree
@@ -102,6 +109,13 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblOp2(smheParser.LblOp2Context ctx);
 	/**
+	 * Visit a parse tree produced by the {@code lblOp21}
+	 * labeled alternative in {@link smheParser#op2}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblOp21(smheParser.LblOp21Context ctx);
+	/**
 	 * Visit a parse tree produced by the {@code lblRelacionales}
 	 * labeled alternative in {@link smheParser#op3}.
 	 * @param ctx the parse tree
@@ -116,6 +130,13 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblOp4(smheParser.LblOp4Context ctx);
 	/**
+	 * Visit a parse tree produced by the {@code lblOp41}
+	 * labeled alternative in {@link smheParser#op4}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblOp41(smheParser.LblOp41Context ctx);
+	/**
 	 * Visit a parse tree produced by the {@code lblSumaResta}
 	 * labeled alternative in {@link smheParser#op5}.
 	 * @param ctx the parse tree
@@ -129,6 +150,13 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLblOp6(smheParser.LblOp6Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblOp61}
+	 * labeled alternative in {@link smheParser#op6}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblOp61(smheParser.LblOp61Context ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lblMultDiv}
 	 * labeled alternative in {@link smheParser#op7}.
@@ -319,20 +347,6 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLblAsignacionGramas(smheParser.LblAsignacionGramasContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lblUsarFuncion}
-	 * labeled alternative in {@link smheParser#usar}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblUsarFuncion(smheParser.LblUsarFuncionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code lblUsarFuncion1}
-	 * labeled alternative in {@link smheParser#usar}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx);
-	/**
 	 * Visit a parse tree produced by the {@code lblUsarAdmitir}
 	 * labeled alternative in {@link smheParser#usar}.
 	 * @param ctx the parse tree
@@ -346,6 +360,20 @@ public interface smheVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLblUsarVentilar(smheParser.LblUsarVentilarContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblUsarFuncion}
+	 * labeled alternative in {@link smheParser#usar}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblUsarFuncion(smheParser.LblUsarFuncionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lblUsarFuncion1}
+	 * labeled alternative in {@link smheParser#usar}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lblParametrosFuncion}
 	 * labeled alternative in {@link smheParser#parametro}.

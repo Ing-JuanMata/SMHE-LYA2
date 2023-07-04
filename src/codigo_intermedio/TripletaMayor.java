@@ -49,12 +49,13 @@ public class TripletaMayor extends TripletaExpresion {
             codigo += "DECF FSR,F\nSUBWF INDF,W\n";
         }
         codigo += """
-                  MOVLW 0X0
                   BTFSS STATUS,C
                   GOTO $+4
                   BTFSC STATUS,Z
+                  GOTO $+3
+                  MOVLW 0X01
                   GOTO $+2
-                  IORLW 0X01
+                  CLRW
                   """;
         if (super.siguiente == 1) {
             return codigo + """

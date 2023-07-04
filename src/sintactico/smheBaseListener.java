@@ -1,4 +1,4 @@
-// Generated from smhe.g4 by ANTLR 4.12.0
+// Generated from smhe.g4 by ANTLR 4.13.0
 package sintactico;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -137,6 +137,18 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLblExpresion1(smheParser.LblExpresion1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblExpresion1(smheParser.LblExpresion1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLblAndOr(smheParser.LblAndOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -173,6 +185,18 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLblOp21(smheParser.LblOp21Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblOp21(smheParser.LblOp21Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLblRelacionales(smheParser.LblRelacionalesContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -197,6 +221,18 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLblOp41(smheParser.LblOp41Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblOp41(smheParser.LblOp41Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLblSumaResta(smheParser.LblSumaRestaContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -216,6 +252,18 @@ public class smheBaseListener implements smheListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLblOp6(smheParser.LblOp6Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblOp61(smheParser.LblOp61Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblOp61(smheParser.LblOp61Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -545,30 +593,6 @@ public class smheBaseListener implements smheListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLblUsarFuncion(smheParser.LblUsarFuncionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblUsarFuncion(smheParser.LblUsarFuncionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLblUsarAdmitir(smheParser.LblUsarAdmitirContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -588,6 +612,30 @@ public class smheBaseListener implements smheListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLblUsarVentilar(smheParser.LblUsarVentilarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblUsarFuncion(smheParser.LblUsarFuncionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblUsarFuncion(smheParser.LblUsarFuncionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLblUsarFuncion1(smheParser.LblUsarFuncion1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -105,13 +105,12 @@ public class TripletaFin extends Tripleta {
                    BCF			INTCON, T0IF
                    BSF			INTCON, T0IE
                    BTFSC		INTCON, T0IE
-                   GOTO		$+3
-                   BCF			INTCON, RBIE
+                   GOTO		$+2
                    RETURN
                    MOVFW		PERSONAS
                    SUBWF		LIMITE, W
                    BTFSS		STATUS, Z
-                   GOTO		$-7
+                   GOTO		$-6
                    CALL		CPUERTA
                    BCF			ADMIP
                    BTFSC		INTCON, T0IE

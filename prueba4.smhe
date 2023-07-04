@@ -1,7 +1,24 @@
 inicio test{
-comienzo(cada 1 min){
-	abrir puertas mantener;
-	condicion(obtener personas == 2){ encender luces; }
-	sino { apagar luces; }
+	declarar a como entero
+	declarar b como logico;
+comienzo(cada 1 seg){
+	declarar limite como entero = 5;
+	encender luces;
+	usar admitir(verdadero, limite, por 1 min);
+	mientras(obtener personas > 0){
+		usar controlAula(verdadero)
+	}
+	usar ventilar(por 30 seg, falso, falso);
+	apagar luces;
+}
+funcion controlAula(declarar edo como logico){
+	condicion(edo){
+		abrir puertas mantener;
+		abrir ventanas mantener;
+	}sino{
+		cerrar puertas mantener;
+		cerrar ventanas mantener;
+	}
+	salir;
 }
 }fin

@@ -118,6 +118,10 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
             }
         }
 
+        if (ctx.PUNTOYCOMA() == null) {
+            errores.agregarErrorSintactico("ES4", inicioDec);
+        }
+
         if (ctx.decGlobales() != null) {
             visit(ctx.decGlobales());
         }
@@ -202,6 +206,12 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitLblExpresion1(smheParser.LblExpresion1Context ctx) {
+        this.errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "Antes del operador se esperaba [\"id\", \"verdadero\", \"falso\"]");
+        return visit(ctx.op1());
+    }
+
+    @Override
     public Object visitLblAndOr(smheParser.LblAndOrContext ctx) {
         if (!tipoActual.equals("logico")) {
             this.errores.agregarErrorSemantico("ESM9", ctx.start.getLine(), tipoActual, "logica");
@@ -234,6 +244,14 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitLblOp21(smheParser.LblOp21Context ctx) {
+        this.errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "Antes del operador se esperaba [\"id\", \"numero\"]");
+        return visit(ctx.op3());
+    }
+    
+    
+
+    @Override
     public Object visitLblRelacionales(smheParser.LblRelacionalesContext ctx) {
         if (!tipoActual.equals("entero")) {
             this.errores.agregarErrorSemantico("ESM9", ctx.start.getLine(), tipoActual, "entera");
@@ -255,6 +273,14 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitLblOp41(smheParser.LblOp41Context ctx) {
+        this.errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "Antes del operador se esperaba [\"id\", \"numero\"]");
+        return visit(ctx.op5());
+    }
+    
+    
+
+    @Override
     public Object visitLblSumaResta(smheParser.LblSumaRestaContext ctx) {
         if (!tipoActual.equals("entero")) {
             this.errores.agregarErrorSemantico("ESM9", ctx.start.getLine(), tipoActual, "entera");
@@ -274,6 +300,14 @@ public class smheSintaxVisitor extends smheBaseVisitor<Object> {
         tipoActual = (String) visit(ctx.op8());
         return ctx.op7() != null ? (String) visit(ctx.op7()) : tipoActual == null ? "Sin Tipo" : tipoActual;
     }
+
+    @Override
+    public Object visitLblOp61(smheParser.LblOp61Context ctx) {
+        this.errores.agregarErrorSintactico("ES6", ctx.start.getLine(), "Antes del operador se esperaba [\"id\", \"numero\"]");
+        return visit(ctx.op7());
+    }
+    
+    
 
     @Override
     public Object visitLblMultDiv(smheParser.LblMultDivContext ctx) {

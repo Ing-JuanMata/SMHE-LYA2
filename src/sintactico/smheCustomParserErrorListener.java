@@ -62,8 +62,7 @@ public class smheCustomParserErrorListener extends BaseErrorListener {
             return;
         }
         if (p.getContext() instanceof smheParser.DeclaracionContext) {
-            errores.agregarErrorSintactico("ES7", line, "declarar");
-            System.out.println(sym.getText());
+            errores.agregarErrorSintactico("ES7", line, "como");
             return;
         }
         if (p.getContext() instanceof smheParser.EstadoContext) {

@@ -29,7 +29,7 @@ public class TripletaDeclaracion extends Tripleta {
 
     @Override
     public String codigoObjeto() {
-        return (super.etiqueta == null ? "" : super.etiqueta + " ") + (this.inicializacion != null ? this.inicializacion.codigoObjeto() : "");
+        return (super.etiqueta == null ? "" : super.etiqueta + "\n") + (this.inicializacion != null ? this.inicializacion.codigoObjeto() : "");
     }
 
     @Override
